@@ -1,6 +1,7 @@
 RhsHub::Application.routes.draw do
   namespace :api do
     get 'test/ping' => :ping
+    match '*url'    => :not_found # needed to trigger auth for all /api/* URLs
   end
 
   # The priority is based upon order of creation:
