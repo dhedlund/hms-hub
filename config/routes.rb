@@ -1,4 +1,8 @@
 RhsHub::Application.routes.draw do
+  namespace :api do
+    get 'test/ping' => :ping
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
