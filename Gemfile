@@ -6,6 +6,8 @@ gem 'mysql'
 gem 'sqlite3'
 gem 'haml'
 
+gem 'delayed_job'
+
 group :development do
   gem 'rails3-generators'
   gem 'haml-rails'
