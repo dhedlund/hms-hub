@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-valid:
-  username: notifier1
-  password: password
-  timezone: America/Los_Angeles
-  last_login_at: '2011-03-01 14:23:04'
-  last_status_req_at: '2011-02-26 06:55:21'
-
