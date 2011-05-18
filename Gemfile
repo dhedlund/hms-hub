@@ -8,9 +8,10 @@ gem 'haml'
 
 gem 'delayed_job'
 
-group :development do
+group :development, :test do
   gem 'rails3-generators'
   gem 'haml-rails'
+  gem 'factory_girl_rails'
 end
 
 # Bundle edge Rails instead:
