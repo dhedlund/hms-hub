@@ -31,7 +31,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "last error msg should be able to hold long messages > 255 chars" do
     notification = Factory.build(:notification, :last_error_msg => 'x'*2048)
-    assert_equal notification.last_error_msg, 'x'*2048
+    assert_equal 'x'*2048, notification.last_error_msg
   end
 
   #----------------------------------------------------------------------------#
@@ -70,7 +70,7 @@ class NotificationTest < ActiveSupport::TestCase
   test "delivery start date should hold both a date and a time" do
     now = Time.now
     notification = Factory.build(:notification, :delivery_start => now)
-    assert_equal notification.delivery_start, now
+    assert_equal now, notification.delivery_start
   end
 
   #----------------------------------------------------------------------------#
@@ -79,13 +79,13 @@ class NotificationTest < ActiveSupport::TestCase
   test "delivery expires date should hold both a date and a time" do
     now = Time.now
     notification = Factory.build(:notification, :delivery_expires => now)
-    assert_equal notification.delivery_expires, now
+    assert_equal now, notification.delivery_expires
   end
 
   test "delivery expires date should default to 7 days from start date" do
     start = 5.days.ago + 4.hours
     notification = Factory.build(:notification, :delivery_start => start)
-    assert_equal notification.delivery_expires, (start + 7.days)
+    assert_equal (start + 7.days), notification.delivery_expires
   end
 
   #----------------------------------------------------------------------------#
@@ -119,7 +119,7 @@ class NotificationTest < ActiveSupport::TestCase
   # status:
   #--------
   test "default delivery status is NEW" do
-    assert_equal Factory.build(:notification).status, 'NEW'
+    assert_equal 'NEW', Factory.build(:notification).status
   end
 
   test "should be invalid unless delivery status is an expected value" do
@@ -152,7 +152,7 @@ class NotificationTest < ActiveSupport::TestCase
   test "last run at should hold both a date and a time" do
     now = Time.now
     notification = Factory.build(:notification, :last_run_at => now)
-    assert_equal notification.last_run_at, now
+    assert_equal now, notification.last_run_at
   end
 
   #----------------------------------------------------------------------------#
@@ -166,7 +166,7 @@ class NotificationTest < ActiveSupport::TestCase
     message = Factory.build(:message)
     message.notifications << Factory.build(:notification)
     message.notifications << Factory.build(:notification)
-    assert_equal message.notifications.size, 2
+    assert_equal 2, message.notifications.size
   end
 
   #----------------------------------------------------------------------------#

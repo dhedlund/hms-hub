@@ -25,13 +25,13 @@ class NotifierTest < ActiveSupport::TestCase
   test "last_login_at attribute is supported" do
     now = Time.now
     notifier = Factory.build(:notifier, :last_login_at => now)
-    assert_equal notifier.last_login_at, now
+    assert_equal now, notifier.last_login_at
   end
 
   test "should be able to access last_status_req_at attribute" do
     now = Time.now
     notifier = Factory.build(:notifier, :last_status_req_at => now)
-    assert_equal notifier.last_status_req_at, now
+    assert_equal now, notifier.last_status_req_at
   end
 
 end

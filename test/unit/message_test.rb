@@ -15,7 +15,7 @@ class MessagesTest < ActiveSupport::TestCase
 
   test "ivr codes are supported" do
     message = Factory.build(:message, :ivr_code => 'myivrcode')
-    assert_equal message.ivr_code, 'myivrcode'
+    assert_equal 'myivrcode', message.ivr_code
   end
 
   #----------------------------------------------------------------------------#

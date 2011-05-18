@@ -22,7 +22,7 @@ class MessageStreamTest < ActiveSupport::TestCase
     stream = Factory.build(:message_stream)
     stream.messages << Factory.build(:message)
     stream.messages << Factory.build(:message)
-    assert_equal stream.messages.size, 2
+    assert_equal 2, stream.messages.size
   end
 
   test "cannot have two messages with same name in same stream" do
