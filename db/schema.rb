@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110516221753) do
+ActiveRecord::Schema.define(:version => 20110517221757) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -35,6 +35,18 @@ ActiveRecord::Schema.define(:version => 20110516221753) do
   end
 
   add_index "message_streams", ["name"], :name => "index_message_streams_on_name", :unique => true
+
+  create_table "messages", :force => true do |t|
+    t.integer  "message_stream_id"
+    t.string   "name"
+    t.string   "sms_text"
+    t.string   "ivr_code"
+    t.integer  "offset_days"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["message_stream_id", "name"], :name => "index_messages_on_message_stream_id_and_name", :unique => true
 
   create_table "notifiers", :force => true do |t|
     t.string   "username"

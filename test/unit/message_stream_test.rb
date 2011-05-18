@@ -18,4 +18,18 @@ class MessageStreamTest < ActiveSupport::TestCase
     assert Factory.build(:message_stream, :name => 'mystream').invalid?
   end
 
+  test "can associate multiple messages with a message stream" do
+    stream = Factory.build(:message_stream)
+    stream.messages << Factory.build(:message)
+    stream.messages << Factory.build(:message)
+    assert_equal stream.messages.size, 2
+  end
+
+  test "cannot have two messages with same name in same stream" do
+    stream = Factory.create(:message_stream)
+    Factory.create(:message, :name => 'mymessage', :message_stream => stream)
+    assert Factory.build(:message, :name => 'mymessage',
+      :message_stream => stream).invalid?
+  end
+
 end
