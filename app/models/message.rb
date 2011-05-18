@@ -1,5 +1,6 @@
 class Message < ActiveRecord::Base
   belongs_to :message_stream
+  has_many :notifications
 
   validates :message_stream_id, :presence => true
   validates :name, :presence => true, :uniqueness => { :scope => :message_stream_id }
