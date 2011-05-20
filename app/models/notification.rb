@@ -4,7 +4,7 @@ class Notification < ActiveRecord::Base
 
   after_initialize :default_values
 
-  validates :uuid, :presence => true
+  validates :uuid, :presence => true, :uniqueness => { :scope => :notifier_id }
   validates :notifier_id, :presence => true
   validates :message_id, :presence => true
   validates :phone_number, :presence => true

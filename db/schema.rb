@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110518075041) do
+ActiveRecord::Schema.define(:version => 20110520092627) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(:version => 20110518075041) do
   end
 
   add_index "notifications", ["last_run_at", "notifier_id"], :name => "index_notifications_on_last_run_at_and_notifier_id"
-  add_index "notifications", ["uuid"], :name => "index_notifications_on_uuid", :unique => true
+  add_index "notifications", ["notifier_id", "uuid"], :name => "index_notifications_on_notifier_id_and_uuid", :unique => true
 
   create_table "notifiers", :force => true do |t|
     t.string   "username"

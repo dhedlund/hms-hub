@@ -41,6 +41,18 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification, :uuid => nil).invalid?
   end
 
+  test "one notifier cannot have multiple notifications with the same uuid" do
+    notifier = Factory.create(:notifier)
+    Factory.create(:notification, :notifier => notifier, :uuid => '32')
+    assert Factory.build(:notification, :notifier => notifier, :uuid => '32').invalid?
+  end
+
+  test "the same uuid can exist across notifiers" do
+    x = Factory.create(:notification, :uuid => '72')
+    notification = Factory.build(:notification, :uuid => '72')
+    assert notification.save
+  end
+
   #----------------------------------------------------------------------------#
   # delivery_method:
   #-----------------
