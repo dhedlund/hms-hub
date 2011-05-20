@@ -3,7 +3,6 @@ require 'jsonschema'
 
 class Api::MessageStreamsControllerTest < ActionController::TestCase
   setup do
-    @controller = Api::MessageStreamsController.new
     @notifier = Factory.create(:notifier)
 
     creds = encode_credentials(@notifier.username, @notifier.password)
