@@ -57,6 +57,29 @@ class MessagesTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # path:
+  #------
+  test "can get a unique path to represent message across message streams" do
+    message = Factory.build(:message)
+    assert_equal "#{message.message_stream.name}/#{message.name}",
+      message.path
+  end
+
+  test "path should return nil if not enough info to build path" do
+    assert_nil Factory.build(:message, :message_stream => nil).path
+    assert_nil Factory.build(:message, :name => nil).path
+  end
+
+  test "can search for a message by its path" do
+    message = Factory.create(:message)
+    assert_equal message, Message.find_by_path(message.path)
+  end
+
+  test "searching for a message by a nonexistent path should return nil" do
+    assert_nil Message.find_by_path('nonexistent/path')
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ MessageStream:
   #-------------------------------
   test "can access message stream from message" do

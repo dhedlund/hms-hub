@@ -17,6 +17,10 @@ class Notification < ActiveRecord::Base
     self.status ||= 'NEW'
   end
 
+  def message_path=(path)
+    self.message = Message.find_by_path(path)
+  end
+
   def delivery_start=(value)
     if value && !delivery_expires
       write_attribute :delivery_expires, value + 7.days

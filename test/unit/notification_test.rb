@@ -168,6 +168,36 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # message_path:
+  #--------------
+  test "responds to message_path=" do
+    notification = Factory.build(:notification)
+    assert_respond_to notification, :message_path=
+  end
+
+  test "can set a notification's message by assigning a message path" do
+    message = Factory.create(:message)
+    notification = Factory.build(:notification, :message => nil)
+
+    notification.message_path = message.path
+    assert_equal message, notification.message
+  end
+
+  test "setting message path to nil will unset message" do
+    notification = Factory.build(:notification)
+
+    notification.message_path = nil
+    assert_nil notification.message
+  end
+
+  test "setting message path to nonexistent path will unset message" do
+    notification = Factory.build(:notification)
+
+    notification.message_path = 'nonexistent/path'
+    assert_nil notification.message
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ Message:
   #-------------------------
   test "can access message from notification" do
