@@ -13,13 +13,19 @@ class ApiController < ApplicationController
     render :text => '404 Not Found', :status => '404'
   end
 
+  def current_user
+    @current_user
+  end
+
 
   protected
 
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|
       user = Notifier.find_by_username(username)
-      user && username == user.username && password == user.password
+      if user && username == user.username && password == user.password
+        @current_user = user
+      end
     end
   end
 

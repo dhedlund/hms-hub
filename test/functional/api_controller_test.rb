@@ -25,6 +25,22 @@ class ApiControllerTest < ActionController::TestCase
     end
   end
 
+  test "authenticating with valid credentials should set current user" do
+    creds = encode_credentials(@notifier.username, @notifier.password)
+    @request.env['HTTP_AUTHORIZATION'] = creds
+
+    get :ping
+    assert_equal @notifier, @controller.current_user
+  end
+
+  test "authenticating with invalid credentials should not set current user" do
+    creds = encode_credentials('invalid', 'bah!')
+    @request.env['HTTP_AUTHORIZATION'] = creds
+
+    get :ping
+    assert_nil @controller.current_user
+  end
+
   test "GET /api/test/ping should return 'pong'" do
     creds = encode_credentials(@notifier.username, @notifier.password)
     @request.env['HTTP_AUTHORIZATION'] = creds
