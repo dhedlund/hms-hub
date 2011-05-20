@@ -12,6 +12,7 @@ group :development, :test do
   gem 'rails3-generators'
   gem 'haml-rails'
   gem 'factory_girl_rails'
+  gem 'jsonschema'
 end
 
 # Bundle edge Rails instead:
