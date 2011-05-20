@@ -34,4 +34,14 @@ class NotifierTest < ActiveSupport::TestCase
     assert_equal now, notifier.last_status_req_at
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ Notification:
+  #------------------------------
+  test "can access notifications from notifier" do
+    notifier = Factory.build(:notifier)
+    notifier.notifications << Factory.build(:notification)
+    notifier.notifications << Factory.build(:notification)
+    assert_equal 2, notifier.notifications.size
+  end
+
 end
