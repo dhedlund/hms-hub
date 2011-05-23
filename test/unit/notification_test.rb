@@ -39,6 +39,16 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal 'x'*2048, notification.last_error_msg
   end
 
+  test "should be able to retrieve the created_at date" do
+    @notification.save
+    assert_not_nil @notification.created_at
+  end
+
+  test "should be able to retrieve the updated_at date" do
+    @notification.save
+    assert_not_nil @notification.updated_at
+  end
+
   #----------------------------------------------------------------------------#
   # uuid:
   #------

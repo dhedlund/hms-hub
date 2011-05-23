@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110523105426) do
+ActiveRecord::Schema.define(:version => 20110523114135) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(:version => 20110523105426) do
     t.string   "last_error_type"
     t.text     "last_error_msg"
     t.datetime "last_run_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "notifications", ["last_run_at", "notifier_id"], :name => "index_notifications_on_last_run_at_and_notifier_id"
