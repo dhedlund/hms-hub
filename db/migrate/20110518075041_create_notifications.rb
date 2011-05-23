@@ -9,14 +9,16 @@ class CreateNotifications < ActiveRecord::Migration
       t.string   :delivery_method
       t.datetime :delivery_start
       t.datetime :delivery_expires
-      t.string   :delivery_window
+      t.integer  :delivery_window
       t.string   :status
       t.string   :last_error_type
       t.text     :last_error_msg
       t.datetime :last_run_at
+
+      t.timestamps
     end
 
-    add_index :notifications, :uuid, :unique => true
+    add_index :notifications, [:notifier_id, :uuid], :unique => true
     add_index :notifications, [:last_run_at, :notifier_id]
   end
 
