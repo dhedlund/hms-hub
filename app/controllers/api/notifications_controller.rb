@@ -15,10 +15,31 @@ class Api::NotificationsController < ApiController
       params[:notification][:delivery_expires],
       params[:notification][:preferred_time]
     )
-    start, expires, preferred_time = notification.get_delivery_range
 
     if notification.save
-      render :json => { :notification => {
+      render :json => jsonify_notification(notification)
+    else
+      render :json => 'error', :status => :unprocessable_entity
+    end
+  end
+
+  def updated
+    notifications = current_user.notifications
+
+    if from_date = current_user.last_status_req_at
+      notifications = notifications.where('last_run_at > ?', from_date)
+    end
+
+    current_user.update_attributes({ :last_status_req_at => Time.now })
+
+    render :json => notifications.map { |n| jsonify_notification(n) }
+  end
+
+  def jsonify_notification(notification)
+    start, expires, preferred_time = notification.get_delivery_range
+
+    {
+      :notification => {
         :uuid => notification.uuid,
         :first_name => notification.first_name,
         :phone_number => notification.phone_number,
@@ -27,21 +48,13 @@ class Api::NotificationsController < ApiController
         :delivery_date => start,
         :delivery_expires => expires,
         :preferred_time => preferred_time,
-      } }
-    else
-      render :json => 'error', :status => :unprocessable_entity
-    end
+        :status => notification.status,
+        :error => {
+          :type => notification.last_error_type,
+          :message => notification.last_error_msg,
+        }.delete_if {|k,v| v.nil?}
+      }.delete_if {|k,v| v.nil? || v.empty?}
+    }
   end
 
-#  def index
-#    streams = MessageStream.scoped
-#    render :json => streams.to_json(
-#      :only => [:name, :title],
-#      :include => {
-#        :messages => {
-#          :only => [ :name, :offset_days, :sms_text ]
-#        }
-#      }
-#    )
-#  end
 end

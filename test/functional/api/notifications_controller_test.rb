@@ -14,6 +14,42 @@ class Api::NotificationsControllerTest < ActionController::TestCase
     assert_response 401
   end
 
+  test "GET /api/notifications/updated should return status updates" do
+    notifications = 3.times.map do
+      Factory.build(:notification, :notifier => @notifier)
+    end
+
+    @notifier.last_status_req_at = 1.hour.ago
+    @notifier.save
+
+    notifications[0].last_run_at = 1.day.ago
+    notifications[1].status = 'SUCCESS'
+    notifications[1].last_run_at = 1.hour.ago
+    notifications[2].status = 'PERM_FAIL'
+    notifications[2].last_error_type = 'INVALID_PHONE_NUMBER'
+    notifications[2].last_error_msg = 'Phone number not in service.'
+    notifications[2].last_run_at = 1.hour.ago
+    notifications.each { |n| n.save }
+
+    get :updated, :format => :json
+    assert_response :success
+
+    assert_equal 2, json_response.count
+    assert_equal 'SUCCESS', json_response[0]['notification']['status']
+
+    expected = {
+      'type' => 'INVALID_PHONE_NUMBER',
+      'message' => 'Phone number not in service.'
+    }
+    assert_equal expected, json_response[1]['notification']['error']
+  end
+
+  test "GET /api/notifications/updated should update last_status_req_at" do
+    get :updated, :format => :json
+    notifier = Notifier.find(@notifier.id)
+    assert_not_equal @notifier.last_status_req_at, notifier.last_status_req_at
+  end
+
   test "POST /api/notifications of valid notification creates and returns it" do
     notification = Factory.build(:notification, :notifier => @notifier)
 
@@ -28,9 +64,13 @@ class Api::NotificationsControllerTest < ActionController::TestCase
       'preferred_time'   => '10-14',
     }
 
-    post :create, :format => :json, :notification => json_data
+    assert_difference 'Notification.count', 1 do
+      post :create, :format => :json, :notification => json_data
+    end
 
     assert_response :success
+
+    json_data['status'] = 'NEW'
     assert_equal({ 'notification' => json_data }, json_response)
   end
 
@@ -40,6 +80,13 @@ class Api::NotificationsControllerTest < ActionController::TestCase
       :phone_number => '+01234-5678-9',
     }
     assert_response 422
+  end
+
+  test "routing: GET /api/notifications/updated => api/notifications#updated" do
+    assert_routing(
+      { :path => '/api/notifications/updated', :method => :get },
+      { :controller => 'api/notifications', :action => 'updated' }
+    )
   end
 
   test "routing: POST /api/notifications -> api/notifications#create" do
