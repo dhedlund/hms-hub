@@ -33,6 +33,15 @@ class ApiControllerTest < ActionController::TestCase
     assert_equal @notifier, @controller.current_user
   end
 
+  test "authenticating w/ valid creds should set notifier's last login time" do
+    creds = encode_credentials(@notifier.username, @notifier.password)
+    @request.env['HTTP_AUTHORIZATION'] = creds
+
+    get :ping
+    notifier = Notifier.find(@notifier.id)
+    assert_not_equal @notifier.last_login_at, notifier.last_login_at
+  end
+
   test "authenticating with invalid credentials should not set current user" do
     creds = encode_credentials('invalid', 'bah!')
     @request.env['HTTP_AUTHORIZATION'] = creds
