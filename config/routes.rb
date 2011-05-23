@@ -2,6 +2,7 @@ RhsHub::Application.routes.draw do
   namespace :api do
     get 'test/ping' => :ping
     resources :message_streams, :path => :streams, :only => [:index]
+    resources :notifications, :only => [:create]
   end
 
   match 'api/*url' => 'api#not_found'

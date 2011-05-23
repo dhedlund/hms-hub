@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class NotificationTest < ActiveSupport::TestCase
+  setup do
+    @notifier = Factory.create(:notifier, :timezone => 'Sydney')
+    @notification = Factory.build(:notification, :notifier => @notifier)
+  end
+
   test "valid notification should be valid" do
     assert Factory.build(:notification).valid?
   end
@@ -103,28 +108,32 @@ class NotificationTest < ActiveSupport::TestCase
   #----------------------------------------------------------------------------#
   # delivery_window:
   #------------------
-  test "delivery window attribute is optional" do
-    assert Factory.build(:notification, :delivery_window => nil).valid?
+  test "default delivery window size is 6" do
+    assert_equal 6, Factory.build(:notification).delivery_window
+  end
+
+  test "should be invalid without a delivery window" do
+    assert Factory.build(:notification, :delivery_window => nil).invalid?
   end
 
   test "delivery window must be a whole number" do
     assert Factory.build(:notification, :delivery_window => 7.1).invalid?
   end
 
-  test "delivery windows less than 1 hour are invalid" do
-    assert Factory.build(:notification, :delivery_window => 0).invalid?
+  test "delivery windows less than 2 hour are invalid" do
+    assert Factory.build(:notification, :delivery_window => 1).invalid?
   end
 
-  test "one hour delivery window offsets are valid" do
-    assert Factory.build(:notification, :delivery_window => 1).valid?
+  test "two hour delivery windows are valid" do
+    assert Factory.build(:notification, :delivery_window => 2).valid?
   end
 
-  test "delivery windows greater than or equal to 24 are invalid" do
-    assert Factory.build(:notification, :delivery_window => 24).invalid?
+  test "delivery windows greater than 12 hours are invalid" do
+    assert Factory.build(:notification, :delivery_window => 13).invalid?
   end
 
-  test "delivery window of 24 hours is valid" do
-    assert Factory.build(:notification, :delivery_window => 23).valid?
+  test "delivery window of 12 hours is valid" do
+    assert Factory.build(:notification, :delivery_window => 12).valid?
   end
 
   #----------------------------------------------------------------------------#
@@ -195,6 +204,180 @@ class NotificationTest < ActiveSupport::TestCase
 
     notification.message_path = 'nonexistent/path'
     assert_nil notification.message
+  end
+
+  #----------------------------------------------------------------------------#
+  # get_delivery_range:
+  #--------------------
+  test "responds to get_delivery_range" do
+    assert_respond_to @notification, :get_delivery_range
+  end
+
+  test "get_delivery_range: returns delivery range as array" do
+    assert_instance_of Array, @notification.get_delivery_range
+  end
+
+  test "get_delivery_range: returns nil if no delivery_start" do
+    @notification.delivery_start = nil
+    assert_nil @notification.get_delivery_range
+  end
+
+  test "get_delivery_range: returns nil if no delivery_expires" do
+    @notification.delivery_expires = nil
+    assert_nil @notification.get_delivery_range
+  end
+
+  test "get_delivery_range: returns nil if no delivery_window" do
+    @notification.delivery_window = nil
+    assert_nil @notification.get_delivery_range
+  end
+
+  test "get_delivery_range: return expected values in array" do
+    Time.use_zone(@notifier.timezone) do
+      @notification = Factory.build(:notification, :notifier => @notifier,
+        :delivery_start => Time.zone.parse('2011-05-03 11:00:00'),
+        :delivery_expires => Time.zone.parse('2011-05-06 00:00:00'),
+        :delivery_window => 7
+      )
+    end
+
+    expected = ['2011-05-03', '2011-05-06', '11-18']
+    assert_equal expected, @notification.get_delivery_range
+  end
+
+  #----------------------------------------------------------------------------#
+  # set_delivery_range:
+  #--------------------
+  # takes date, expires and preferred_time
+  test "responds to set_delivery_range" do
+    assert_respond_to @notification, :set_delivery_range
+  end
+
+  test "set_delivery_range: start_date is required" do
+    assert_raise(ArgumentError) { @notification.set_delivery_range }
+    assert_equal false, @notification.set_delivery_range(nil)
+  end
+
+  test "set_delivery_range: expire_date is optional" do
+    assert @notification.set_delivery_range('2011-05-03')
+  end
+
+  test "set_delivery_range: preferred_time is optional" do
+    assert @notification.set_delivery_range('2011-05-02', '2011-05-03')
+  end
+
+  test "set_delivery_range: invalid start date should return false" do
+    assert_equal false, @notification.set_delivery_range('2011-13-13')
+  end
+
+  test "set_delivery_range: invalid expire date should return false" do
+    assert_equal false, @notification.set_delivery_range('2011-02-15', '2011-13-13')
+  end
+
+  test "set_delivery_range: preferred time should accept a time range" do
+    assert @notification.set_delivery_range('2011-05-02', nil, '11-14')
+  end
+
+  test "set_delivery_range: default expire date is 7 days from start" do
+    Time.use_zone(@notifier.timezone) do
+      expires = Time.zone.parse('2011-05-10 00:00:00')
+      @notification.set_delivery_range('2011-05-03')
+      assert_equal expires, @notification.delivery_expires
+    end
+  end
+
+  test "set_delivery_range: default delivery window is 6 hours" do
+    @notification.set_delivery_range('2011-05-03', '2011-05-05')
+    assert_equal 6, @notification.delivery_window
+  end
+
+  test "set_delivery_range: default start time is 12pm local to notifer" do
+    @notification.set_delivery_range('2011-05-03')
+
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 12:00:00')
+      assert_equal start, @notification.delivery_start
+    end
+  end
+
+  test "set_delivery_range: should ignore any 'time parts' passed in" do
+    @notification.set_delivery_range('2011-05-03 16:17:00', '2011-05-07 01:04:00')
+
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 12:00:00')
+      expires = Time.zone.parse('2011-05-07 00:00:00')
+      assert_equal start, @notification.delivery_start
+      assert_equal expires, @notification.delivery_expires
+    end
+  end
+
+  test "set_delivery_range: preferred time sets window and start time" do
+    @notification.set_delivery_range('2011-05-03', nil, '10-15')
+
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 10:00:00')
+      assert_equal start, @notification.delivery_start
+      assert_equal 5, @notification.delivery_window
+    end
+  end
+
+  test "set_delivery_range: invalid preferred time ranges are ignored" do
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 12:00:00')
+      @notification.set_delivery_range('2011-05-03', nil, '6x4')
+      assert_equal start, @notification.delivery_start
+      @notification.set_delivery_range('2011-05-03', nil, '10')
+      assert_equal start, @notification.delivery_start
+      @notification.set_delivery_range('2011-05-03', nil, '14-10')
+      assert_equal start, @notification.delivery_start
+    end
+  end
+
+  test "set_delivery_range: preferred time won't get set before 9am" do
+    @notification.set_delivery_range('2011-05-03', nil, '7-15')
+
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 09:00:00')
+      assert_equal start, @notification.delivery_start
+    end
+  end
+
+  test "set_delivery_range: preferred time won't get set afterp 9pm" do
+    @notification.set_delivery_range('2011-05-03', nil, '13-22')
+
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 13:00:00')
+      assert_equal start, @notification.delivery_start
+      assert_equal 8, @notification.delivery_window
+    end
+  end
+
+  test "set_delivery_range: preferred time ranges >= 2 hours are okay" do
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 11:00:00')
+      @notification.set_delivery_range('2011-05-03', nil, '11-13')
+      assert_equal start, @notification.delivery_start
+
+      start = Time.zone.parse('2011-05-03 09:00:00')
+      @notification.set_delivery_range('2011-05-03', nil, '08-11') # 9-11
+      assert_equal start, @notification.delivery_start
+
+      start = Time.zone.parse('2011-05-03 19:00:00')
+      @notification.set_delivery_range('2011-05-03', nil, '19-22') # 19-21
+      assert_equal start, @notification.delivery_start
+    end
+  end
+
+  test "set_delivery_range: preferred time ranges < 2 hours are ignored" do
+    Time.use_zone(@notifier.timezone) do
+      start = Time.zone.parse('2011-05-03 12:00:00')
+      @notification.set_delivery_range('2011-05-03', nil, '11-12')
+      assert_equal start, @notification.delivery_start
+      @notification.set_delivery_range('2011-05-03', nil, '08-10') # 9-10
+      assert_equal start, @notification.delivery_start
+      @notification.set_delivery_range('2011-05-03', nil, '20-22') # 20-21
+      assert_equal start, @notification.delivery_start
+    end
   end
 
   #----------------------------------------------------------------------------#
