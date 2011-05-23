@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110520092627) do
+ActiveRecord::Schema.define(:version => 20110523105426) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(:version => 20110520092627) do
     t.string   "delivery_method"
     t.datetime "delivery_start"
     t.datetime "delivery_expires"
-    t.string   "delivery_window"
+    t.integer  "delivery_window",  :limit => 255
     t.string   "status"
     t.string   "last_error_type"
     t.text     "last_error_msg"
