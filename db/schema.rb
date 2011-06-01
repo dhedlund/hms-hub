@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110518075041) do
+ActiveRecord::Schema.define(:version => 20110523204845) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -26,6 +26,23 @@ ActiveRecord::Schema.define(:version => 20110518075041) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "delivery_attempts", :force => true do |t|
+    t.integer  "notification_id"
+    t.string   "phone_number"
+    t.string   "delivery_method"
+    t.string   "message_id"
+    t.text     "request"
+    t.text     "response"
+    t.string   "result"
+    t.string   "error_type"
+    t.text     "error_msg"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delivery_attempts", ["delivery_method", "created_at"], :name => "index_delivery_attempts_on_delivery_method_and_created_at"
+  add_index "delivery_attempts", ["notification_id"], :name => "index_delivery_attempts_on_notification_id"
 
   create_table "message_streams", :force => true do |t|
     t.string   "name"

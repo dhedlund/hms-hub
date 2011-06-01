@@ -13,6 +13,7 @@ group :development, :test do
   gem 'haml-rails'
   gem 'factory_girl_rails'
   gem 'jsonschema'
+  gem 'mocha'
 end
 
 # Bundle edge Rails instead:

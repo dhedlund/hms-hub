@@ -1,6 +1,7 @@
 class Notification < ActiveRecord::Base
   belongs_to :message
   belongs_to :notifier
+  has_many :delivery_attempts
 
   after_initialize :default_values
 

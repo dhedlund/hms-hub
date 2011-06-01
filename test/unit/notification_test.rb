@@ -411,4 +411,14 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification).notifier
   end
 
+  #----------------------------------------------------------------------------#
+  # relationship w/ DeliveryAttempt:
+  #---------------------------------
+  test "can associate multiple delivery attempts with a notification" do
+    notification = Factory.build(:notification)
+    notification.delivery_attempts << Factory.build(:delivery_attempt)
+    notification.delivery_attempts << Factory.build(:delivery_attempt)
+    assert_equal 2, notification.delivery_attempts.size
+  end
+
 end
