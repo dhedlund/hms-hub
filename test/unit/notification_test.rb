@@ -391,6 +391,37 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # saving/enqueuing:
+  #------------------
+  test "saving new notification should create an enqueue new delivery job" do
+    notification = Factory.build(:notification)
+
+    job = mock()
+    DeliverNotificationJob.expects(:new).once.returns(job)
+    Delayed::Job.expects(:enqueue).with(job).once
+
+    notification.save!
+  end
+
+  test "saving invalid notification should not enqueue deliver job" do
+    notification = Factory.build(:notification, :message => nil)
+
+    job = mock()
+    DeliverNotificationJob.expects(:new).never
+
+    assert_equal false, notification.save
+  end
+
+  test "saving existing notification should not enqueue new delivery job" do
+    notification = Factory.create(:notification)
+
+    DeliverNotificationJob.expects(:new).never
+    Delayed::Job.expects(:enqueue).never
+
+    notification.save!
+  end
+
+  #----------------------------------------------------------------------------#
   # relationship w/ Message:
   #-------------------------
   test "can access message from notification" do

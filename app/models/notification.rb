@@ -4,6 +4,7 @@ class Notification < ActiveRecord::Base
   has_many :delivery_attempts
 
   after_initialize :default_values
+  after_create :enqueue_delivery
 
   validates :uuid, :presence => true, :uniqueness => { :scope => :notifier_id }
   validates :notifier_id, :presence => true
@@ -82,6 +83,13 @@ class Notification < ActiveRecord::Base
     end
 
     write_attribute :delivery_start, value
+  end
+
+
+  protected
+
+  def enqueue_delivery
+    Delayed::Job.enqueue(DeliverNotificationJob.new(id))
   end
 
 end
