@@ -47,6 +47,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
                 additionalProperties: false
                 properties:
                   name: { type: string }
+                  title: { type: string }
                   offset_days: { type: integer }
                   sms_text: { type: string }
     YAMLEND
@@ -65,6 +66,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
         'title' => stream.title,
         'messages' => stream.messages.map { |message| {
           'name' => message.name,
+          'title' => message.title,
           'offset_days' => message.offset_days,
           'sms_text' => message.sms_text,
     } } } } }

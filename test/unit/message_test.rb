@@ -18,6 +18,10 @@ class MessagesTest < ActiveSupport::TestCase
     assert_equal 'myivrcode', message.ivr_code
   end
 
+  test "should be invalid without a title" do
+    assert Factory.build(:message, :title => nil).invalid?
+  end
+
   #----------------------------------------------------------------------------#
   # sms_text:
   #----------
