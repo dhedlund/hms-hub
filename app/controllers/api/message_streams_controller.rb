@@ -7,7 +7,7 @@ class Api::MessageStreamsController < ApiController
       :only => [:name, :title],
       :include => {
         :messages => {
-          :only => [ :name, :title, :offset_days, :sms_text ]
+          :only => [ :name, :title, :offset_days ]
         }
       }
     )

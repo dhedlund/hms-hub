@@ -25,11 +25,16 @@ class MessagesTest < ActiveSupport::TestCase
   #----------------------------------------------------------------------------#
   # sms_text:
   #----------
-  test "should be invalid without sms text" do
-    assert Factory.build(:message, :sms_text => nil).invalid?
+  test "sms_text is supported" do
+    message = Factory.build(:message, :sms_text => 'my message')
+    assert_equal 'my message', message.sms_text
   end
 
-  test "sms text is invalid if blank" do
+  test "sms_text is optional (can be nil)" do
+    message = Factory.build(:message, :sms_text => nil).valid?
+  end
+
+  test "sms_text cannot be blank" do
     assert Factory.build(:message, :sms_text => '').invalid?
   end
 
