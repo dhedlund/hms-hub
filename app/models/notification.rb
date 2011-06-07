@@ -6,18 +6,28 @@ class Notification < ActiveRecord::Base
   after_initialize :default_values
   after_create :enqueue_delivery
 
+  NEW = 'NEW'
+  SUCCESS = 'SUCCESS'
+  TEMP_FAIL = 'TEMP_FAIL'
+  PERM_FAIL = 'PERM_FAIL'
+  VALID_STATUSES = [ NEW, SUCCESS, TEMP_FAIL, PERM_FAIL ]
+
+  SMS = 'SMS'
+  IVR = 'IVR'
+  VALID_DELIVERY_METHODS = [ SMS, IVR ]
+
   validates :uuid, :presence => true, :uniqueness => { :scope => :notifier_id }
   validates :notifier_id, :presence => true
   validates :message_id, :presence => true
   validates :phone_number, :presence => true
-  validates :delivery_method, :inclusion => ['SMS', 'IVR']
+  validates :delivery_method, :inclusion => VALID_DELIVERY_METHODS
   validates :delivery_start, :presence => true
   validates :delivery_window, :numericality => {
     :only_integer => true,
     :greater_than_or_equal_to => 2,
     :less_than_or_equal_to => 12
   }
-  validates :status, :inclusion => [ 'NEW', 'SUCCESS', 'TEMP_FAIL', 'PERM_FAIL' ]
+  validates :status, :inclusion => VALID_STATUSES
 
   WINDOW_SIZE   = 6  # default delivery window size, in hours
   WINDOW_START  = 12 # default delivery start hour, in hours

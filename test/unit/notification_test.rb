@@ -75,16 +75,16 @@ class NotificationTest < ActiveSupport::TestCase
     assert Factory.build(:notification, :delivery_method => nil).invalid?
   end
 
-  test "should be invalid unless delivery method is IVR or SMS" do
+  test "should be invalid unless delivery method is not valid" do
     assert Factory.build(:notification, :delivery_method => 'PIGEON').invalid?
   end
 
   test "delivery method of IVR should be valid" do
-    assert Factory.build(:notification, :delivery_method => 'IVR').valid?
+    assert Factory.build(:notification, :delivery_method => Notification::IVR).valid?
   end
 
   test "delivery method of SMS should be valid" do
-    assert Factory.build(:notification, :delivery_method => 'SMS').valid?
+    assert Factory.build(:notification, :delivery_method => Notification::SMS).valid?
   end
 
   #----------------------------------------------------------------------------#
@@ -150,7 +150,7 @@ class NotificationTest < ActiveSupport::TestCase
   # status:
   #--------
   test "default delivery status is NEW" do
-    assert_equal 'NEW', Factory.build(:notification).status
+    assert_equal Notification::NEW, Factory.build(:notification).status
   end
 
   test "should be invalid unless delivery status is an expected value" do
@@ -158,19 +158,19 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "delivery status of NEW should be valid" do
-    assert Factory.build(:notification, :status => 'NEW').valid?
+    assert Factory.build(:notification, :status => Notification::NEW).valid?
   end
 
   test "delivery status of SUCCESS should be valid" do
-    assert Factory.build(:notification, :status => 'SUCCESS').valid?
+    assert Factory.build(:notification, :status => Notification::SUCCESS).valid?
   end
 
   test "delivery status of TEMP_FAIL should be valid" do
-    assert Factory.build(:notification, :status => 'TEMP_FAIL').valid?
+    assert Factory.build(:notification, :status => Notification::TEMP_FAIL).valid?
   end
 
   test "delivery status of PERM_FAIL should be valid" do
-    assert Factory.build(:notification, :status => 'PERM_FAIL').valid?
+    assert Factory.build(:notification, :status => Notification::PERM_FAIL).valid?
   end
 
   #----------------------------------------------------------------------------#
