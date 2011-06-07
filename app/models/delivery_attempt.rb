@@ -2,13 +2,17 @@ class DeliveryAttempt < ActiveRecord::Base
   belongs_to :notification
   has_one :message
 
-  before_validation :cache_notification_data
-  before_save :deliver, :unless => :result?
+  after_create :deliver
+
+  SUCCESS = 'SUCCESS'
+  VALID_RESULTS = [ SUCCESS ]
 
   validates :notification_id, :presence => true
   validates :message_id, :presence => true
   validates :phone_number, :presence => true
   validates :delivery_method, :presence => true
+  validates :result, :on => :create, :inclusion => VALID_RESULTS, :allow_nil => true
+  validates :result, :on => :update, :inclusion => VALID_RESULTS
 
   alias_method :orig_notification=, :notification=
   def notification=(value)
@@ -29,7 +33,8 @@ class DeliveryAttempt < ActiveRecord::Base
   def deliver
     return false if result
 
-    self.result = 'SUCCESS'
+    self.result = SUCCESS
+    self.save!
 
     return true
   end
