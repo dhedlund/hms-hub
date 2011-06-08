@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110607132522) do
+ActiveRecord::Schema.define(:version => 20110608093603) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -98,5 +98,15 @@ ActiveRecord::Schema.define(:version => 20110607132522) do
   end
 
   add_index "notifiers", ["username"], :name => "index_notifiers_on_username", :unique => true
+
+  create_table "users", :force => true do |t|
+    t.string   "username"
+    t.string   "password"
+    t.string   "timezone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
 
 end

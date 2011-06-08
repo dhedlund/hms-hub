@@ -8,6 +8,10 @@ RhsHub::Application.routes.draw do
     end
   end
 
+  namespace :admin do
+    get '/' => :index
+  end
+
   match 'api/*url' => 'api#not_found'
 
   # The priority is based upon order of creation:
