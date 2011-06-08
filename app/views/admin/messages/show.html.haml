@@ -1,0 +1,29 @@
+%h1 View Message
+%table
+  %tr
+    %th ID
+    %td= @message.id
+  %tr
+    %th
+    %td= link_to @message.message_stream_id, [:admin, @message_stream]
+  %tr
+    %th Name
+    %td= @message.name
+  %tr
+    %th Title
+    %td= @message.title
+  %tr
+    %th Offset Days
+    %td= @message.offset_days
+  %tr
+    %th IVR Code
+    %td= @message.ivr_code
+  %tr
+    %th SMS Text
+    %td= @message.sms_text
+  %tr
+    %th Date Created
+    %td= @message.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @message.updated_at.strftime '%b %e, %Y @ %r %Z'

@@ -27,7 +27,7 @@
   - @messages.each do |message|
     %tr
       %td= message.offset_days
-      %td= message.name
+      %td= link_to message.name, [:admin, @message_stream, message]
       %td= message.title
       %td= message.ivr_code.present? ? 'Yes' : ''
       %td= message.sms_text.present? ? 'Yes' : ''
