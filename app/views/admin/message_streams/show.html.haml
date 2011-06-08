@@ -1,0 +1,33 @@
+%h1 View Message Stream
+%table
+  %tr
+    %th ID
+    %td= @message_stream.id
+  %tr
+    %th Name
+    %td= @message_stream.name
+  %tr
+    %th Title
+    %td= @message_stream.title
+  %tr
+    %th Date Created
+    %td= @message_stream.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @message_stream.updated_at.strftime '%b %e, %Y @ %r %Z'
+
+%h2 Messages
+%table
+  %tr
+    %th Offset (Days)
+    %th Name
+    %th Title
+    %th IVR?
+    %th SMS?
+  - @messages.each do |message|
+    %tr
+      %td= message.offset_days
+      %td= message.name
+      %td= message.title
+      %td= message.ivr_code.present? ? 'Yes' : ''
+      %td= message.sms_text.present? ? 'Yes' : ''

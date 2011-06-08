@@ -1,0 +1,9 @@
+%h1 Message Streams
+%table
+  %tr
+    %th Name
+    %th Title
+  - @message_streams.each do |stream|
+    %tr
+      %td= link_to stream.name, [:admin, stream]
+      %td= stream.title
