@@ -1,0 +1,20 @@
+%h1 Notifications
+%table
+  %tr
+    %th ID
+    %th Phone Number
+    %th Start
+    %th Expires
+    %th Last Run
+    %th Status
+    %th Error Type
+  - @notifications.each do |notification|
+    %tr
+      %td= link_to notification.id, [:admin, notification]
+      %td= notification.phone_number
+      %td= notification.delivery_start.strftime '%Y-%m-%d'
+      %td= notification.delivery_expires.strftime '%Y-%m-%d'
+      %td= notification.last_run_at
+      %td= notification.status
+      %td= notification.last_error_type
+      
