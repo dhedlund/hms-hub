@@ -16,6 +16,7 @@ RhsHub::Application.routes.draw do
     end
     resources :notifications, :only => [:index, :show]
     resources :notifiers, :only => [:index, :show]
+    resources :jobs, :only => [:index, :show]
     resources :users, :only => [:index, :show]
   end
 
