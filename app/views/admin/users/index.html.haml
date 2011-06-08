@@ -1,0 +1,9 @@
+%h1 Users
+%table
+  %tr
+    %th Username
+    %th Timezone
+  - @users.each do |user|
+    %tr
+      %td= link_to user.username, [:admin, user]
+      %td= user.timezone

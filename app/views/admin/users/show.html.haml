@@ -1,0 +1,17 @@
+%h1 View User
+%table
+  %tr
+    %th ID
+    %td= @user.id
+  %tr
+    %th Username
+    %td= @user.username
+  %tr
+    %th Timezone
+    %td= @user.timezone
+  %tr
+    %th Date Created
+    %td= @user.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @user.updated_at.strftime '%b %e, %Y @ %r %Z'
