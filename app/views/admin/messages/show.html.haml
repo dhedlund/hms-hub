@@ -4,7 +4,7 @@
     %th ID
     %td= @message.id
   %tr
-    %th
+    %th Message Stream ID
     %td= link_to @message.message_stream_id, [:admin, @message_stream]
   %tr
     %th Name
@@ -12,6 +12,9 @@
   %tr
     %th Title
     %td= @message.title
+  %tr
+    %th Path
+    %td= @message.path
   %tr
     %th Offset Days
     %td= @message.offset_days
