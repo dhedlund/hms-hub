@@ -1,0 +1,38 @@
+%h1 View Delivery Attempt
+%table
+  %tr
+    %th ID
+    %td= @delivery_attempt.id
+  %tr
+    %th Notification ID
+    %td= link_to @delivery_attempt.notification_id, admin_notification_path(@delivery_attempt.notification_id)
+  %tr
+    %th Message ID
+    %td= link_to @delivery_attempt.message_id, admin_message_stream_message_path(@message.message_stream_id, @message.id)
+  %tr
+    %th Phone Number
+    %td= @delivery_attempt.phone_number
+  %tr
+    %th Delivery Method
+    %td= @delivery_attempt.delivery_method
+  %tr
+    %th Result
+    %td= @delivery_attempt.result
+  %tr
+    %th Error Type
+    %th= @delivery_attempt.error_type
+  %tr
+    %th Error Message
+    %th= @delivery_attempt.error_msg
+  %tr
+    %th Request
+    %th= @delivery_attempt.request
+  %tr
+    %th Response
+    %th= @delivery_attempt.response
+  %tr
+    %th Date Created
+    %td= @delivery_attempt.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @delivery_attempt.updated_at.strftime '%b %e, %Y @ %r %Z'

@@ -1,0 +1,17 @@
+%h1 Delivery Attempts
+%table
+  %tr
+    %th ID
+    %th Notification
+    %th Method
+    %th Date
+    %th Result
+    %th Error Type
+  - @delivery_attempts.each do |attempt|
+    %tr
+      %td= link_to attempt.id, [:admin, attempt]
+      %td= attempt.notification_id
+      %td= attempt.delivery_method
+      %td= time_ago_in_words(attempt.created_at)
+      %td= attempt.result
+      %td= attempt.error_type

@@ -10,6 +10,7 @@ RhsHub::Application.routes.draw do
 
   namespace :admin do
     get '/' => :index
+    resources :delivery_attempts, :only => [:index, :show]
     resources :message_streams, :path => :streams, :only => [:index, :show] do
       resources :messages, :only => [:index, :show]
     end
