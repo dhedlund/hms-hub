@@ -1,0 +1,17 @@
+%h1 View Notifier
+%table
+  %tr
+    %th ID
+    %td= @notifier.id
+  %tr
+    %th Username
+    %td= @notifier.username
+  %tr
+    %th Timezone
+    %td= @notifier.timezone
+  %tr
+    %th Date Created
+    %td= @notifier.created_at.strftime '%b %e, %Y @ %r %Z'
+  %tr
+    %th Last Updated
+    %td= @notifier.updated_at.strftime '%b %e, %Y @ %r %Z'

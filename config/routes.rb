@@ -11,6 +11,7 @@ RhsHub::Application.routes.draw do
   namespace :admin do
     get '/' => :index
     resources :message_streams, :only => [:index, :show]
+    resources :notifiers, :only => [:index, :show]
   end
 
   match 'api/*url' => 'api#not_found'

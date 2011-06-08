@@ -1,0 +1,9 @@
+%h1 Notifiers
+%table
+  %tr
+    %th Username
+    %th Timezone
+  - @notifiers.each do |notifier|
+    %tr
+      %td= link_to notifier.username, [:admin, notifier]
+      %td= notifier.timezone
