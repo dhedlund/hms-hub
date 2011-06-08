@@ -28,6 +28,14 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
     assert_equal 4, json_response.count
   end
 
+  test "index should not include notifier passwords (JSON)" do
+    4.times { Factory.create(:notifier) }
+
+    get :index, :format => :json
+    assert_response :success
+    assert_nil json_response[0]['notifier']['password']
+  end
+
   test "show should return a notifier (HTML)" do
     notifier = Factory.create(:notifier)
 
@@ -42,6 +50,14 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
     get :show, :id => notifier.id, :format => :json
     assert_response :success
     assert_equal 'notifier', json_response.keys.first
+  end
+
+  test "show should not include notifier password (JSON)" do
+    notifier = Factory.create(:notifier)
+
+    get :show, :id => notifier.id, :format => :json
+    assert_response :success
+    assert_nil json_response['notifier']['password']
   end
 
 end
