@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-RhsHub::Application.load_tasks
+HmsHub::Application.load_tasks
