@@ -5,3 +5,21 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
+
+# populates message_streams
+Dir[File.expand_path('../seed_data/message_streams/*.yml', __FILE__)].each do |file|
+  data = YAML.load_file(file)
+  stream = MessageStream.new(:name => data['name'], :title => data['title'])
+  unless stream.save
+    puts "#{stream.name}: not saved, validation errors."
+    stream.save!
+  end
+  data['messages'].each do |data|
+    data['sms_text'].strip!
+    message = stream.messages.build(data)
+    unless message.save
+      puts "#{message.path}: not saved, validation errors."
+      message.save!
+    end
+  end
+end
