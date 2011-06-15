@@ -38,12 +38,12 @@ class MessagesTest < ActiveSupport::TestCase
     assert Factory.build(:message, :sms_text => '').invalid?
   end
 
-  test "sms text can be up to 140 chars" do
-    assert Factory.build(:message, :sms_text => 'x'*140).valid?
+  test "sms text can be up to 160 chars" do
+    assert Factory.build(:message, :sms_text => 'x'*160).valid?
   end
 
-  test "an sms text greater than 140 chars is invalid" do
-    assert Factory.build(:message, :sms_text => 'x'*141).invalid?
+  test "an sms text greater than 160 chars is invalid" do
+    assert Factory.build(:message, :sms_text => 'x'*161).invalid?
   end
 
   #----------------------------------------------------------------------------#
