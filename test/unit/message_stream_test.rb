@@ -1,35 +1,49 @@
 require 'test_helper'
 
 class MessageStreamTest < ActiveSupport::TestCase
+  setup do
+    @stream = Factory.build(:message_stream)
+  end
+
   test "valid message stream should be valid" do
-    assert Factory.build(:message_stream).valid?
+    assert @stream.valid?
   end
 
+  #----------------------------------------------------------------------------#
+  # messages:
+  #----------
+  test "can associate multiple messages with a message stream" do
+    assert_difference('@stream.messages.size', 2) do
+      2.times do
+        message = Factory.build(:message, :message_stream => @stream)
+        @stream.messages << message
+      end
+    end
+  end
+
+  #----------------------------------------------------------------------------#
+  # name:
+  #------
   test "should be invalid without a name" do
-    assert Factory.build(:message_stream, :name => nil).invalid?
-  end
-
-  test "should be invalid without a title" do
-    assert Factory.build(:message_stream, :title => nil).invalid?
+    @stream.name = nil
+    assert @stream.invalid?
+    assert @stream.errors[:name].any?
   end
 
   test "cannot have two message streams with the same name" do
     Factory.create(:message_stream, :name => 'mystream')
-    assert Factory.build(:message_stream, :name => 'mystream').invalid?
+    @stream.name = 'mystream'
+    assert @stream.invalid?
+    assert @stream.errors[:name].any?
   end
 
-  test "can associate multiple messages with a message stream" do
-    stream = Factory.build(:message_stream)
-    stream.messages << Factory.build(:message)
-    stream.messages << Factory.build(:message)
-    assert_equal 2, stream.messages.size
-  end
-
-  test "cannot have two messages with same name in same stream" do
-    stream = Factory.create(:message_stream)
-    Factory.create(:message, :name => 'mymessage', :message_stream => stream)
-    assert Factory.build(:message, :name => 'mymessage',
-      :message_stream => stream).invalid?
+  #----------------------------------------------------------------------------#
+  # title:
+  #-------
+  test "should be invalid without a title" do
+    @stream.title = nil
+    assert @stream.invalid?
+    assert @stream.errors[:title].any?
   end
 
 end

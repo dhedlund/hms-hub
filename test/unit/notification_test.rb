@@ -4,251 +4,160 @@ class NotificationTest < ActiveSupport::TestCase
   setup do
     @notifier = Factory.create(:notifier, :timezone => 'Sydney')
     @notification = Factory.build(:notification, :notifier => @notifier)
+    @message = @notification.message
   end
 
   test "valid notification should be valid" do
-    assert Factory.build(:notification).valid?
-  end
-
-  test "first name is an optional attribute" do
-    assert Factory.build(:notification, :first_name => 'Cassandra').valid?
-  end
-
-  test "should be invalid without a phone number" do
-    assert Factory.build(:notification, :phone_number => nil).invalid?
-  end
-
-  test "should be invalid without a notifier id" do
-    assert Factory.build(:notification, :notifier_id => nil).invalid?
-  end
-
-  test "should be invalid without a message id" do
-    assert Factory.build(:notification, :message_id => nil).invalid?
-  end
-
-  test "last error type attribute is optional" do
-    assert Factory.build(:notification, :last_error_type => nil).valid?
-  end
-
-  test "last error msg is optional" do
-    assert Factory.build(:notification, :last_error_msg => nil).valid?
-  end
-
-  test "last error msg should be able to hold long messages > 255 chars" do
-    notification = Factory.build(:notification, :last_error_msg => 'x'*2048)
-    assert_equal 'x'*2048, notification.last_error_msg
-  end
-
-  test "should be able to retrieve the created_at date" do
-    @notification.save
-    assert_not_nil @notification.created_at
-  end
-
-  test "should be able to retrieve the updated_at date" do
-    @notification.save
-    assert_not_nil @notification.updated_at
+    assert @notification.valid?
   end
 
   #----------------------------------------------------------------------------#
-  # uuid:
-  #------
-  test "should be invalid without a uuid" do
-    assert Factory.build(:notification, :uuid => nil).invalid?
+  # delivery_attempt:
+  #------------------
+  test "can associate multiple delivery_attempts with a notification" do
+    assert_difference('@notification.delivery_attempts.size', 2) do
+      2.times do
+        a = Factory.build(:delivery_attempt, :notification => @notification)
+        @notification.delivery_attempts << a
+      end
+    end
   end
 
-  test "one notifier cannot have multiple notifications with the same uuid" do
-    notifier = Factory.create(:notifier)
-    Factory.create(:notification, :notifier => notifier, :uuid => '32')
-    assert Factory.build(:notification, :notifier => notifier, :uuid => '32').invalid?
+  #----------------------------------------------------------------------------#
+  # delivery_expires:
+  #------------------
+  test "should be valid without a delivery_expires datetime" do
+    @notification.delivery_expires = nil
+    assert @notification.valid?
   end
 
-  test "the same uuid can exist across notifiers" do
-    x = Factory.create(:notification, :uuid => '72')
-    notification = Factory.build(:notification, :uuid => '72')
-    assert notification.save
+  test "delivery_expires should hold both a date and a time" do
+    expected = @notification.delivery_expires = 3.days.ago
+    assert_equal expected, @notification.delivery_expires
+  end
+
+  test "delivery_expires should default to 7 days from delivery_start_date" do
+    @notification.delivery_expires = nil
+    @notification.delivery_start = 5.days.ago + 4.hours
+    expected = @notification.delivery_start + 7.days
+    assert_equal expected, @notification.delivery_expires
   end
 
   #----------------------------------------------------------------------------#
   # delivery_method:
   #-----------------
-  test "should be invalid without a delivery method" do
-    assert Factory.build(:notification, :delivery_method => nil).invalid?
+  test "should be invalid without a delivery_method" do
+    @notification.delivery_method = nil
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_method].any?
   end
 
-  test "should be invalid unless delivery method is not valid" do
-    assert Factory.build(:notification, :delivery_method => 'PIGEON').invalid?
+  test "should be invalid for unexpected delivery_method values" do
+    @notification.delivery_method = 'PIGEON'
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_method].any?
   end
 
-  test "delivery method of IVR should be valid" do
-    assert Factory.build(:notification, :delivery_method => Notification::IVR).valid?
+  test "should be valid if delivery_method is IVR" do
+    @notification.delivery_method = Notification::IVR
+    assert @notification.valid?
   end
 
-  test "delivery method of SMS should be valid" do
-    assert Factory.build(:notification, :delivery_method => Notification::SMS).valid?
-  end
-
-  #----------------------------------------------------------------------------#
-  # delivery_start_date:
-  #---------------------
-  test "should be invalid without a delivery start date" do
-    assert Factory.build(:notification, :delivery_start => nil).invalid?
-  end
-
-  test "delivery start date should hold both a date and a time" do
-    now = Time.now
-    notification = Factory.build(:notification, :delivery_start => now)
-    assert_equal now, notification.delivery_start
+  test "should be valid if delivery_method is SMS" do
+    @notification.delivery_method = Notification::SMS
+    assert @notification.valid?
   end
 
   #----------------------------------------------------------------------------#
-  # delivery_expires_date:
-  #-----------------------
-  test "delivery expires date should hold both a date and a time" do
-    now = Time.now
-    notification = Factory.build(:notification, :delivery_expires => now)
-    assert_equal now, notification.delivery_expires
+  # delivery_start:
+  #----------------
+  test "should be invalid without a delivery_start datetime" do
+    @notification.delivery_start = nil
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_start].any?
   end
 
-  test "delivery expires date should default to 7 days from start date" do
-    start = 5.days.ago + 4.hours
-    notification = Factory.build(:notification, :delivery_start => start)
-    assert_equal (start + 7.days), notification.delivery_expires
+  test "delivery_start datetime should hold both a date and a time" do
+    expected = @notification.delivery_start = 2.days.from_now
+    assert_equal expected, @notification.delivery_start
   end
 
   #----------------------------------------------------------------------------#
   # delivery_window:
-  #------------------
-  test "default delivery window size is 6" do
-    assert_equal 6, Factory.build(:notification).delivery_window
+  #-----------------
+  test "should be invalid without a delivery_window" do
+    @notification.delivery_window = nil
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_window].any?
   end
 
-  test "should be invalid without a delivery window" do
-    assert Factory.build(:notification, :delivery_window => nil).invalid?
+  test "delivery_window should default to 6 hours" do
+    assert_equal 6, Notification.new.delivery_window
   end
 
-  test "delivery window must be a whole number" do
-    assert Factory.build(:notification, :delivery_window => 7.1).invalid?
+  test "should be invalid if delivery_window is not a whole number" do
+    @notification.delivery_window = 7.1
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_window].any?
   end
 
-  test "delivery windows less than 2 hour are invalid" do
-    assert Factory.build(:notification, :delivery_window => 1).invalid?
+  test "should be invalid if delivery_window is less than 2 hours" do
+    @notification.delivery_window = 1
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_window].any?
   end
 
-  test "two hour delivery windows are valid" do
-    assert Factory.build(:notification, :delivery_window => 2).valid?
+  test "should be valid if delivery_window is 2 hours" do
+    @notification.delivery_window = 2
+    assert @notification.valid?
   end
 
-  test "delivery windows greater than 12 hours are invalid" do
-    assert Factory.build(:notification, :delivery_window => 13).invalid?
+  test "should be invalid if delivery_window is greater than 12 hours" do
+    @notification.delivery_window = 13
+    assert @notification.invalid?
+    assert @notification.errors[:delivery_window].any?
   end
 
-  test "delivery window of 12 hours is valid" do
-    assert Factory.build(:notification, :delivery_window => 12).valid?
-  end
-
-  #----------------------------------------------------------------------------#
-  # status:
-  #--------
-  test "default delivery status is NEW" do
-    assert_equal Notification::NEW, Factory.build(:notification).status
-  end
-
-  test "should be invalid unless delivery status is an expected value" do
-    assert Factory.build(:notification, :status => 'SHOT').invalid?
-  end
-
-  test "delivery status of NEW should be valid" do
-    assert Factory.build(:notification, :status => Notification::NEW).valid?
-  end
-
-  test "delivery status of SUCCESS should be valid" do
-    assert Factory.build(:notification, :status => Notification::SUCCESS).valid?
-  end
-
-  test "delivery status of TEMP_FAIL should be valid" do
-    assert Factory.build(:notification, :status => Notification::TEMP_FAIL).valid?
-  end
-
-  test "delivery status of PERM_FAIL should be valid" do
-    assert Factory.build(:notification, :status => Notification::PERM_FAIL).valid?
+  test "should be valid if delivery_window is 12 hours" do
+    @notification.delivery_window = 12
+    assert @notification.valid?
   end
 
   #----------------------------------------------------------------------------#
-  # last_run_at:
-  #-------------
-  test "last run at is optional" do
-    assert Factory.build(:notification, :last_run_at => nil).valid?
-  end
-
-  test "last run at should hold both a date and a time" do
-    now = Time.now
-    notification = Factory.build(:notification, :last_run_at => now)
-    assert_equal now, notification.last_run_at
-  end
-
-  #----------------------------------------------------------------------------#
-  # message_path:
-  #--------------
-  test "responds to message_path=" do
-    notification = Factory.build(:notification)
-    assert_respond_to notification, :message_path=
-  end
-
-  test "can set a notification's message by assigning a message path" do
-    message = Factory.create(:message)
-    notification = Factory.build(:notification, :message => nil)
-
-    notification.message_path = message.path
-    assert_equal message, notification.message
-  end
-
-  test "setting message path to nil will unset message" do
-    notification = Factory.build(:notification)
-
-    notification.message_path = nil
-    assert_nil notification.message
-  end
-
-  test "setting message path to nonexistent path will unset message" do
-    notification = Factory.build(:notification)
-
-    notification.message_path = 'nonexistent/path'
-    assert_nil notification.message
+  # first_name:
+  #------------
+  test "should be valid without a first_name" do
+    @notification.first_name = nil
+    assert @notification.valid?
   end
 
   #----------------------------------------------------------------------------#
   # get_delivery_range:
   #--------------------
-  test "responds to get_delivery_range" do
-    assert_respond_to @notification, :get_delivery_range
-  end
-
-  test "get_delivery_range: returns delivery range as array" do
+  test "get_delivery_range returns delivery range as an array" do
     assert_instance_of Array, @notification.get_delivery_range
   end
 
-  test "get_delivery_range: returns nil if no delivery_start" do
+  test "get_delivery_range returns nil if no delivery_start" do
     @notification.delivery_start = nil
     assert_nil @notification.get_delivery_range
   end
 
-  test "get_delivery_range: returns nil if no delivery_expires" do
+  test "get_delivery_range returns nil if no delivery_expires" do
     @notification.delivery_expires = nil
     assert_nil @notification.get_delivery_range
   end
 
-  test "get_delivery_range: returns nil if no delivery_window" do
+  test "get_delivery_range returns nil if no delivery_window" do
     @notification.delivery_window = nil
     assert_nil @notification.get_delivery_range
   end
 
-  test "get_delivery_range: return expected values in array" do
+  test "get_delivery_range returns expected values in notifier's timezone" do
     Time.use_zone(@notifier.timezone) do
-      @notification = Factory.build(:notification, :notifier => @notifier,
-        :delivery_start => Time.zone.parse('2011-05-03 11:00:00'),
-        :delivery_expires => Time.zone.parse('2011-05-06 00:00:00'),
-        :delivery_window => 7
-      )
+      @notification.delivery_start = Time.zone.parse('2011-05-03 11:00:00')
+      @notification.delivery_expires = Time.zone.parse('2011-05-06 00:00:00')
+      @notification.delivery_window = 7
     end
 
     expected = ['2011-05-03', '2011-05-06', '11-18']
@@ -256,39 +165,154 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
-  # set_delivery_range:
-  #--------------------
-  # takes date, expires and preferred_time
-  test "responds to set_delivery_range" do
-    assert_respond_to @notification, :set_delivery_range
+  # last_error_type:
+  #-----------------
+  test "should be valid without a last_error_type" do
+    @notification.last_error_type = nil
+    assert @notification.valid?
   end
 
-  test "set_delivery_range: start_date is required" do
+  #----------------------------------------------------------------------------#
+  # last_error_msg:
+  #----------------
+  test "should be valid without a last_error_msg" do
+    @notification.last_error_msg = nil
+    assert @notification.valid?
+  end
+
+  test "last_error_msg should be able to hold messages at least 4096 chars" do
+    @notification.last_error_msg = 'x'*4096
+    assert @notification.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # last_run_at:
+  #-------------
+  test "should be valid without a last_run_at datetime" do
+    @notification.last_run_at = nil
+    assert @notification.valid?
+  end
+
+  test "last_run_at should hold both a date and a time" do
+    expected = @notification.last_run_at = 2.days.ago
+    assert_equal expected, @notification.last_run_at
+  end
+
+  #----------------------------------------------------------------------------#
+  # message:
+  #---------
+  test "should be invalid without a message_id" do
+    @notification.message_id = nil
+    assert @notification.invalid?
+    assert @notification.errors[:message_id].any?
+  end
+
+  test "can access message from notification" do
+    assert @notification.message
+  end
+
+  #----------------------------------------------------------------------------#
+  # message_path:
+  #--------------
+  test "should be able to set a notification's message by its path" do
+    @notification.message = nil
+    assert_nil @notification.message
+    @notification.message_path = @message.path
+    assert_equal @message.id, @notification.message.id
+  end
+
+  test "should be able to unset the message by assigning a nil message_path" do
+    assert_not_nil @notification.message
+    @notification.message_path = nil
+    assert_nil @notification.message
+  end
+
+  test "setting a message_path to a nonexistent path should unset message" do
+    assert_not_nil @notification.message
+    @notification.message_path = 'nonexistent/path'
+    assert_nil @notification.message
+  end
+
+  #----------------------------------------------------------------------------#
+  # notifier:
+  #----------
+  test "should be invalid without a notifier_id" do
+    @notification.notifier_id = nil
+    assert @notification.invalid?
+    assert @notification.errors[:notifier_id].any?
+  end
+
+  test "can access notifier from notification" do
+    assert @notification.notifier
+  end
+
+  #----------------------------------------------------------------------------#
+  # phone_number:
+  #--------------
+  test "should be invalid without a phone_number" do
+    @notification.phone_number = nil
+    assert @notification.invalid?
+    assert @notification.errors[:phone_number].any?
+  end
+
+  #----------------------------------------------------------------------------#
+  # saving/enqueuing:
+  #------------------
+  test "saving new notification should create an enqueue new delivery job" do
+    job = mock()
+    DeliverNotificationJob.expects(:new).once.returns(job)
+    Delayed::Job.expects(:enqueue).with(job).once
+    @notification.save!
+  end
+
+  test "saving invalid notification should not enqueue delivery job" do
+    DeliverNotificationJob.expects(:new).never
+    @notification.message = nil
+    assert_equal false, @notification.save
+  end
+
+  test "saving existing notification should not enqueue new delivery job" do
+    assert @notification.save
+    DeliverNotificationJob.expects(:new).never
+    Delayed::Job.expects(:enqueue).never
+    @notification.save!
+  end
+
+  #----------------------------------------------------------------------------#
+  # set_delivery_range: (takes date, expires and preferred_time)
+  #--------------------
+  test "first argument to set_delivery_range is a required argument" do
     assert_raise(ArgumentError) { @notification.set_delivery_range }
+  end
+
+  test "set_delivery_range should return false if start_date nil" do
     assert_equal false, @notification.set_delivery_range(nil)
   end
 
-  test "set_delivery_range: expire_date is optional" do
-    assert @notification.set_delivery_range('2011-05-03')
+  test "set_delivery_range should return true if no expire_date" do
+    assert_equal true, @notification.set_delivery_range('2011-05-03')
   end
 
-  test "set_delivery_range: preferred_time is optional" do
-    assert @notification.set_delivery_range('2011-05-02', '2011-05-03')
+  test "set_delivery_range should return true if no preferred_time" do
+    result = @notification.set_delivery_range('2011-05-02', '2011-05-03')
+    assert_equal true, result
   end
 
-  test "set_delivery_range: invalid start date should return false" do
+  test "set_delivery_range should return false if start_date is invalid" do
     assert_equal false, @notification.set_delivery_range('2011-13-13')
   end
 
-  test "set_delivery_range: invalid expire date should return false" do
-    assert_equal false, @notification.set_delivery_range('2011-02-15', '2011-13-13')
+  test "set_delivery_range should return false if expire_date is invalid" do
+    result = @notification.set_delivery_range('2011-02-15', '2011-13-13')
+    assert_equal false, result
   end
 
-  test "set_delivery_range: preferred time should accept a time range" do
-    assert @notification.set_delivery_range('2011-05-02', nil, '11-14')
+  test "set_delivery_range should return true if preferred_time is a range" do
+    result = @notification.set_delivery_range('2011-05-02', nil, '11-14')
+    assert_equal true, result
   end
 
-  test "set_delivery_range: default expire date is 7 days from start" do
+  test "set_delivery_range should expire 7 days from start by default" do
     Time.use_zone(@notifier.timezone) do
       expires = Time.zone.parse('2011-05-10 00:00:00')
       @notification.set_delivery_range('2011-05-03')
@@ -296,23 +320,21 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test "set_delivery_range: default delivery window is 6 hours" do
+  test "set_delivery_range should have default delivery window of 6 hours" do
     @notification.set_delivery_range('2011-05-03', '2011-05-05')
     assert_equal 6, @notification.delivery_window
   end
 
-  test "set_delivery_range: default start time is 12pm local to notifer" do
+  test "set_delivery_range defaults start time to 12pm local to notifer" do
     @notification.set_delivery_range('2011-05-03')
-
     Time.use_zone(@notifier.timezone) do
       start = Time.zone.parse('2011-05-03 12:00:00')
       assert_equal start, @notification.delivery_start
     end
   end
 
-  test "set_delivery_range: should ignore any 'time parts' passed in" do
+  test "set_delivery_range should ignore any 'time parts' passed in" do
     @notification.set_delivery_range('2011-05-03 16:17:00', '2011-05-07 01:04:00')
-
     Time.use_zone(@notifier.timezone) do
       start = Time.zone.parse('2011-05-03 12:00:00')
       expires = Time.zone.parse('2011-05-07 00:00:00')
@@ -323,7 +345,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "set_delivery_range: preferred time sets window and start time" do
     @notification.set_delivery_range('2011-05-03', nil, '10-15')
-
     Time.use_zone(@notifier.timezone) do
       start = Time.zone.parse('2011-05-03 10:00:00')
       assert_equal start, @notification.delivery_start
@@ -345,7 +366,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "set_delivery_range: preferred time won't get set before 9am" do
     @notification.set_delivery_range('2011-05-03', nil, '7-15')
-
     Time.use_zone(@notifier.timezone) do
       start = Time.zone.parse('2011-05-03 09:00:00')
       assert_equal start, @notification.delivery_start
@@ -354,7 +374,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "set_delivery_range: preferred time won't get set afterp 9pm" do
     @notification.set_delivery_range('2011-05-03', nil, '13-22')
-
     Time.use_zone(@notifier.timezone) do
       start = Time.zone.parse('2011-05-03 13:00:00')
       assert_equal start, @notification.delivery_start
@@ -391,65 +410,72 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
-  # saving/enqueuing:
-  #------------------
-  test "saving new notification should create an enqueue new delivery job" do
-    notification = Factory.build(:notification)
-
-    job = mock()
-    DeliverNotificationJob.expects(:new).once.returns(job)
-    Delayed::Job.expects(:enqueue).with(job).once
-
-    notification.save!
+  # status:
+  #--------
+  test "should be invalid without a status" do
+    @notification.status = nil
+    assert @notification.invalid?
+    assert @notification.errors[:status].any?
   end
 
-  test "saving invalid notification should not enqueue deliver job" do
-    notification = Factory.build(:notification, :message => nil)
-
-    job = mock()
-    DeliverNotificationJob.expects(:new).never
-
-    assert_equal false, notification.save
+  test "should be invalid if an unexpected status" do
+    @notification.status = 'SHOT'
+    assert @notification.invalid?
+    assert @notification.errors[:status].any?
   end
 
-  test "saving existing notification should not enqueue new delivery job" do
-    notification = Factory.create(:notification)
-
-    DeliverNotificationJob.expects(:new).never
-    Delayed::Job.expects(:enqueue).never
-
-    notification.save!
+  test "default delivery status is NEW" do
+    assert_equal Notification::NEW, Notification.new.status
   end
 
-  #----------------------------------------------------------------------------#
-  # relationship w/ Message:
-  #-------------------------
-  test "can access message from notification" do
-    assert Factory.build(:notification).message
+  test "should be valid if status is NEW" do
+    @notification.status = Notification::NEW
+    assert @notification.valid?
   end
 
-  test "can associate multiple notifications with a message" do
-    message = Factory.build(:message)
-    message.notifications << Factory.build(:notification)
-    message.notifications << Factory.build(:notification)
-    assert_equal 2, message.notifications.size
+  test "should be valid if status is SUCCESS" do
+    @notification.status = Notification::SUCCESS
+    assert @notification.valid?
+  end
+
+  test "should be valid if status is TEMP_FAIL" do
+    @notification.status = Notification::TEMP_FAIL
+    assert @notification.valid?
+  end
+
+  test "should be valid if status is PERM_FAIL" do
+    @notification.status = Notification::PERM_FAIL
+    assert @notification.valid?
   end
 
   #----------------------------------------------------------------------------#
-  # relationship w/ Notifier:
-  #--------------------------
-  test "can access notifier from notification" do
-    assert Factory.build(:notification).notifier
+  # uuid:
+  #------
+  test "should be invalid without a uuid" do
+    @notification.uuid = nil
+    assert @notification.invalid?
+    assert @notification.errors[:uuid].any?
   end
 
-  #----------------------------------------------------------------------------#
-  # relationship w/ DeliveryAttempt:
-  #---------------------------------
-  test "can associate multiple delivery attempts with a notification" do
-    notification = Factory.build(:notification)
-    notification.delivery_attempts << Factory.build(:delivery_attempt)
-    notification.delivery_attempts << Factory.build(:delivery_attempt)
-    assert_equal 2, notification.delivery_attempts.size
+  test "should be valid if uuid contains non-numeric characters" do
+    @notification.uuid = 'asdf1234_:44N'
+    assert @notification.valid?
+  end
+
+  test "two notifications for the same notifier cannot share the same uuid" do
+    @notification.save!
+    n2 = @notification.clone
+    n2.uuid = @notification.uuid
+    assert n2.invalid?
+    assert n2.errors[:uuid].any?
+  end
+
+  test "notifications can have same uuid if different notifiers" do
+    @notification.save!
+    n2 = @notification.clone
+    n2.uuid = @notification.uuid
+    n2.notifier = Factory.create(:notifier)
+    assert n2.valid?
   end
 
 end

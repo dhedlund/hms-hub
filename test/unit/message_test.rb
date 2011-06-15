@@ -1,98 +1,172 @@
 require 'test_helper'
 
 class MessagesTest < ActiveSupport::TestCase
+  setup do
+    @message = Factory.build(:message)
+    @stream = @message.message_stream
+  end
+
   test "valid message should be valid" do
-    assert Factory.build(:message).valid?
-  end
-
-  test "should be invalid without a message stream id" do
-    assert Factory.build(:message, :message_stream_id => nil).invalid?
-  end
-
-  test "should be invalid without a name" do
-    assert Factory.build(:message, :name => nil).invalid?
-  end
-
-  test "ivr codes are supported" do
-    message = Factory.build(:message, :ivr_code => 'myivrcode')
-    assert_equal 'myivrcode', message.ivr_code
-  end
-
-  test "should be invalid without a title" do
-    assert Factory.build(:message, :title => nil).invalid?
+    assert @message.valid?
   end
 
   #----------------------------------------------------------------------------#
-  # sms_text:
+  # find_by_path:
+  #--------------
+  test "searching for a message by its path returns correct message" do
+    [
+      Factory.build(:message, :message_stream => @stream),
+      Factory.build(:message),
+      @message
+    ].shuffle.each { |m| m.save! }
+
+    assert @found = Message.find_by_path(@message.path)
+    assert_equal @message.id, @found.id
+  end
+
+  test "searching for a message by a nonexistent path should return nil" do
+    @message.save!
+    assert_nil Message.find_by_path('nonexistent/path')
+  end
+
+  #----------------------------------------------------------------------------#
+  # ivr_code:
   #----------
-  test "sms_text is supported" do
-    message = Factory.build(:message, :sms_text => 'my message')
-    assert_equal 'my message', message.sms_text
+  test "should be valid without an ivr_code" do
+    @message.ivr_code = nil
+    assert @message.valid?
   end
 
-  test "sms_text is optional (can be nil)" do
-    message = Factory.build(:message, :sms_text => nil).valid?
+  #----------------------------------------------------------------------------#
+  # message_stream:
+  #----------------
+  test "should be invalid without a message_stream_id" do
+    @message.message_stream_id = nil
+    assert @message.invalid?
+    assert @message.errors[:message_stream_id].any?
   end
 
-  test "sms_text cannot be blank" do
-    assert Factory.build(:message, :sms_text => '').invalid?
+  test "can access message_stream from message" do
+    assert @message.message_stream
   end
 
-  test "sms text can be up to 160 chars" do
-    assert Factory.build(:message, :sms_text => 'x'*160).valid?
+  #----------------------------------------------------------------------------#
+  # name:
+  #------
+  test "should be invalid without a name" do
+    @message.name = nil
+    assert @message.invalid?
+    assert @message.errors[:name].any?
   end
 
-  test "an sms text greater than 160 chars is invalid" do
-    assert Factory.build(:message, :sms_text => 'x'*161).invalid?
+  test "two messages within the same stream cannot share the same name" do
+    @message.save!
+    m2 = @message.clone
+    m2.name = @message.name
+    assert m2.invalid?
+    assert m2.errors[:name].any?
+  end
+
+  test "messages can have the same name if belonging to different streams" do
+    @message.save!
+    m2 = @message.clone
+    m2.name = @message.name
+    m2.message_stream = Factory.create(:message_stream)
+    assert m2.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # notifications:
+  #---------------
+  test "can associate multiple notifications with a message" do
+    assert_difference('@message.notifications.size', 2) do
+      2.times do
+        notification = Factory.build(:notification, :message => @message)
+        @message.notifications << notification
+      end
+    end
   end
 
   #----------------------------------------------------------------------------#
   # offset_days:
   #-------------
-  test "should be invalid without an offset" do
-    assert Factory.build(:message, :offset_days => nil).invalid?
+  test "should be invalid without offset_days" do
+    @message.offset_days = nil
+    assert @message.invalid?
+    assert @message.errors[:offset_days].any?
   end
 
-  test "days offset must be a whole number" do
-    assert Factory.build(:message, :offset_days => 2.25).invalid?
+  test "should be invalid if offset_days is not a whole number" do
+    @message.offset_days = 2.25
+    assert @message.invalid?
+    assert @message.errors[:offset_days].any?
   end
 
-  test "negative day offsets are invalid" do
-    assert Factory.build(:message, :offset_days => -5).invalid?
+  test "should be invalid if offset_days is negative" do
+    @message.offset_days = -5
+    assert @message.invalid?
+    assert @message.errors[:offset_days].any?
   end
 
-  test "zero day offsets are valid" do
-    assert Factory.build(:message, :offset_days => 0).valid?
+  test "should be valid if offset_days is zero" do
+    @message.offset_days = 0
+    assert @message.valid?
   end
 
   #----------------------------------------------------------------------------#
   # path:
   #------
-  test "can get a unique path to represent message across message streams" do
-    message = Factory.build(:message)
-    assert_equal "#{message.message_stream.name}/#{message.name}",
-      message.path
+  test "path is a combination of message stream name and message name" do
+    assert_equal "#{@stream.name}/#{@message.name}", @message.path
   end
 
-  test "path should return nil if not enough info to build path" do
-    assert_nil Factory.build(:message, :message_stream => nil).path
-    assert_nil Factory.build(:message, :name => nil).path
+  test "path should not return a value if no message name" do
+    @message.name = nil
+    assert_nil @message.path
   end
 
-  test "can search for a message by its path" do
-    message = Factory.create(:message)
-    assert_equal message, Message.find_by_path(message.path)
-  end
-
-  test "searching for a message by a nonexistent path should return nil" do
-    assert_nil Message.find_by_path('nonexistent/path')
+  test "path should not return a value if no message stream name" do
+    @stream.name = nil
+    assert_nil @message.path
   end
 
   #----------------------------------------------------------------------------#
-  # relationship w/ MessageStream:
-  #-------------------------------
-  test "can access message stream from message" do
-    assert Factory.build(:message).message_stream
+  # sms_text:
+  #----------
+  test "should be valid without an sms_text" do
+    @message.sms_text = nil
+    assert @message.valid?
+  end
+
+  test "should be invalid if sms_text is empty (but not nil)" do
+    @message.sms_text = ''
+    assert @message.invalid?
+    assert @message.errors[:sms_text].any?
+  end
+
+  test "should allow sms_text messages as short as 1 character" do
+    @message.sms_text = 'x'
+    assert @message.valid?
+  end
+
+  test "should allow sms_text messages up to 160 characters" do
+    @message.sms_text = 'x'*160
+    assert @message.valid?
+  end
+
+  test "should not allow sms_text messages greater than 160 characters "do
+    @message.sms_text = 'x'*161
+    assert @message.invalid?
+    assert @message.errors[:sms_text].any?
+  end
+
+  #----------------------------------------------------------------------------#
+  # title:
+  #-------
+  test "should be invalid without a title" do
+    @message.title = nil
+    assert @message.invalid?
+    assert @message.errors[:title].any?
   end
 
 end

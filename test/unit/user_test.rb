@@ -1,34 +1,52 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  setup do
+    @user = Factory.build(:user)
+  end
+
   test "valid user should be valid" do
-    assert Factory.build(:user).valid?
-  end
-
-  #----------------------------------------------------------------------------#
-  # username:
-  #----------
-  test "should be invalid without a username" do
-    assert Factory.build(:user, :username => nil).invalid?
-  end
-
-  test "cannot have two users with the same username" do
-    Factory.create(:user, :username => 'myuser')
-    assert Factory.build(:user, :username => 'myuser').invalid?
+    assert @user.valid?
   end
 
   #----------------------------------------------------------------------------#
   # password:
   #----------
   test "should be invalid without a password" do
-    assert Factory.build(:user, :password => nil).invalid?
+    @user.password = nil
+    assert @user.invalid?
+    assert @user.errors[:password].any?
+  end
+
+  test "should be invalid with a blank password" do
+    @user.password = ''
+    assert @user.invalid?
+    assert @user.errors[:password].any?
   end
 
   #----------------------------------------------------------------------------#
   # timezone:
   #----------
   test "should be invalid without a timezone" do
-    assert Factory.build(:user, :timezone => nil).invalid?
+    @user.timezone = nil
+    assert @user.invalid?
+    assert @user.errors[:timezone]
+  end
+
+  #----------------------------------------------------------------------------#
+  # username:
+  #----------
+  test "should be invalid without a username" do
+    @user.username = nil
+    assert @user.invalid?
+    assert @user.errors[:username].any?
+  end
+
+  test "cannot have two users with the same username" do
+    Factory.create(:user, :username => 'myuser')
+    @user.username = 'myuser'
+    assert @user.invalid?
+    assert @user.errors[:username].any?
   end
 
 end
