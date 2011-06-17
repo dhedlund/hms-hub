@@ -433,8 +433,8 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.valid?
   end
 
-  test "should be valid if status is SUCCESS" do
-    @notification.status = Notification::SUCCESS
+  test "should be valid if status is DELIVERED" do
+    @notification.status = Notification::DELIVERED
     assert @notification.valid?
   end
 
@@ -445,6 +445,11 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "should be valid if status is PERM_FAIL" do
     @notification.status = Notification::PERM_FAIL
+    assert @notification.valid?
+  end
+
+  test "should be valid if status is CANCELLED" do
+    @notification.status = Notification::CANCELLED
     assert @notification.valid?
   end
 

@@ -23,7 +23,7 @@ class Api::NotificationsControllerTest < ActionController::TestCase
     @notifier.save
 
     notifications[0].last_run_at = 1.day.ago
-    notifications[1].status = 'SUCCESS'
+    notifications[1].status = 'DELIVERED'
     notifications[1].last_run_at = 1.hour.ago
     notifications[2].status = 'PERM_FAIL'
     notifications[2].last_error_type = 'INVALID_PHONE_NUMBER'
@@ -35,7 +35,7 @@ class Api::NotificationsControllerTest < ActionController::TestCase
     assert_response :success
 
     assert_equal 2, json_response.count
-    assert_equal 'SUCCESS', json_response[0]['notification']['status']
+    assert_equal 'DELIVERED', json_response[0]['notification']['status']
 
     expected = {
       'type' => 'INVALID_PHONE_NUMBER',

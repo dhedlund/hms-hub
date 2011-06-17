@@ -7,10 +7,11 @@ class Notification < ActiveRecord::Base
   after_create :enqueue_delivery
 
   NEW = 'NEW'
-  SUCCESS = 'SUCCESS'
   TEMP_FAIL = 'TEMP_FAIL'
   PERM_FAIL = 'PERM_FAIL'
-  VALID_STATUSES = [ NEW, SUCCESS, TEMP_FAIL, PERM_FAIL ]
+  DELIVERED = 'DELIVERED'
+  CANCELLED = 'CANCELLED'
+  VALID_STATUSES = [ NEW, TEMP_FAIL, PERM_FAIL, DELIVERED, CANCELLED ]
 
   SMS = 'SMS'
   IVR = 'IVR'
