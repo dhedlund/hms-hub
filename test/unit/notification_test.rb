@@ -12,8 +12,21 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
-  # delivery_attempt:
-  #------------------
+  # delivered_at:
+  #--------------
+  test "should be valid without a delivered_at datetime" do
+    @notification.delivered_at = nil
+    assert @notification.valid?
+  end
+
+  test "delivered_at should hold both a date and a time" do
+    expected = @notification.delivered_at = 3.days.ago
+    assert_equal expected, @notification.delivered_at
+  end
+
+  #----------------------------------------------------------------------------#
+  # delivery_attempts:
+  #-------------------
   test "can associate multiple delivery_attempts with a notification" do
     assert_difference('@notification.delivery_attempts.size', 2) do
       2.times do
