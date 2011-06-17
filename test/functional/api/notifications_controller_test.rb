@@ -48,28 +48,42 @@ class Api::NotificationsControllerTest < ActionController::TestCase
     @notifier.last_status_req_at = 1.hour.ago
     @notifier.save!
 
-    notification = Factory.create(:notification,
-      :notifier => @notifier,
-      :status => 'PERM_FAIL',
-      :last_error_type => 'INVALID_PHONE_NUMBER',
-      :last_error_msg => 'Phone number not in service.',
-      :last_run_at => 1.hour.ago
-    )
+    notifications = [
+      Factory.create(:notification,
+        :notifier => @notifier,
+        :status => 'PERM_FAIL',
+        :last_error_type => 'INVALID_PHONE_NUMBER',
+        :last_error_msg => 'Phone number not in service.',
+        :last_run_at => 1.hour.ago
+      ),
+      Factory.create(:notification,
+        :notifier => @notifier,
+        :status => 'DELIVERED',
+        :delivered_at => 1.hour.ago,
+        :last_run_at => 1.hour.ago
+      )
+    ]
 
     get :updated, :format => :json, :only_status => 1
     assert_response :success
 
-    assert_equal 1, json_response.count
+    assert_equal 2, json_response.count
 
-    expected = {
-      'uuid'   => notification.uuid,
+    error_expected = {
+      'uuid'   => notifications[0].uuid,
       'status' => 'PERM_FAIL',
       'error'  => {
         'type'    => 'INVALID_PHONE_NUMBER',
         'message' => 'Phone number not in service.',
       }
     }
-    assert_equal expected, json_response[0]['notification']
+    delivered_expected = {
+      'uuid'   => notifications[1].uuid,
+      'status' => 'DELIVERED',
+      'delivered_at' => notifications[1].delivered_at.strftime('%Y-%m-%d %H:%M:%S')
+    }
+    assert_equal error_expected, json_response[0]['notification']
+    assert_equal delivered_expected, json_response[1]['notification']
   end
 
   test "GET /api/notifications/updated should update last_status_req_at" do

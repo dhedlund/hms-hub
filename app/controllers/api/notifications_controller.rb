@@ -46,6 +46,7 @@ class Api::NotificationsController < ApiController
         :notification => {
           :uuid => notification.uuid,
           :status => notification.status,
+          :delivered_at => notification.delivered_at.try(:strftime, '%Y-%m-%d %H:%M:%S'),
           :error => {
             :type => notification.last_error_type,
             :message => notification.last_error_msg,
@@ -64,6 +65,7 @@ class Api::NotificationsController < ApiController
           :delivery_expires => expires,
           :preferred_time => preferred_time,
           :status => notification.status,
+          :delivered_at => notification.delivered_at.try(:strftime, '%Y-%m-%d %H:%M:%S'),
           :error => {
             :type => notification.last_error_type,
             :message => notification.last_error_msg,
