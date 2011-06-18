@@ -270,29 +270,6 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
-  # saving/enqueuing:
-  #------------------
-  test "saving new notification should create an enqueue new delivery job" do
-    job = mock()
-    DeliverNotificationJob.expects(:new).once.returns(job)
-    Delayed::Job.expects(:enqueue).with(job).once
-    @notification.save!
-  end
-
-  test "saving invalid notification should not enqueue delivery job" do
-    DeliverNotificationJob.expects(:new).never
-    @notification.message = nil
-    assert_equal false, @notification.save
-  end
-
-  test "saving existing notification should not enqueue new delivery job" do
-    assert @notification.save
-    DeliverNotificationJob.expects(:new).never
-    Delayed::Job.expects(:enqueue).never
-    @notification.save!
-  end
-
-  #----------------------------------------------------------------------------#
   # set_delivery_range: (takes date, expires and preferred_time)
   #--------------------
   test "first argument to set_delivery_range is a required argument" do
