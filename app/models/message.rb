@@ -9,13 +9,12 @@ class Message < ActiveRecord::Base
   validates :offset_days, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
 
   def self.find_by_path(path)
-    (sname, mname) = path.to_s.split '/'
-
-    stream_where = MessageStream.where(:name => sname)
-    where(:name => mname).joins(:message_stream).merge(stream_where).first
+    %r{^([^/]+)/([^/]+)$} =~ path or return
+    stream = MessageStream.find_by_name($1) or return
+    stream.messages.find_by_name($2)
   end
 
   def path
-    message_stream.name + '/' + name rescue nil
+    "#{message_stream.name}/#{name}" if message_stream.name && name
   end
 end
