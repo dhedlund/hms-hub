@@ -17,6 +17,12 @@ class Notification < ActiveRecord::Base
   IVR = 'IVR'
   VALID_DELIVERY_METHODS = [ SMS, IVR ]
 
+  WINDOW_SIZE   = 6  # default delivery window size, in hours
+  WINDOW_START  = 12 # default delivery start hour, in hours
+  EXPIRES_AFTER = 7  # default expiration date offset, in days
+  EARLIEST_HOUR = 9  # earliest a notification can be delivered, in hours
+  LATEST_HOUR   = 21 # latest a notification can be delivered, in hours
+
   validates :uuid, :presence => true, :uniqueness => { :scope => :notifier_id }
   validates :notifier_id, :presence => true
   validates :message_id, :presence => true
@@ -29,12 +35,6 @@ class Notification < ActiveRecord::Base
     :less_than_or_equal_to => 12
   }
   validates :status, :inclusion => VALID_STATUSES
-
-  WINDOW_SIZE   = 6  # default delivery window size, in hours
-  WINDOW_START  = 12 # default delivery start hour, in hours
-  EXPIRES_AFTER = 7  # default expiration date offset, in days
-  EARLIEST_HOUR = 9  # earliest a notification can be delivered, in hours
-  LATEST_HOUR   = 21 # latest a notification can be delivered, in hours
 
   def default_values
     self.status ||= 'NEW'
