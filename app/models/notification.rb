@@ -4,7 +4,6 @@ class Notification < ActiveRecord::Base
   has_many :delivery_attempts
 
   after_initialize :default_values
-  after_create :enqueue_delivery
 
   NEW = 'NEW'
   TEMP_FAIL = 'TEMP_FAIL'
@@ -90,13 +89,6 @@ class Notification < ActiveRecord::Base
     rescue ArgumentError
       false
     end
-  end
-
-
-  protected
-
-  def enqueue_delivery
-    Delayed::Job.enqueue(DeliverNotificationJob.new(id))
   end
 
 end
