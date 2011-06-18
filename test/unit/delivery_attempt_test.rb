@@ -127,15 +127,49 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
   #----------------------------------------------------------------------------#
   # save/deliver hooks:
   #--------------------
-  test "should attempt delivery once on save" do
+  test "should attempt delivery on create" do
     @attempt.expects(:deliver).once
     assert_equal true, @attempt.save
   end
 
-  test "should not attempt delivery on subsequent save attempts" do
+  test "should not attempt delivery on updates" do
     @attempt.save!
     @attempt.expects(:deliver).never
     8.times { @attempt.save! }
+  end
+
+  test "should update notification with delivery status on success" do
+    @attempt.save! # do deliver() first to prevent result being overwritten
+    @attempt.result = DeliveryAttempt::DELIVERED
+    @attempt.save!
+
+    assert_equal Notification::DELIVERED, @notification.status
+    assert_equal @attempt.updated_at, @notification.delivered_at
+  end
+
+  test "should update notification with delivery status on failure" do
+    ['TEMP_FAIL', 'PERM_FAIL'].each do |result|
+      attempt = Factory.create(:delivery_attempt)
+      notification = attempt.notification
+      attempt.update_attributes(
+        :result     => result,
+        :error_type => 'CONNECTION_LOST',
+        :error_msg  => 'Remote server disconnected.'
+      )
+
+      assert_equal attempt.result, notification.status
+      assert_equal attempt.error_type, notification.last_error_type
+      assert_equal attempt.error_msg, notification.last_error_msg
+      assert_equal attempt.updated_at, notification.last_run_at
+    end
+  end
+
+  test "should not update notification status if response is ASYNC_DELIVERY" do
+    @attempt.save! # do deliver() first to prevent result being overwritten
+    @attempt.result = DeliveryAttempt::ASYNC_DELIVERY
+    @attempt.save!
+
+    assert_not_equal @attempt.result, @notification.status
   end
 
 end
