@@ -100,9 +100,27 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
     assert @attempt.errors[:result].any?
   end
 
-  test "should be valid if status is SUCCESS" do
+  test "should be valid if result is TEMP_FAIL" do
     @attempt.save!
-    @attempt.result = DeliveryAttempt::SUCCESS
+    @attempt.result = DeliveryAttempt::TEMP_FAIL
+    assert @attempt.valid?
+  end
+
+  test "should be valid if result is PERM_FAIL" do
+    @attempt.save!
+    @attempt.result = DeliveryAttempt::PERM_FAIL
+    assert @attempt.valid?
+  end
+
+  test "should be valid if result is DELIVERED" do
+    @attempt.save!
+    @attempt.result = DeliveryAttempt::DELIVERED
+    assert @attempt.valid?
+  end
+
+  test "should be valid if result is ASYNC_DELIVERY" do
+    @attempt.save!
+    @attempt.result = DeliveryAttempt::ASYNC_DELIVERY
     assert @attempt.valid?
   end
 

@@ -4,8 +4,11 @@ class DeliveryAttempt < ActiveRecord::Base
 
   after_create :deliver
 
-  SUCCESS = 'SUCCESS'
-  VALID_RESULTS = [ SUCCESS ]
+  TEMP_FAIL = 'TEMP_FAIL'
+  PERM_FAIL = 'PERM_FAIL'
+  DELIVERED = 'DELIVERED'
+  ASYNC_DELIVERY = 'ASYNC_DELIVERY'
+  VALID_RESULTS = [ TEMP_FAIL, PERM_FAIL, DELIVERED, ASYNC_DELIVERY ]
 
   validates :notification_id, :presence => true
   validates :message_id, :presence => true
@@ -33,7 +36,7 @@ class DeliveryAttempt < ActiveRecord::Base
   def deliver
     return false if result
 
-    self.result = SUCCESS
+    self.result = DELIVERED
     self.save!
 
     return true
