@@ -49,11 +49,17 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal expected, @notification.delivery_expires
   end
 
-  test "delivery_expires should default to 7 days from delivery_start_date" do
+  test "delivery_expires should default to 7 days from delivery_start date" do
     @notification.delivery_expires = nil
     @notification.delivery_start = 5.days.ago + 4.hours
     expected = @notification.delivery_start + 7.days
     assert_equal expected, @notification.delivery_expires
+  end
+
+  test "delivery_expires should return nil if no delivery_start specified" do
+    @notification.delivery_expires = nil
+    @notification.delivery_start = nil
+    assert_nil @notification.delivery_expires
   end
 
   #----------------------------------------------------------------------------#
@@ -153,11 +159,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "get_delivery_range returns nil if no delivery_start" do
     @notification.delivery_start = nil
-    assert_nil @notification.get_delivery_range
-  end
-
-  test "get_delivery_range returns nil if no delivery_expires" do
-    @notification.delivery_expires = nil
     assert_nil @notification.get_delivery_range
   end
 

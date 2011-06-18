@@ -41,6 +41,10 @@ class Notification < ActiveRecord::Base
     self.delivery_window ||= WINDOW_SIZE
   end
 
+  def delivery_expires
+    self[:delivery_expires] ||= delivery_start.try(:+, EXPIRES_AFTER.days)
+  end
+
   def message_path=(path)
     self.message = Message.find_by_path(path)
   end
@@ -86,14 +90,6 @@ class Notification < ActiveRecord::Base
     rescue ArgumentError
       false
     end
-  end
-
-  def delivery_start=(value)
-    if value && !delivery_expires
-      write_attribute :delivery_expires, value + EXPIRES_AFTER.days
-    end
-
-    write_attribute :delivery_start, value
   end
 
 
