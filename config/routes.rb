@@ -22,6 +22,8 @@ HmsHub::Application.routes.draw do
 
   match 'api/*url' => 'api#not_found'
 
+  root :to => "status_checks#dbcheck"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
