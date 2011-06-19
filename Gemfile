@@ -8,6 +8,10 @@ gem 'haml'
 
 gem 'delayed_job'
 
+group :development do
+  gem 'rvm'
+end
+  
 group :development, :test do
   gem 'rails3-generators'
   gem 'haml-rails'
