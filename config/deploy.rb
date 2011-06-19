@@ -21,13 +21,15 @@ set :deploy_to, "/var/www/apps/#{application}"
 
 
 
-set :shared_files, ["config/priv"]
-
 # Passenger controls:
 namespace :deploy do
    task :start do ; end
    task :stop do ; end
    task :restart, :roles => :app, :except => { :no_release => true } do
-     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+     run "touch #{File.join(current_path,'tmp','restart.txt')}"
    end
+end
+
+task :after_update_code, :roles => :app do
+    run "cp #{shared_path}/config/database.yml #{release_path}/config/database.yml"
 end
