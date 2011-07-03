@@ -101,8 +101,8 @@ class Api::NotificationsControllerTest < ActionController::TestCase
       'phone_number'     => '+01234-5678-9',
       'message_path'     => notification.message.path,
       'delivery_method'  => 'SMS',
-      'delivery_date'    => Date.parse('2011-05-03'),
-      'delivery_expires' => Date.parse('2011-05-08'),
+      'delivery_date'    => Date.parse('2011-05-03').strftime('%Y-%m-%d'),
+      'delivery_expires' => Date.parse('2011-05-08').strftime('%Y-%m-%d'),
       'preferred_time'   => '10-14',
     }
 

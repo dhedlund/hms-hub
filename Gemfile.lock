@@ -55,8 +55,11 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     mocha (0.9.12)
+    multi_json (1.0.3)
     mysql (2.8.1)
     polyglot (0.3.1)
+    rabl (0.3.0)
+      multi_json (~> 1.0.3)
     rack (1.2.2)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
@@ -84,6 +87,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.27)
+    yajl-ruby (0.8.2)
 
 PLATFORMS
   ruby
@@ -96,7 +100,9 @@ DEPENDENCIES
   jsonschema
   mocha
   mysql
+  rabl
   rails (= 3.0.7)
   rails3-generators
   rvm
   sqlite3
+  yajl-ruby

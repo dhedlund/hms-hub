@@ -6,6 +6,9 @@ gem 'mysql'
 gem 'sqlite3'
 gem 'haml'
 
+gem 'yajl-ruby', :require => 'yajl'
+gem 'rabl'
+
 gem 'delayed_job'
 
 group :development do
