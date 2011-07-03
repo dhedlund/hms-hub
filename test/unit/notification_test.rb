@@ -270,6 +270,28 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "run: notifications that have had a delivery attempt made" do
+    (0..5).map { |h| Date.today + h.hours }.map do |lra|
+      Factory.create(:notification, :notifier => @notifier, :last_run_at => lra)
+    end
+    not_run = Factory.create(:notification, :notifier => @notifier)
+
+    matched = @notifier.notifications.run
+    assert_equal 6, matched.count
+    assert matched.map(&:id).exclude? not_run.id
+  end
+
+  test "run_since: restrict to notifications run since given datetime" do
+    ns = (0..5).map { |h| Date.today + h.hours }.map do |lra|
+      Factory.create(:notification, :notifier => @notifier, :last_run_at => lra)
+    end
+
+    assert_equal 3, @notifier.notifications.run_since(ns[2].last_run_at).count
+  end
+
+  #----------------------------------------------------------------------------#
   # set_delivery_range: (takes date, expires and preferred_time)
   #--------------------
   test "first argument to set_delivery_range is a required argument" do

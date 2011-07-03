@@ -35,6 +35,9 @@ class Notification < ActiveRecord::Base
   }
   validates :status, :inclusion => VALID_STATUSES
 
+  scope :run, where('last_run_at is not null')
+  scope :run_since, lambda { |f| run.where('last_run_at > ?', f) }
+
   def default_values
     self.status ||= 'NEW'
     self.delivery_window ||= WINDOW_SIZE

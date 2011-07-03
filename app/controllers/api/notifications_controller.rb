@@ -26,9 +26,10 @@ class Api::NotificationsController < ApiController
   end
 
   def updated
+    @notifications = current_user.notifications.run
+
     from_date = current_user.last_status_req_at
-    @notifications = current_user.notifications
-    @notifications = @notifications.where('last_run_at > ?', from_date) if from_date
+    @notifications = @notifications.run_since(from_date) if from_date
 
     current_user.update_attributes({ :last_status_req_at => Time.now })
   end
