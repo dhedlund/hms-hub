@@ -46,9 +46,14 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
                 type: object
                 additionalProperties: false
                 properties:
-                  name: { type: string }
-                  title: { type: string }
-                  offset_days: { type: integer }
+                  message:
+                    items:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        name: { type: string }
+                        title: { type: string }
+                        offset_days: { type: integer }
     YAMLEND
     assert_nothing_raised { JSON::Schema.validate(json_response, schema) }
   end
@@ -64,10 +69,11 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
         'name' => stream.name,
         'title' => stream.title,
         'messages' => stream.messages.map { |message| {
-          'name' => message.name,
-          'title' => message.title,
-          'offset_days' => message.offset_days,
-    } } } } }
+          'message' => {
+            'name' => message.name,
+            'title' => message.title,
+            'offset_days' => message.offset_days,
+    } } } } } }
     assert_equal data, json_response
   end
 
