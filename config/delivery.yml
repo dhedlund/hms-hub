@@ -1,0 +1,34 @@
+# Default settings notification delivery services.  You can override
+# connection settings for one or more environments by creating a
+# config/priv/delivery.yml file following the same format as this file.
+
+development:
+  delivery_providers:
+    sms: nexmo
+    ivr: intellivr
+
+  nexmo:
+    plugin: nexmo
+    json_endpoint: http://rest.nexmo.com/sms/json
+    api_key: ~
+    api_secret: ~
+
+test:
+  delivery_providers:
+    sms: dummy
+    ivr: dummy
+
+production:
+  delivery_providers:
+    sms: nexmo
+    ivr: intellivr
+
+  nexmo:
+    plugin: nexmo
+    json_endpoint: http://rest.nexmo.com/sms/json
+    api_key: ~
+    api_secret: ~
+
+
+<% file = Rails.root.join('config', 'priv', 'delivery.yml') %>
+<%= file.read if file.exist? %>
