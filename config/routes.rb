@@ -22,6 +22,9 @@ HmsHub::Application.routes.draw do
 
   match 'api/*url' => 'api#not_found'
 
+  get 'nexmo/confirmation' => 'nexmo#confirm_delivery'
+  get 'nexmo/inbound_sms' => 'nexmo#accept_delivery'
+
   root :to => "status_checks#dbcheck"
 
   # The priority is based upon order of creation:

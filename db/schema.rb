@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110617104620) do
+ActiveRecord::Schema.define(:version => 20110705171910) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -65,6 +65,34 @@ ActiveRecord::Schema.define(:version => 20110617104620) do
   end
 
   add_index "messages", ["message_stream_id", "name"], :name => "index_messages_on_message_stream_id_and_name", :unique => true
+
+  create_table "nexmo_inbound_messages", :force => true do |t|
+    t.string   "ext_message_id"
+    t.integer  "multipart_start_id"
+    t.string   "to_msisdn"
+    t.string   "mo_tag"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "nexmo_inbound_messages", ["ext_message_id"], :name => "index_nexmo_inbound_messages_on_ext_message_id", :unique => true
+  add_index "nexmo_inbound_messages", ["multipart_start_id"], :name => "index_nexmo_inbound_messages_on_multipart_start_id"
+
+  create_table "nexmo_outbound_messages", :force => true do |t|
+    t.integer  "delivery_attempt_id"
+    t.string   "ext_message_id"
+    t.string   "to_msisdn"
+    t.string   "network_code"
+    t.string   "mo_tag"
+    t.string   "status"
+    t.string   "scts"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "nexmo_outbound_messages", ["delivery_attempt_id"], :name => "index_nexmo_outbound_messages_on_delivery_attempt_id"
+  add_index "nexmo_outbound_messages", ["ext_message_id"], :name => "index_nexmo_outbound_messages_on_ext_message_id", :unique => true
 
   create_table "notifications", :force => true do |t|
     t.string   "uuid"
