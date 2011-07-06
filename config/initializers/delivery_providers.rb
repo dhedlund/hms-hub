@@ -2,4 +2,4 @@
 providers_file = Rails.root.join('config', 'delivery.yml')
 config = YAML::load(ERB.new(providers_file.read).result)[Rails.env]
 config =  HashWithIndifferentAccess.new(config)
-HmsHub::Application.config.delivery_agent = config
+Delivery::Agent.instance.register_from_config(config)

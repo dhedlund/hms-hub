@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class Delivery::AgentTest < ActiveSupport::TestCase
+  class Delivery::Provider::MockProvider1; def initialize(config={}); end; end
+  class Delivery::Provider::MockProvider2; def initialize(config={}); end; end
+  class Delivery::Provider::MockProvider3; def initialize(config={}); end; end
+
   setup do
     @agent = Delivery::Agent.new
   end
@@ -17,6 +21,16 @@ class Delivery::AgentTest < ActiveSupport::TestCase
   test "fetching a provider from an unsupported delivery service returns nil" do
     @agent.register(mock(), :dummy)
     assert_nil @agent[:pigeon]
+  end
+
+  test "should be able to fetch a provider using a symbol-based service name" do
+    @agent.register(mock(), 'dummy')
+    assert @agent[:dummy]
+  end
+
+  test "should be able to fetch a provider using a string-based service name" do
+    @agent.register(mock(), :dummy)
+    assert @agent['dummy']
   end
 
   #----------------------------------------------------------------------------#
@@ -61,11 +75,57 @@ class Delivery::AgentTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # register_from_config:
+  #----------------------
+  test "register_from_config should register a provider based on config" do
+    config = { :delivery_providers => { :sms => 'mock_provider_1' } }
+    assert_difference('@agent.providers.count') do
+      @agent.register_from_config(config)
+    end
+  end
+
+  test "register_from_config should raise error if provider info is bad" do
+    config = { :delivery_providers => { :sms => 'gangstas' } }
+    assert_raise(NameError) { @agent.register_from_config(config) }
+  end
+
+  test "register_from_config should be able to register multiple providers" do
+    assert_difference('@agent.providers.count', 2) do
+      @agent.register_from_config({
+        :delivery_providers => {
+          :sms => 'mock_provider_1',
+          :ivr => 'mock_provider_2',
+        }
+      })
+    end
+  end
+
+  test "register_from_config should pass provider-specific config to new" do
+    config = {
+      :delivery_providers => { :sms => 'myprovider' },
+      :myprovider => {
+        :class  => 'Delivery::Provider::MockProvider3',
+        :abc123 => 'foobar',
+      }
+    }
+
+    Delivery::Provider::MockProvider3.expects(:new).with(config[:myprovider])
+    assert_difference('@agent.providers.count') do
+      @agent.register_from_config(config)
+    end
+  end
+
+  #----------------------------------------------------------------------------#
   # services:
   #----------
+  test "service names returned by :services should be strings, not symbols" do
+    @agent.register(mock(), :amnesiacs_anonymous)
+    assert_equal ['amnesiacs_anonymous'], @agent.services
+  end
+
   test "should be able to get a list of delivery services in sorted order" do
-    [:dummy3, :dummy1, :dummy2].each { |s| @agent.register(mock(), s) }
-    assert_equal [:dummy1, :dummy2, :dummy3], @agent.services
+    ['dummy3', 'dummy1', 'dummy2'].each { |s| @agent.register(mock(), s) }
+    assert_equal ['dummy1', 'dummy2', 'dummy3'], @agent.services
   end
 
 end

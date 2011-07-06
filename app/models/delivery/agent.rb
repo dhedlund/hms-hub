@@ -8,11 +8,11 @@ class Delivery::Agent
   end
 
   def [](service)
-    @providers[service]
+    @providers[service.to_s]
   end
 
   def register(provider, service)
-    @providers[service] = provider
+    @providers[service.to_s] = provider
     provider
   end
 
@@ -22,6 +22,14 @@ class Delivery::Agent
 
   def providers
     @providers.values.uniq
+  end
+
+  def register_from_config(config)
+    config[:delivery_providers].each do |service,provider_name|
+      provider_config = config[provider_name.to_sym] || {}
+      provider = Delivery::Provider.new(provider_name, provider_config)
+      register(provider, service)
+    end
   end
 
 end
