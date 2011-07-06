@@ -8,7 +8,7 @@ development:
     ivr: intellivr
 
   nexmo:
-    plugin: nexmo
+    #class: Delivery::Provider::Nexmo
     json_endpoint: http://rest.nexmo.com/sms/json
     api_key: ~
     api_secret: ~
@@ -24,7 +24,6 @@ production:
     ivr: intellivr
 
   nexmo:
-    plugin: nexmo
     json_endpoint: http://rest.nexmo.com/sms/json
     api_key: ~
     api_secret: ~
