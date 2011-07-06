@@ -172,4 +172,19 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
     assert_not_equal @attempt.result, @notification.status
   end
 
+  test "should call delivery agent to perform delivery" do
+    dummy = Delivery::Provider::Dummy.new
+    Delivery::Agent.instance.expects(:[]).with('kamikaze').returns(dummy)
+    @attempt.delivery_method = 'kamikaze'
+    @attempt.save!
+  end
+
+  test "generates PERM_FAIL and UNSUPPORTED_PROVIDER if bad delivery method" do
+    @attempt.delivery_method = 'trebuchet'
+    @attempt.save!
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal DeliveryAttempt::UNSUPPORTED_PROVIDER, @attempt.error_type
+    assert @attempt.error_msg.present?
+  end
+
 end

@@ -11,6 +11,9 @@ class DeliveryAttempt < ActiveRecord::Base
   ASYNC_DELIVERY = 'ASYNC_DELIVERY'
   VALID_RESULTS = [ TEMP_FAIL, PERM_FAIL, DELIVERED, ASYNC_DELIVERY ]
 
+  # error types
+  UNSUPPORTED_PROVIDER = 'UNSUPPORTED_PROVIDER'
+
   validates :notification_id, :presence => true
   validates :message_id, :presence => true
   validates :phone_number, :presence => true
@@ -35,10 +38,15 @@ class DeliveryAttempt < ActiveRecord::Base
   end
 
   def deliver
-    self.result = DELIVERED
-    save!
+    provider = Delivery::Agent.instance[delivery_method.downcase]
+    unless provider
+      self.result = PERM_FAIL
+      self.error_type = UNSUPPORTED_PROVIDER
+      self.error_msg = "unsupported delivery provider '#{delivery_method}'"
+      return save
+    end
 
-    return true
+    provider.deliver(self)
   end
 
   def update_notification
