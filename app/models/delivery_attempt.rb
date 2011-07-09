@@ -14,7 +14,6 @@ class DeliveryAttempt < ActiveRecord::Base
   # error types
   UNSUPPORTED_PROVIDER = 'UNSUPPORTED_PROVIDER'
 
-  validates :notification_id, :presence => true
   validates :message_id, :presence => true
   validates :phone_number, :presence => true
   validates :delivery_method, :presence => true
@@ -50,6 +49,8 @@ class DeliveryAttempt < ActiveRecord::Base
   end
 
   def update_notification
+    return unless notification
+
     # if async, don't want to tell notifier until we get back a real result
     return if result == ASYNC_DELIVERY
 

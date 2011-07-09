@@ -37,10 +37,9 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
   #----------------------------------------------------------------------------#
   # notification:
   #--------------
-  test "should be invalid without a notification_id" do
+  test "should be valid without a notification_id" do
     @attempt.notification_id = nil
-    assert @attempt.invalid?
-    assert @attempt.errors[:notification_id].any?
+    assert @attempt.valid?
   end
 
   test "can access notification from delivery attempt" do
