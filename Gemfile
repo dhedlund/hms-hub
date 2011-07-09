@@ -10,6 +10,7 @@ gem 'yajl-ruby', :require => 'yajl'
 gem 'rabl'
 
 gem 'delayed_job'
+gem 'rest-client'
 
 group :development do
   gem 'rvm'
