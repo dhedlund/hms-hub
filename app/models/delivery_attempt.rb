@@ -1,6 +1,6 @@
 class DeliveryAttempt < ActiveRecord::Base
   belongs_to :notification
-  has_one :message
+  belongs_to :message
 
   after_create :deliver
   after_save :update_notification, :if => :result?
