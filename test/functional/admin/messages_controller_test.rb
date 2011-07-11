@@ -3,17 +3,16 @@ require 'test_helper'
 class Admin::MessagesControllerTest < ActionController::TestCase
   setup do
     @user = Factory.create(:user)
-
-    creds = encode_credentials(@user.username, @user.password)
-    @request.env['HTTP_AUTHORIZATION'] = creds
+    with_valid_user_creds @user
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
-    @request.env['HTTP_AUTHORIZATION'] = nil
-    stream = Factory.create(:message_stream)
+    without_auth_creds do
+      stream = Factory.create(:message_stream)
 
-    get :index, :message_stream_id => stream.id
-    assert_response 401
+      get :index, :message_stream_id => stream.id
+      assert_response 401
+    end
   end
 
   test "index should redirect to message stream show page (HTML)" do

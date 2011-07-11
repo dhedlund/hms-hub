@@ -6,57 +6,57 @@ class ApiControllerTest < ActionController::TestCase
   end
 
   test "api calls without auth credentials should fail with unauthorized" do
-    get :ping
-    assert_response 401
-  end
-
-  test "api calls with invalid credentials should fail with unauthorized" do
-    @request.env['HTTP_AUTHORIZATION'] = encode_credentials('invalid', 'bah!')
-
-    get :ping
-    assert_response 401
-  end
-
-  test "accessing nonexistent api calls w/o creds should give unauthorized" do
-    with_routing do |map|
-      map.draw { match '/api/bad_url' => 'api#not_found' }
-      get :not_found
+    without_auth_creds do
+      get :ping
       assert_response 401
     end
   end
 
-  test "authenticating with valid credentials should set current user" do
-    creds = encode_credentials(@notifier.username, @notifier.password)
-    @request.env['HTTP_AUTHORIZATION'] = creds
+  test "api calls with invalid credentials should fail with unauthorized" do
+    with_invalid_creds do
+      get :ping
+      assert_response 401
+    end
+  end
 
-    get :ping
-    assert_equal @notifier, @controller.current_user
+  test "accessing nonexistent api calls w/o creds should give unauthorized" do
+    without_auth_creds do
+      with_routing do |map|
+        map.draw { match '/api/bad_url' => 'api#not_found' }
+        get :not_found
+        assert_response 401
+      end
+    end
+  end
+
+  test "authenticating with valid credentials should set current user" do
+    with_valid_notifier_creds @notifier do
+      get :ping
+      assert_equal @notifier, @controller.current_user
+    end
   end
 
   test "authenticating w/ valid creds should set notifier's last login time" do
-    creds = encode_credentials(@notifier.username, @notifier.password)
-    @request.env['HTTP_AUTHORIZATION'] = creds
-
-    get :ping
-    notifier = Notifier.find(@notifier.id)
-    assert_not_equal @notifier.last_login_at, notifier.last_login_at
+    old_login_at = @notifier.last_login_at
+    with_valid_notifier_creds @notifier do
+      get :ping
+      assert_not_equal old_login_at, @notifier.reload.last_login_at
+    end
   end
 
   test "authenticating with invalid credentials should not set current user" do
-    creds = encode_credentials('invalid', 'bah!')
-    @request.env['HTTP_AUTHORIZATION'] = creds
-
-    get :ping
-    assert_nil @controller.current_user
+    with_invalid_creds do
+      get :ping
+      assert_nil @controller.current_user
+    end
   end
 
   test "GET /api/test/ping should return 'pong'" do
-    creds = encode_credentials(@notifier.username, @notifier.password)
-    @request.env['HTTP_AUTHORIZATION'] = creds
-
-    get :ping
-    assert_response :success
-    assert_equal 'pong', @response.body
+    with_valid_notifier_creds do
+      get :ping
+      assert_response :success
+      assert_equal 'pong', @response.body
+    end
   end
 
 end

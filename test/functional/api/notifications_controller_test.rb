@@ -3,15 +3,14 @@ require 'test_helper'
 class Api::NotificationsControllerTest < ActionController::TestCase
   setup do
     @notifier = Factory.create(:notifier)
-
-    creds = encode_credentials(@notifier.username, @notifier.password)
-    @request.env['HTTP_AUTHORIZATION'] = creds
+    with_valid_notifier_creds @notifier
   end
 
   test "accessing api w/o creds should give 401 unauthorized response" do
-    @request.env['HTTP_AUTHORIZATION'] = nil
-    post :create, :format => :json
-    assert_response 401
+    without_auth_creds do
+      post :create, :format => :json
+      assert_response 401
+    end
   end
 
   test "GET /api/notifications/updated should return status updates" do
