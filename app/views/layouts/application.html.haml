@@ -1,0 +1,13 @@
+!!! XML
+!!!
+%html
+  %head
+    %title HMS Hub
+    = stylesheet_link_tag 'reset'
+    = yield :stylesheets
+
+  %body
+    - if content_for?(:content)
+      = yield :content
+    - else
+      %div#content= yield
