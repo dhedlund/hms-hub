@@ -8,6 +8,8 @@ class Message < ActiveRecord::Base
   validates :sms_text, :length => { :within => 1..160 }, :allow_nil => true
   validates :offset_days, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
 
+  default_scope order('offset_days')
+
   def self.find_by_path(path)
     %r{^([^/]+)/([^/]+)$} =~ path or return
     stream = MessageStream.find_by_name($1) or return
