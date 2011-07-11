@@ -38,6 +38,16 @@ class MessageStreamTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # scopes:
+  #--------
+  test "should be sorted by name in ascending order" do
+    ['w','b','e','x','n'].each do |name|
+      Factory.create(:message_stream, :name => name)
+    end
+    assert_equal MessageStream.all.map(&:name).sort, MessageStream.all.map(&:name)
+  end
+
+  #----------------------------------------------------------------------------#
   # title:
   #-------
   test "should be invalid without a title" do
