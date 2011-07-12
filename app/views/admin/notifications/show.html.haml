@@ -1,52 +1,53 @@
 - @primary_nav = :notifications
 
-%h1 View Notification
-%table
-  %tr
-    %th ID
-    %td= @notification.id
-  %tr
-    %th UUID
-    %td= @notification.uuid
-  %tr
-    %th Notifier ID
-    %td= link_to @notification.notifier_id, admin_notifier_path(@notification.notifier_id)
-  %tr
-    %th Message ID
-    %td= @notification.message_id
-  %tr
-    %th Phone Number
-    %td= @notification.phone_number
-  %tr
-    %th First Name
-    %td= @notification.first_name
-  %tr
-    %th Delivery Method
-    %td= @notification.delivery_method
-  %tr
-    %th Delivery Start
-    %td= @notification.delivery_start.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Delivery Expires
-    %td= @notification.delivery_expires.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Delivery Window
-    %td= @notification.delivery_window
-  %tr
-    %th Last Run At
-    %td= @notification.last_run_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Status
-    %td= @notification.status
-  %tr
-    %th Last Error Type
-    %td= @notification.last_error_type
-  %tr
-    %th Last Error Message
-    %td= @notification.last_error_msg
-  %tr
-    %th Date Created
-    %td= @notification.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+%h2 View Notification
+= form_for(admin_notification_path(@notification), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @notification.id
+    .field
+      = f.label :uuid, 'UUID'
+      = @notification.uuid
+    .field
+      = f.label :notifier_id, 'Notifier ID'
+      = link_to @notification.notifier_id, admin_notifier_path(@notification.notifier_id)
+    .field
+      = f.label :message_id, 'Message ID'
+      = @notification.message_id
+    .field
+      = f.label :phone_number, 'Phone Number'
+      = @notification.phone_number
+    .field
+      = f.label :first_name, 'First Name'
+      = @notification.first_name
+    .field
+      = f.label :delivery_method, 'Delivery Method'
+      = @notification.delivery_method
+    .field
+      = f.label :delivery_start, 'Delivery Start'
+      = @notification.delivery_start.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :delivery_expires, 'Delivery Expires'
+      = @notification.delivery_expires.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :delivery_window, 'Delivery Window'
+      = @notification.delivery_window
+    .field
+      = f.label :last_run_at, 'Last Run At'
+      = @notification.last_run_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :status
+      = @notification.status
+    .field
+      = f.label :last_error_type, 'Last Error Type'
+      = @notification.last_error_type
+    .field
+      = f.label :last_error_msg, 'Last Error Message'
+      = @notification.last_error_msg
+    .field
+      = f.label :date_created, 'Date Created'
+      = @notification.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
