@@ -1,7 +1,7 @@
 - @primary_nav = :notifications
 
 %h1 Notifications
-%table
+%table.admin-table
   %tr
     %th ID
     %th Phone Number
@@ -10,13 +10,14 @@
     %th Last Run
     %th Status
     %th Error Type
+    %th Actions
   - @notifications.each do |notification|
     %tr
-      %td= link_to notification.id, [:admin, notification]
+      %td= notification.id
       %td= notification.phone_number
       %td= notification.delivery_start.strftime '%Y-%m-%d'
       %td= notification.delivery_expires.strftime '%Y-%m-%d'
-      %td= notification.last_run_at
+      %td= notification.last_run_at.try(:strftime, '%Y-%m-%d')
       %td= notification.status
       %td= notification.last_error_type
-      
+      %td.actions #{link_to 'View', [:admin, notification]} | #{link_to 'Edit', '#'}
