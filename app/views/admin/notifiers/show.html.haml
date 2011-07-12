@@ -1,19 +1,20 @@
 - @primary_nav = :notifiers
 
-%h1 View Notifier
-%table
-  %tr
-    %th ID
-    %td= @notifier.id
-  %tr
-    %th Username
-    %td= @notifier.username
-  %tr
-    %th Timezone
-    %td= @notifier.timezone
-  %tr
-    %th Date Created
-    %td= @notifier.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @notifier.updated_at.strftime '%b %e, %Y @ %r %Z'
+%h2 View Notifier
+= form_for(admin_notifier_path(@notifier), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @notifier.id
+    .field
+      = f.label :username
+      = @notifier.username
+    .field
+      = f.label :timezone
+      = @notifier.timezone
+    .field
+      = f.label :date_created, 'Date Created'
+      = @notifier.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @notifier.updated_at.strftime '%b %e, %Y @ %r %Z'
