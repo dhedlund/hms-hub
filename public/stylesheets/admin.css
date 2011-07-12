@@ -21,7 +21,7 @@ h2 { font-size: 18px; }
 #content {
   padding: 20px;
   background-color: #fff;
-  border-left: 5px solid #e1edB9;
+  border-left: 5px solid #e1edb9;
 }
 
 #footer {
@@ -60,3 +60,38 @@ h2 { font-size: 18px; }
   border-top: 2px solid #b40f0f;
 }
 
+.admin-table {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  padding: 5px 10px;
+  background-color: #D4EE5E;
+}
+.admin-table td {
+  padding: 5px 10px;
+  text-align: center;
+  vertical-align: top
+}
+
+.admin-table .odd {
+  background-color: #e1edb9;
+}
+
+.admin-table .actions {
+  text-align: left;
+}
+
+.admin-table .actions a:link, .admin-table .actions a:visited, .admin-table .actions a:active {
+  color: #b40f0f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.sms-text {
+  font-size: 10px;
+  white-space: normal;
+  text-align: left !important;
+  line-height: 1.2em;
+}

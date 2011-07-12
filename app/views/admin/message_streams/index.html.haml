@@ -1,11 +1,22 @@
 - @primary_nav = :messages
 
-%h1 Message Streams
-%table
-  %tr
-    %th Name
-    %th Title
-  - @message_streams.each do |stream|
+- @message_streams.each do |stream|
+  %h2 Stream: #{stream.title}
+
+  - reset_cycle
+  %table.admin-table
     %tr
-      %td= link_to stream.name, [:admin, stream]
-      %td= stream.title
+      %th Offset
+      %th Title
+      %th Text
+      %th IVR
+      %th SMS
+      %th Actions
+    - stream.messages.each do |message|
+      %tr{:class => cycle('even', 'odd')}
+        %td= message.offset_days
+        %td= message.title
+        %td.sms-text= message.sms_text
+        %td= message.ivr_code.present? ? 'X' : ''
+        %td= message.sms_text.present? ? 'X' : ''
+        %td.actions #{link_to 'View', [:admin, stream, message]} | #{link_to 'Edit', '#'}
