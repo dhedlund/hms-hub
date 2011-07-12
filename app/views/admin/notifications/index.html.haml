@@ -12,7 +12,7 @@
     %th Error Type
     %th Actions
   - @notifications.each do |notification|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= notification.id
       %td= notification.phone_number
       %td= notification.delivery_start.strftime '%Y-%m-%d'

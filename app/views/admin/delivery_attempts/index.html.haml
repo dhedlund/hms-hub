@@ -11,7 +11,7 @@
     %th Error Type
     %th Actions
   - @delivery_attempts.each do |attempt|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= attempt.id
       %td= attempt.notification_id
       %td= attempt.delivery_method

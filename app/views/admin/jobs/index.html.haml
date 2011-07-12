@@ -10,7 +10,7 @@
     %th Last Error
     %th Actions
   - @jobs.each do |job|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= job.id
       %td= job.attempts
       %td= job.run_at.try(:strftime, '%Y-%m-%d %H:%M:%S')

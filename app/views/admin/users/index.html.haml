@@ -6,6 +6,6 @@
     %th Username
     %th Timezone
   - @users.each do |user|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       %td= link_to user.username, [:admin, user]
       %td= user.timezone

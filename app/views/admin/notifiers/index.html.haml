@@ -9,7 +9,7 @@
     %th Updates Pending
     %th Actions
   - @notifiers.each do |notifier|
-    %tr
+    %tr{:class => cycle('even', 'odd')}
       - last_status_req_at = notifier.last_status_req_at
       %td= notifier.username
       %td= last_status_req_at.try(:strftime, '%Y-%m-%d')
