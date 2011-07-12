@@ -2,6 +2,9 @@
   = stylesheet_link_tag 'admin'
 
 - content_for :content do
+  #user-nav
+    .site-title <strong>HMS</strong> Hub
+    .user-logged-in Signed In: #{@current_user.username}
   #main
     #primary-nav
       %ul
