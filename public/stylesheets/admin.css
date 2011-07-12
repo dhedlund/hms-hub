@@ -67,7 +67,7 @@ h2 { font-size: 18px; }
 
 .admin-table th {
   padding: 5px 10px;
-  background-color: #D4EE5E;
+  background-color: #d4ee5e;
 }
 .admin-table td {
   padding: 5px 10px;
@@ -96,3 +96,22 @@ h2 { font-size: 18px; }
   text-align: left;
   line-height: 1.2em;
 }
+
+
+fieldset {
+}
+
+div.field {
+  clear: left;
+  border-top: dashed 1px #ccc;
+  padding: 10px 0px 10px 190px;
+}
+.field label {
+  display: block; float: left;
+  width: 170px;
+  margin: 3px 0px 10px -190px;
+  font-weight: bold;
+}
+
+
+

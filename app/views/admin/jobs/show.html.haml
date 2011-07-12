@@ -1,37 +1,38 @@
 - @primary_nav = :jobs
 
-%h1 View Notification Job
-%table
-  %tr
-    %th ID
-    %td= @job.id
-  %tr
-    %th Run At
-    %td= @job.run_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Priority
-    %td= @job.priority
-  %tr
-    %th Attempts
-    %td= @job.attempts
-  %tr
-    %th Failed At
-    %td= @job.failed_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Last Error
-    %td= @job.last_error
-  %tr
-    %th Handler
-    %td= @job.handler
-  %tr
-    %th Locked At
-    %td= @job.locked_at.try(:strftime, '%b %e, %Y @ %r %Z')
-  %tr
-    %th Locked By
-    %td= @job.locked_by
-  %tr
-    %th Date Created
-    %td= @job.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @job.updated_at.strftime '%b %e, %Y @ %r %Z'
+%h2 View Notification Job
+= form_for(admin_job_path(@job), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @job.id
+    .field
+      = f.label :run_at, 'Run At'
+      = @job.run_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :priority
+      = @job.priority
+    .field
+      = f.label :attempts
+      = @job.attempts
+    .field
+      = f.label :failed_at, 'Failed At'
+      = @job.failed_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :last_error, 'Last Error'
+      = @job.last_error
+    .field
+      = f.label :handler
+      = @job.handler
+    .field
+      = f.label :locked_at, 'Locked At'
+      = @job.locked_at.try(:strftime, '%b %e, %Y @ %r %Z')
+    .field
+      = f.label :locked_by, 'Locked By'
+      = @job.locked_by
+    .field
+      = f.label :date_created, 'Date Created'
+      = @job.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @job.updated_at.strftime '%b %e, %Y @ %r %Z'
