@@ -81,6 +81,7 @@ h2 { font-size: 18px; }
 
 .admin-table .actions {
   text-align: left;
+  text-align: right;
 }
 
 .admin-table .actions a:link, .admin-table .actions a:visited, .admin-table .actions a:active {
@@ -89,9 +90,9 @@ h2 { font-size: 18px; }
   text-decoration: none;
 }
 
-.sms-text {
+.admin-table .sms-text {
   font-size: 10px;
   white-space: normal;
-  text-align: left !important;
+  text-align: left;
   line-height: 1.2em;
 }
