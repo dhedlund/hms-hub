@@ -97,15 +97,12 @@ h2 { font-size: 18px; }
   line-height: 1.2em;
 }
 
-
-fieldset {
-}
-
 div.field {
   clear: left;
   border-top: dashed 1px #ccc;
   padding: 10px 0px 10px 190px;
 }
+
 .field label {
   display: block; float: left;
   width: 170px;
@@ -113,5 +110,9 @@ div.field {
   font-weight: bold;
 }
 
-
+.admin-view .block-text {
+  white-space: pre-wrap;
+  text-align: left;
+  font-size: 10px;
+}
 
