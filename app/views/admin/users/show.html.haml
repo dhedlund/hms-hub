@@ -1,19 +1,20 @@
 - @primary_nav = :users
 
-%h1 View User
-%table
-  %tr
-    %th ID
-    %td= @user.id
-  %tr
-    %th Username
-    %td= @user.username
-  %tr
-    %th Timezone
-    %td= @user.timezone
-  %tr
-    %th Date Created
-    %td= @user.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @user.updated_at.strftime '%b %e, %Y @ %r %Z'
+%h2 View User
+= form_for(admin_user_path(@user), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @user.id
+    .field
+      = f.label :username
+      = @user.username
+    .field 
+      = f.label :timezone
+      = @user.timezone
+    .field
+      = f.label :date_created, 'Date Created'
+      = @user.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @user.updated_at.strftime '%b %e, %Y @ %r %Z'
