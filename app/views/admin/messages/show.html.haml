@@ -1,34 +1,35 @@
 - @primary_nav = :messages
 
-%h1 View Message
-%table
-  %tr
-    %th ID
-    %td= @message.id
-  %tr
-    %th Message Stream ID
-    %td= link_to @message.message_stream_id, [:admin, @message_stream]
-  %tr
-    %th Name
-    %td= @message.name
-  %tr
-    %th Title
-    %td= @message.title
-  %tr
-    %th Path
-    %td= @message.path
-  %tr
-    %th Offset Days
-    %td= @message.offset_days
-  %tr
-    %th IVR Code
-    %td= @message.ivr_code
-  %tr
-    %th SMS Text
-    %td= @message.sms_text
-  %tr
-    %th Date Created
-    %td= @message.created_at.strftime '%b %e, %Y @ %r %Z'
-  %tr
-    %th Last Updated
-    %td= @message.updated_at.strftime '%b %e, %Y @ %r %Z'
+%h2 View Message
+= form_for(admin_message_stream_messages_path(@message_stream, @message), :html => { :class => 'admin-view' }) do |f|
+  %fieldset
+    .field
+      = f.label :id, 'ID'
+      = @message.id
+    .field
+      = f.label :message_stream_id, 'Message Stream ID'
+      = link_to @message.message_stream_id, [:admin, @message_stream]
+    .field
+      = f.label :name
+      = @message.name
+    .field
+      = f.label :title
+      = @message.title
+    .field
+      = f.label :path
+      = @message.path
+    .field
+      = f.label :offset_days, 'Offset Days'
+      = @message.offset_days
+    .field
+      = f.label :ivr_code, 'IVR Code'
+      = @message.ivr_code
+    .field
+      = f.label :sms_text, 'SMS Text'
+      = @message.sms_text
+    .field
+      = f.label :date_created, 'Date Created'
+      = @message.created_at.strftime '%b %e, %Y @ %r %Z'
+    .field
+      = f.label :last_updated, 'Last Updated'
+      = @message.updated_at.strftime '%b %e, %Y @ %r %Z'
