@@ -19,4 +19,4 @@
         %td.sms-text= message.sms_text
         %td= message.ivr_code.present? ? 'X' : ''
         %td= message.sms_text.present? ? 'X' : ''
-        %td.actions #{link_to 'View', [:admin, stream, message]} | #{link_to 'Edit', '#'}
+        %td.actions #{link_to 'View', [:admin, stream, message]}

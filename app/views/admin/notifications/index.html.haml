@@ -20,4 +20,4 @@
       %td= notification.last_run_at.try(:strftime, '%Y-%m-%d')
       %td= notification.status
       %td= notification.last_error_type
-      %td.actions #{link_to 'View', [:admin, notification]} | #{link_to 'Edit', '#'}
+      %td.actions #{link_to 'View', [:admin, notification]}
