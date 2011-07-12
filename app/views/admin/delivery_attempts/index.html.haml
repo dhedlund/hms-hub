@@ -1,7 +1,7 @@
 - @primary_nav = :attempts
 
 %h1 Delivery Attempts
-%table
+%table.admin-table
   %tr
     %th ID
     %th Notification
@@ -9,11 +9,13 @@
     %th Date
     %th Result
     %th Error Type
+    %th Actions
   - @delivery_attempts.each do |attempt|
     %tr
-      %td= link_to attempt.id, [:admin, attempt]
+      %td= attempt.id
       %td= attempt.notification_id
       %td= attempt.delivery_method
       %td= time_ago_in_words(attempt.created_at)
       %td= attempt.result
       %td= attempt.error_type
+      %td.actions #{link_to 'View', [:admin, attempt]} | #{link_to 'Edit', '#'}
