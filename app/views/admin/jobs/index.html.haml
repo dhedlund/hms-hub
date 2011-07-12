@@ -1,17 +1,19 @@
 - @primary_nav = :jobs
 
 %h1 Notification Jobs
-%table
+%table.admin-table
   %tr
     %th ID
     %th Attempts
     %th Run At
     %th Failed At
     %th Last Error
+    %th Actions
   - @jobs.each do |job|
     %tr
-      %td= link_to job.id, admin_job_path(job)
+      %td= job.id
       %td= job.attempts
       %td= job.run_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
       %td= job.failed_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
       %td= job.last_error
+      %td.actions #{link_to 'View', admin_job_path(job)}
