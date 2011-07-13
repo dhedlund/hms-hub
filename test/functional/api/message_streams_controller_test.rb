@@ -72,6 +72,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
             'name' => message.name,
             'title' => message.title,
             'offset_days' => message.offset_days,
+            'sms_text' => message.sms_text,
     } } } } } }
     assert_equal data, json_response
   end
