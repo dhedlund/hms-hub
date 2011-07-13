@@ -13,6 +13,12 @@ h1, h2 {
 h1 { font-size: 20px; }
 h2 { font-size: 18px; }
 
+a:link, a:visited, a:active {
+  color: #b40f0f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 #main {
   width: 800px;
   padding: 20px;
@@ -52,12 +58,22 @@ h2 { font-size: 18px; }
 #primary-nav a:link, #primary-nav a:visited, #primary-nav a:active {
   color: #fff;
   text-decoration: none;
+  font-weight: normal;
 }
 
 #primary-nav .selected {
   background-color: #ff4242;
   border-bottom: 10px solid #b40f0f;
   border-top: 2px solid #b40f0f;
+}
+
+#nav-hierarchy {
+  background-color: #e1edb9;
+  padding: 5px 15px;
+}
+
+#nav-hierarchy a:link, #nav-hierarchy a:visited, #nav-hierarchy a:active {
+  font-weight: normal;
 }
 
 .admin-table {
@@ -84,10 +100,28 @@ h2 { font-size: 18px; }
   text-align: right;
 }
 
-.admin-table .actions a:link, .admin-table .actions a:visited, .admin-table .actions a:active {
+.actions a:link, .actions a:visited, .actions a:active {
   color: #b40f0f;
   font-weight: bold;
   text-decoration: none;
+}
+
+div.actions {
+  padding: 5px;
+}
+
+.button_to, .button_to div {
+  display: inline;
+}
+.action-button {
+  padding: 0px; margin: 0px;
+  background: none;
+  border: none;
+  color: #b40f0f;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .admin-table .sms-text {
@@ -108,6 +142,55 @@ div.field {
   width: 170px;
   margin: 3px 0px 10px -190px;
   font-weight: bold;
+}
+
+
+
+.simple_form .input {
+  clear: left;
+  border-top: dashed 1px #ccc;
+  padding: 10px 0px;
+}
+
+.simple_form input[type="text"], .simple_form input[type="tel"] {
+  width: 200px;
+  padding: 2px;
+}
+
+.simple_form label {
+  display: block; float: left;
+  width: 170px;
+  margin: 3px 10px 10px 0px;
+  font-weight: bold;
+}
+
+.simple_form abbr {
+  float: right;
+}
+
+.simple_form label.collection_radio {
+  display: inline; float: none;
+}
+
+.simple_form .hint {
+  display: block; clear: right;
+  font-size: 12px;
+  font-style: italic;
+  color: #888;
+  margin: 0px 10px 0px 2px;
+}
+
+.field_with_errors {
+  position: relative;
+}
+.field_with_errors label{
+  color: #f00;
+}
+.error {
+  display: block; position: absolute;
+  top: 0px; right: 0px;
+  margin: 10px;
+  color: #f00;
 }
 
 .admin-view .block-text {

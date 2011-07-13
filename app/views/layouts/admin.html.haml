@@ -8,9 +8,12 @@
   #main
     #primary-nav
       %ul
-        - primary_nav(@primary_nav).each do |i|
+        - primary_nav(@nav_hierarchy.first).each do |i|
           %li{i[:selected] && :class => 'selected'}= link_to i[:title], i[:path]
-    #content= yield
+    - if @nav_hierarchy && @nav_hierarchy.size > 1
+      #nav-hierarchy= nav_hierarchy(@nav_hierarchy).join(' &raquo; ').html_safe
+    #content
+      = yield
     #footer Unauthorized access prohibited.
 
 = render :file => 'layouts/application'

@@ -1,4 +1,4 @@
-- @primary_nav = :attempts
+- @nav_hierarchy = [:attempts, @delivery_attempt]
 
 %h2 View Delivery Attempt
 = form_for(admin_delivery_attempt_path(@delivery_attept), :html => { :class => 'admin-view' }) do |f|

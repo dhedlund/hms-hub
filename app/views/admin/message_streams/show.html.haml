@@ -1,4 +1,4 @@
-- @primary_nav = :messages
+- @nav_hierarchy = [:messages, @message_stream]
 
 %h2 View Message Stream
 = form_for(admin_message_stream_path(@message_stream), :html => { :class => 'admin-view' }) do |f|
