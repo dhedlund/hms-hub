@@ -52,6 +52,17 @@ class NotifierTest < ActiveSupport::TestCase
     assert @notifier.errors[:password].any?
   end
 
+  test "should be invalid with a password less than 7 characters" do
+    @notifier.password = '123456'
+    assert @notifier.invalid?
+    assert @notifier.errors[:password].any?
+  end
+
+  test "should be valid with a password longer than 7 characters" do
+    @notifier.password = '12345678'
+    assert @notifier.valid?
+  end
+
   #----------------------------------------------------------------------------#
   # timezone:
   #----------
