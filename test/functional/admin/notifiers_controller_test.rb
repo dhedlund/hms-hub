@@ -4,6 +4,8 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   setup do
     @user = Factory.create(:user)
     with_valid_user_creds @user
+
+    @notifier = Factory.build(:notifier)
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
@@ -57,6 +59,49 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
     get :show, :id => notifier.id, :format => :json
     assert_response :success
     assert_nil json_response['notifier']['password']
+  end
+
+  test "new should return a new notifier form (HTML)" do
+    get :new
+    assert_response :success
+    assert_not_nil assigns(:notifier)
+  end
+
+  test "create should create a new notifier (HTML)" do
+    assert_difference('Notifier.count') do
+      post :create, :notifier => @notifier.attributes.symbolize_keys
+    end
+    assert_redirected_to [:admin, assigns(:notifier)]
+  end
+
+  test "edit should return an existing notifier form (HTML)" do
+    @notifier.save!
+    get :edit, :id => @notifier.id
+    assert_response :success
+    assert_equal @notifier, assigns(:notifier)
+  end
+
+  test "update should save an existing notifier (HTML)" do
+    @notifier.save!
+    @notifier.username = 'town-crier'
+    put :update, :id => @notifier.id, :notifier => @notifier.attributes.symbolize_keys
+    assert_redirected_to [:admin, assigns(:notifier)]
+    assert_equal 'town-crier', @notifier.reload.username
+  end
+
+  test "update should update the password if present (HTML)" do
+    @notifier.save!
+    @notifier.password = 'turtlenip'
+    put :update, :id => @notifier.id, :notifier => @notifier.attributes.symbolize_keys
+    assert_equal 'turtlenip', @notifier.reload.password
+  end
+
+  test "update should not update password if not present (HTML)" do
+    @notifier.save!
+    orig_password = @notifier.password
+    @notifier.password = ''
+    put :update, :id => @notifier.id, :notifier => @notifier.attributes.symbolize_keys
+    assert_equal orig_password, @notifier.reload.password
   end
 
 end

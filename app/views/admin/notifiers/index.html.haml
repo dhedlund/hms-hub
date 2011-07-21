@@ -15,4 +15,8 @@
       %td= last_status_req_at.try(:strftime, '%Y-%m-%d')
       %td= notifier.notifications.count
       %td= notifier.notifications.run_since(last_status_req_at).count if last_status_req_at
-      %td.actions #{link_to 'View', [:admin, notifier]}
+      %td.actions
+        #{link_to 'View', [:admin, notifier]}
+        | #{link_to 'Edit', [:edit, :admin, notifier]}
+
+.actions= link_to 'New Notifier', new_admin_notifier_path

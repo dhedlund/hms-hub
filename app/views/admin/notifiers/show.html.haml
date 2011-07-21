@@ -1,20 +1,18 @@
 - @nav_hierarchy = [:notifiers, @notifier]
 
 %h2 View Notifier
-= form_for(admin_notifier_path(@notifier), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @notifier.id
-    .field
-      = f.label :username
-      = @notifier.username
-    .field
-      = f.label :timezone
-      = @notifier.timezone
-    .field
-      = f.label :date_created, 'Date Created'
-      = @notifier.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @notifier.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @notifier, :id
+  = @notifier.id
+.field
+  %label= label_for @notifier, :username
+  = @notifier.username
+.field
+  %label= label_for @notifier, :timezone
+  = @notifier.timezone
+.field
+  %label= label_for @notifier, :created_at
+  = l(@notifier.created_at)
+.field
+  %label= label_for @notifier, :updated_at
+  = l(@notifier.updated_at)

@@ -8,6 +8,7 @@ class Admin::NotificationsController < AdminController
 
   def show
     @notification = Notification.find(params[:id])
+    @message = @notification.message
     respond_with @notification
   end
 

@@ -1,38 +1,41 @@
 - @nav_hierarchy = [:jobs]
 
 %h2 View Notification Job
-= form_for(admin_job_path(@job), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @job.id
-    .field
-      = f.label :run_at, 'Run At'
-      = @job.run_at.try(:strftime, '%b %e, %Y @ %r %Z')
-    .field
-      = f.label :priority
-      = @job.priority
-    .field
-      = f.label :attempts
-      = @job.attempts
-    .field
-      = f.label :failed_at, 'Failed At'
-      = @job.failed_at.try(:strftime, '%b %e, %Y @ %r %Z')
-    .field
-      = f.label :last_error, 'Last Error'
-      = @job.last_error
-    .field
-      = f.label :handler
-      = @job.handler
-    .field
-      = f.label :locked_at, 'Locked At'
-      = @job.locked_at.try(:strftime, '%b %e, %Y @ %r %Z')
-    .field
-      = f.label :locked_by, 'Locked By'
-      = @job.locked_by
-    .field
-      = f.label :date_created, 'Date Created'
-      = @job.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @job.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @job, :id
+  = @job.id
+- case @payload
+- when DeliverNotificationJob
+  .field
+    %label= label_for @job, :notification
+    = link_to @payload.notification_id, admin_notification_path(@payload.notification_id)
+.field
+  %label= label_for @job, :run_at
+  = l(@job.run_at) if @job.run_at
+.field
+  %label= label_for @job, :priority
+  = @job.priority
+.field
+  %label= label_for @job, :attempts
+  = @job.attempts
+.field
+  %label= label_for @job, :failed_at
+  = l(@job.failed_at) if @job.failed_at
+.field
+  %label= label_for @job, :last_error
+  = @job.last_error
+.field
+  %label= label_for @job, :handler
+  = simple_format @job.handler
+.field
+  %label= label_for @job, :locked_at
+  = l(@job.locked_at) if @job.locked_at
+.field
+  %label= label_for @job, :locked_by
+  = @job.locked_by
+.field
+  %label= label_for @job, :created_at
+  = l(@job.created_at)
+.field
+  %label= label_for @job, :updated_at
+  = l(@job.updated_at)

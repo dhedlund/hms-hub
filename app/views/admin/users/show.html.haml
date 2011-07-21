@@ -1,20 +1,18 @@
 - @nav_hierarchy = [:users]
 
 %h2 View User
-= form_for(admin_user_path(@user), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @user.id
-    .field
-      = f.label :username
-      = @user.username
-    .field 
-      = f.label :timezone
-      = @user.timezone
-    .field
-      = f.label :date_created, 'Date Created'
-      = @user.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @user.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @user, :id
+  = @user.id
+.field
+  %label= label_for @user, :username
+  = @user.username
+.field 
+  %label= label_for @user, :timezone
+  = @user.timezone
+.field
+  %label= label_for @user, :created_at
+  = l(@user.created_at)
+.field
+  %label= label_for @user, :updated_at
+  = l(@user.updated_at)

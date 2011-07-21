@@ -1,35 +1,33 @@
 - @nav_hierarchy = [:messages, @message_stream, @message]
 
 %h2 View Message
-= form_for(admin_message_stream_messages_path(@message_stream, @message), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @message.id
-    .field
-      = f.label :message_stream_id, 'Message Stream ID'
-      = link_to @message.message_stream_id, [:admin, @message_stream]
-    .field
-      = f.label :name
-      = @message.name
-    .field
-      = f.label :title
-      = @message.title
-    .field
-      = f.label :path
-      = @message.path
-    .field
-      = f.label :offset_days, 'Offset Days'
-      = @message.offset_days
-    .field
-      = f.label :ivr_code, 'IVR Code'
-      = @message.ivr_code
-    .field
-      = f.label :sms_text, 'SMS Text'
-      = @message.sms_text
-    .field
-      = f.label :date_created, 'Date Created'
-      = @message.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @message.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @message, :id
+  = @message.id
+.field
+  %label= label_for @message, :message_stream
+  = link_to @message_stream.title, [:admin, @message_stream]
+.field
+  %label= label_for @message, :name
+  = @message.name
+.field
+  %label= label_for @message, :title
+  = @message.title
+.field
+  %label= label_for @message, :path
+  = @message.path
+.field
+  %label= label_for @message, :offset_days
+  = @message.offset_days
+.field
+  %label= label_for @message, :ivr_code
+  = @message.ivr_code
+.field
+  %label= label_for @message, :sms_text
+  = @message.sms_text
+.field
+  %label= label_for @message, :created_at
+  = l(@message.created_at)
+.field
+  %label= label_for @message, :updated_at
+  = l(@message.updated_at)

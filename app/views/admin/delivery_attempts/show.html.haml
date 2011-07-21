@@ -1,41 +1,40 @@
 - @nav_hierarchy = [:attempts, @delivery_attempt]
 
 %h2 View Delivery Attempt
-= form_for(admin_delivery_attempt_path(@delivery_attept), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @delivery_attempt.id
-    .field
-      = f.label :notification_id, 'Notification ID'
-      = link_to @delivery_attempt.notification_id, admin_notification_path(@delivery_attempt.notification_id)
-    .field
-      = f.label :message_id, 'Message ID'
-      = link_to @delivery_attempt.message_id, admin_message_stream_message_path(@message.message_stream_id, @message.id)
-    .field
-      = f.label :phone_number, 'Phone Number'
-      = @delivery_attempt.phone_number
-    .field
-      = f.label :delivery_method, 'Delivery Method'
-      = @delivery_attempt.delivery_method
-    .field
-      = f.label :result
-      = @delivery_attempt.result
-    .field
-      = f.label :error_type, 'Error Type'
-      = @delivery_attempt.error_type
-    .field
-      = f.label :error_msg, 'Error Message'
-      .block-text= @delivery_attempt.error_msg
-    .field
-      = f.label :request
-      = @delivery_attempt.request
-    .field
-      = f.label :response
-      = @delivery_attempt.response
-    .field
-      = f.label :date_created
-      = @delivery_attempt.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated
-      = @delivery_attempt.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @delivery_attempt, :id
+  = @delivery_attempt.id
+.field
+  %label= label_for @delivery_attempt, :notification
+  - if @delivery_attempt.notification
+    = link_to @delivery_attempt.notification_id, [:admin, @delivery_attempt.notification]
+.field
+  %label= label_for @delivery_attempt, :message
+  = link_to @delivery_attempt.message.path, [:admin, @message.message_stream, @message]
+.field
+  %label= label_for @delivery_attempt, :phone_number
+  = @delivery_attempt.phone_number
+.field
+  %label= label_for @delivery_attempt, :delivery_method
+  = @delivery_attempt.delivery_method
+.field
+  %label= label_for @delivery_attempt, :result
+  = @delivery_attempt.result
+.field
+  %label= label_for @delivery_attempt, :error_type
+  = @delivery_attempt.error_type
+.field
+  %label= label_for @delivery_attempt, :error_msg
+  .block-text= @delivery_attempt.error_msg
+.field
+  %label= label_for @delivery_attempt, :request
+  = @delivery_attempt.request
+.field
+  %label= label_for @delivery_attempt, :response
+  = @delivery_attempt.response
+.field
+  %label= label_for @delivery_attempt, :created_at
+  = l(@delivery_attempt.created_at)
+.field
+  %label= label_for @delivery_attempt, :updated_at
+  = l(@delivery_attempt.updated_at)

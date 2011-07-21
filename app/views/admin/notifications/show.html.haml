@@ -1,53 +1,51 @@
 - @nav_hierarchy = [:notifications, @notification]
 
 %h2 View Notification
-= form_for(admin_notification_path(@notification), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @notification.id
-    .field
-      = f.label :uuid, 'UUID'
-      = @notification.uuid
-    .field
-      = f.label :notifier_id, 'Notifier ID'
-      = link_to @notification.notifier_id, admin_notifier_path(@notification.notifier_id)
-    .field
-      = f.label :message_id, 'Message ID'
-      = @notification.message_id
-    .field
-      = f.label :phone_number, 'Phone Number'
-      = @notification.phone_number
-    .field
-      = f.label :first_name, 'First Name'
-      = @notification.first_name
-    .field
-      = f.label :delivery_method, 'Delivery Method'
-      = @notification.delivery_method
-    .field
-      = f.label :delivery_start, 'Delivery Start'
-      = @notification.delivery_start.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :delivery_expires, 'Delivery Expires'
-      = @notification.delivery_expires.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :delivery_window, 'Delivery Window'
-      = @notification.delivery_window
-    .field
-      = f.label :last_run_at, 'Last Run At'
-      = @notification.last_run_at.try(:strftime, '%b %e, %Y @ %r %Z')
-    .field
-      = f.label :status
-      = @notification.status
-    .field
-      = f.label :last_error_type, 'Last Error Type'
-      = @notification.last_error_type
-    .field
-      = f.label :last_error_msg, 'Last Error Message'
-      = @notification.last_error_msg
-    .field
-      = f.label :date_created, 'Date Created'
-      = @notification.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @notification, :id
+  = @notification.id
+.field
+  %label= label_for @notification, :uuid
+  = @notification.uuid
+.field
+  %label= label_for @notification, :notifier_id
+  = link_to @notification.notifier_id, admin_notifier_path(@notification.notifier_id)
+.field
+  %label= label_for @notification, :message
+  = link_to @message.path, [:admin, @message.message_stream, @message]
+.field
+  %label= label_for @notification, :phone_number
+  = @notification.phone_number
+.field
+  %label= label_for @notification, :first_name
+  = @notification.first_name
+.field
+  %label= label_for @notification, :delivery_method
+  = @notification.delivery_method
+.field
+  %label= label_for @notification, :delivery_start
+  = l(@notification.delivery_start) if @notification.delivery_start
+.field
+  %label= label_for @notification, :delivery_expires
+  = l(@notification.delivery_expires) if @notification.delivery_expires
+.field
+  %label= label_for @notification, :delivery_window
+  = @notification.delivery_window
+.field
+  %label= label_for @notification, :last_run_at
+  = l(@notification.last_run_at) if @notification.last_run_at
+.field
+  %label= label_for @notification, :status
+  = @notification.status
+.field
+  %label= label_for @notification, :last_error_type
+  = @notification.last_error_type
+.field
+  %label= label_for @notification, :last_error_msg
+  = @notification.last_error_msg
+.field
+  %label= label_for @notification, :created_at
+  = l(@notification.created_at)
+.field
+  %label= label_for @notification, :updated_at
+  = l(@notification.updated_at)

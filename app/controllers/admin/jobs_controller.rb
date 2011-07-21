@@ -8,6 +8,7 @@ class Admin::JobsController < AdminController
 
   def show
     @job = Delayed::Job.find(params[:id])
+    @payload = @job.payload_object
     respond_with @job
   end
 

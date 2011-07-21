@@ -1,23 +1,21 @@
 - @nav_hierarchy = [:messages, @message_stream]
 
 %h2 View Message Stream
-= form_for(admin_message_stream_path(@message_stream), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @message_stream.id
-    .field
-      = f.label :name
-      = @message_stream.name
-    .field
-      = f.label :title
-      = @message_stream.title
-    .field
-      = f.label :date_created, 'Date Created'
-      = @message_stream.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @message_stream.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @message_stream, :id
+  = @message_stream.id
+.field
+  %label= label_for @message_stream, :name
+  = @message_stream.name
+.field
+  %label= label_for @message_stream, :title
+  = @message_stream.title
+.field
+  %label= label_for @message_stream, :created_at
+  = l(@message_stream.created_at)
+.field
+  %label= label_for @message_stream, :updated_at
+  = l(@message_stream.updated_at)
 
 %h2 Messages
 %table.admin-table

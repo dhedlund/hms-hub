@@ -12,6 +12,7 @@ gem 'rabl'
 
 gem 'delayed_job'
 gem 'rest-client'
+gem 'simple_form'
 
 group :development do
   gem 'rvm'

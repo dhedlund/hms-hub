@@ -39,4 +39,9 @@ module AdminHelper
       end
     end
   end
+
+  def label_for(object, attribute)
+    object.class.human_attribute_name attribute
+  end
+
 end

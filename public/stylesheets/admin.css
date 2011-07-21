@@ -131,22 +131,8 @@ div.actions {
   line-height: 1.2em;
 }
 
-div.field {
-  clear: left;
-  border-top: dashed 1px #ccc;
-  padding: 10px 0px 10px 190px;
-}
 
-.field label {
-  display: block; float: left;
-  width: 170px;
-  margin: 3px 0px 10px -190px;
-  font-weight: bold;
-}
-
-
-
-.simple_form .input {
+.simple_form .input, .field {
   clear: left;
   border-top: dashed 1px #ccc;
   padding: 10px 0px;
@@ -157,7 +143,7 @@ div.field {
   padding: 2px;
 }
 
-.simple_form label {
+label {
   display: block; float: left;
   width: 170px;
   margin: 3px 10px 10px 0px;
@@ -168,7 +154,7 @@ div.field {
   float: right;
 }
 
-.simple_form label.collection_radio {
+label.collection_radio {
   display: inline; float: none;
 }
 
@@ -183,7 +169,7 @@ div.field {
 .field_with_errors {
   position: relative;
 }
-.field_with_errors label{
+.field_with_errors label {
   color: #f00;
 }
 .error {
@@ -191,12 +177,6 @@ div.field {
   top: 0px; right: 0px;
   margin: 10px;
   color: #f00;
-}
-
-.admin-view .block-text {
-  white-space: pre-wrap;
-  text-align: left;
-  font-size: 10px;
 }
 
 #user-nav {
