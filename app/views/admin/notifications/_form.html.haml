@@ -1,0 +1,7 @@
+= simple_form_for [:admin, @notification] do |f|
+  = f.input :notifier_id, :collection => Notifier.all.map { |n| [n.username, n.id] }
+  = f.input :first_name
+  = f.input :phone_number
+  = f.input :delivery_method, :collection => ['SMS', 'IVR'], :as => :radio, :required => true
+  = f.input :message_id, :collection => Message.all.sort_by(&:path).map { |m| [m.path, m.id] }
+  = f.button :submit

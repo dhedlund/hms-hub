@@ -48,6 +48,7 @@ GEM
       railties (~> 3.0)
     i18n (0.5.0)
     jsonschema (2.0.1)
+    macaddr (1.0.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -95,6 +96,8 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.29)
+    uuid (2.3.2)
+      macaddr (~> 1.0)
     yajl-ruby (0.8.2)
 
 PLATFORMS
@@ -116,4 +119,5 @@ DEPENDENCIES
   sass
   simple_form
   sqlite3
+  uuid
   yajl-ruby

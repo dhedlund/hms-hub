@@ -6,6 +6,7 @@ gem 'mysql'
 gem 'sqlite3'
 gem 'haml'
 gem 'sass'
+gem 'uuid'
 
 gem 'yajl-ruby', :require => 'yajl'
 gem 'rabl'
