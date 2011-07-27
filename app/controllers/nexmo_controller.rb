@@ -11,8 +11,9 @@ class NexmoController < ApplicationController
       :to_msisdn    => params[:msisdn],
       :network_code => params[:'network-code'],
       :mo_tag       => params[:'mo-tag'],
-      :status       => params[:status],
+      :status       => params[:status].try(:upcase),
       :scts         => params[:scts],
+      :params       => params, # to include w/ error message if failure
     })
     unless success
       log_message_error(@message, 'failed to save delivery confirmation')

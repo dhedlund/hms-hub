@@ -10,6 +10,53 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # after_update:
+  #--------------
+  test "should not update attempt w/ delivered if any nexmo message pending" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+
+    attempt.expects(:save).never
+    @message.update_attributes(:status => NexmoOutboundMessage::DELIVERED)
+  end
+
+  test "should update delivery attempt if all nexmo messages DELIVERED" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    Factory.create(:nexmo_outbound_message,
+      :delivery_attempt => attempt,
+      :status => NexmoOutboundMessage::DELIVERED
+    )
+
+    attempt.expects(:save).once
+    @message.update_attributes(:status => NexmoOutboundMessage::DELIVERED)
+    assert_equal DeliveryAttempt::DELIVERED, attempt.result
+  end
+
+  test "should update delivery attempt if nexmo message EXPIRED" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+
+    attempt.expects(:save).once
+    @message.update_attributes(:status => NexmoOutboundMessage::EXPIRED)
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::REMOTE_TIMEOUT, attempt.error_type
+  end
+
+  test "should update delivery attempt if nexmo message FAILED" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+
+    attempt.expects(:save).once
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED)
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::REMOTE_ERROR, attempt.error_type
+  end
+
+  #----------------------------------------------------------------------------#
   # delivery_attempt_id:
   #---------------------
   test "should be invalid without a delivery_attempt_id" do
@@ -57,6 +104,14 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   test "should be valid without a network_code" do
     @message.network_code = nil
     assert @message.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # params:
+  #--------
+  test "should be valid without params" do
+    @message.params = nil
+    @message.valid?
   end
 
   #----------------------------------------------------------------------------#
