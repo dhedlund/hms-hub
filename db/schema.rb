@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110705171910) do
+ActiveRecord::Schema.define(:version => 20110803053121) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -43,6 +43,21 @@ ActiveRecord::Schema.define(:version => 20110705171910) do
 
   add_index "delivery_attempts", ["delivery_method", "created_at"], :name => "index_delivery_attempts_on_delivery_method_and_created_at"
   add_index "delivery_attempts", ["notification_id"], :name => "index_delivery_attempts_on_notification_id"
+
+  create_table "intellivr_outbound_messages", :force => true do |t|
+    t.integer  "delivery_attempt_id"
+    t.string   "ext_message_id"
+    t.text     "request"
+    t.text     "response"
+    t.text     "callback_res"
+    t.string   "callee"
+    t.integer  "duration"
+    t.string   "status"
+    t.datetime "connect_at"
+    t.datetime "disconnect_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "message_streams", :force => true do |t|
     t.string   "name"

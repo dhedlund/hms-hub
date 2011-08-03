@@ -25,6 +25,8 @@ HmsHub::Application.routes.draw do
   get 'nexmo/confirmation' => 'nexmo#confirm_delivery'
   get 'nexmo/inbound_sms' => 'nexmo#accept_delivery'
 
+  post 'intellivr/confirmation' => 'intellivr#confirm_delivery'
+
   root :to => "status_checks#dbcheck"
 
   # The priority is based upon order of creation:

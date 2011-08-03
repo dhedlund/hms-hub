@@ -13,6 +13,11 @@ development:
     api_key: ~
     api_secret: ~
 
+  intellivr:
+    api_key: ~ # secret API key from INTELLIVR admin interface
+    base_url: ~ # URL to INTELLIVR API (i.e. http://HOSTNAME/intellivr/api/api.php)
+    callback_url: ~ # URL to have INTELLIVR contact for delivery confirmations
+
 test:
   delivery_providers:
     sms: dummy
@@ -28,6 +33,10 @@ production:
     api_key: ~
     api_secret: ~
 
+  intellivr:
+    api_key: ~
+    base_url: ~
+    callback_url: ~
 
 <% file = Rails.root.join('config', 'priv', 'delivery.yml') %>
 <%= file.read if file.exist? %>
