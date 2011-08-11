@@ -26,6 +26,23 @@ class DeliveryAttempt < ActiveRecord::Base
     self.cache_notification_data
   end
 
+  def provider
+    begin
+      self[:provider].constantize if self[:provider]
+    rescue NameError
+      nil
+    end
+  end
+
+  def provider=(p)
+    self[:provider] = p.to_s
+    self[:provider].constantize # throws NameError if not class
+  end
+
+  def delivery_details
+    self.provider.delivery_details(id) if self.provider
+  end
+
 
   protected
 
@@ -45,6 +62,7 @@ class DeliveryAttempt < ActiveRecord::Base
       return save
     end
 
+    self.provider = provider.class
     provider.deliver(self)
   end
 

@@ -13,6 +13,16 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_details:
+  #------------------
+  test "delivery_details should ask provider for attempt's delivery details" do
+    provider = mock().class
+    provider.expects(:delivery_details).with(@attempt.id).returns(['abc','def'])
+    @attempt.provider = provider
+    assert_equal ['abc','def'], @attempt.delivery_details
+  end
+
+  #----------------------------------------------------------------------------#
   # delivery_method:
   #-----------------
   test "should be invalid without a delivery_method" do
@@ -75,6 +85,37 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
     @attempt.phone_number = nil
     assert @attempt.invalid?
     assert @attempt.errors[:phone_number].any?
+  end
+
+  #----------------------------------------------------------------------------#
+  # provider:
+  #----------
+  test "should be valid without a provider" do
+    @attempt.provider = nil
+    assert @attempt.valid?
+  end
+
+  test "should be able to set and fetch a provider from its class" do
+    @attempt.provider = Delivery::Provider::Dummy
+    assert_equal Delivery::Provider::Dummy, @attempt.provider
+  end
+
+  test "should be able to set a provider from a string" do
+    @attempt.provider = 'Delivery::Provider::Dummy'
+    assert_equal Delivery::Provider::Dummy, @attempt.provider
+  end
+
+  test "provider= should raise an error if invalid provider provided" do
+    assert_raise(NameError) do
+      @attempt.provider = 'Delivery::Provider::PandorasBox'
+    end
+  end
+
+  test "provider should return nil if provider class no longer valid" do
+    class FooBar; end
+    @attempt.provider = FooBar
+    self.class.send(:remove_const, :FooBar)
+    assert_nil @attempt.provider
   end
 
   #----------------------------------------------------------------------------#
