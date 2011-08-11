@@ -27,12 +27,6 @@
   %label= label_for @delivery_attempt, :error_msg
   .block-text= @delivery_attempt.error_msg
 .field
-  %label= label_for @delivery_attempt, :request
-  = @delivery_attempt.request
-.field
-  %label= label_for @delivery_attempt, :response
-  = @delivery_attempt.response
-.field
   %label= label_for @delivery_attempt, :created_at
   = l(@delivery_attempt.created_at)
 .field
