@@ -49,3 +49,21 @@
 .field
   %label= label_for @notification, :updated_at
   = l(@notification.updated_at)
+
+%h2 Delivery Attempts
+%table.admin-table
+  %tr
+    %th ID
+    %th Method
+    %th Date
+    %th Result
+    %th Error Type
+    %th Actions
+  - @attempts.each do |attempt|
+    %tr{:class => cycle('even', 'odd')}
+      %td= attempt.id
+      %td= attempt.delivery_method
+      %td= time_ago_in_words(attempt.created_at)
+      %td= attempt.result
+      %td= attempt.error_type
+      %td.actions #{link_to 'View', [:admin, attempt]}
