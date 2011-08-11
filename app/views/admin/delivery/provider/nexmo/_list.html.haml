@@ -1,0 +1,29 @@
+- details.each do |message|
+  .admin-delivery-details
+    .field
+      %label= label_for message, :id
+      = message.id
+    .field
+      %label= label_for message, :ext_message_id
+      = message.ext_message_id
+    .field
+      %label= label_for message, :status
+      = message.status
+    .field
+      %label= label_for message, :to_msisdn
+      = message.to_msisdn
+    .field
+      %label= label_for message, :network_code
+      = message.network_code
+    .field
+      %label= label_for message, :mo_tag
+      = message.mo_tag
+    .field
+      %label= label_for message, :scts
+      = message.scts
+    .field
+      %label= label_for message, :created_at
+      = l(message.created_at)
+    .field
+      %label= label_for message, :updated_at
+      = l(message.updated_at)

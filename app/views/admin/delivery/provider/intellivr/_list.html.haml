@@ -1,0 +1,38 @@
+- details.each do |message|
+  .admin-delivery-details
+    .field
+      %label= label_for message, :id
+      = message.id
+    .field
+      %label= label_for message, :ext_message_id
+      = message.ext_message_id
+    .field
+      %label= label_for message, :status
+      = message.status
+    .field
+      %label= label_for message, :callee
+      = message.callee
+    .field
+      %label= label_for message, :duration
+      = message.duration
+    .field
+      %label= label_for message, :conenct_at
+      = l(message.connect_at) if message.connect_at
+    .field
+      %label= label_for message, :disconnect_at
+      = l(message.disconnect_at) if message.disconnect_at
+    .field
+      %label= label_for message, :request
+      .text-block= preserve(html_escape(message.request))
+    .field
+      %label= label_for message, :response
+      .text-block= preserve(html_escape(message.response))
+    .field
+      %label= label_for message, :callback_res
+      .text-block= preserve(html_escape(message.callback_res))
+    .field
+      %label= label_for message, :created_at
+      = l(message.created_at)
+    .field
+      %label= label_for message, :updated_at
+      = l(message.updated_at)

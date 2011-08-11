@@ -18,6 +18,9 @@
   %label= label_for @delivery_attempt, :delivery_method
   = @delivery_attempt.delivery_method
 .field
+  %label= label_for @delivery_attempt, :provider
+  = @delivery_attempt.provider
+.field
   %label= label_for @delivery_attempt, :result
   = @delivery_attempt.result
 .field
@@ -32,3 +35,7 @@
 .field
   %label= label_for @delivery_attempt, :updated_at
   = l(@delivery_attempt.updated_at)
+
+- if @provider && @delivery_details
+  %h2 Provider Specific Details
+  = render "admin/#{@provider.to_s.underscore}/list", :details => @delivery_details
