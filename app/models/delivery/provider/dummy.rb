@@ -7,4 +7,8 @@ class Delivery::Provider::Dummy
     true
   end
 
+  def self.delivery_details(delivery_attempt_id)
+    nil
+  end
+
 end

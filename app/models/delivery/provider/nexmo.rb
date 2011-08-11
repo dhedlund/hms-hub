@@ -80,6 +80,10 @@ class Delivery::Provider::Nexmo
     handle_nexmo_response(attempt, result)
   end
 
+  def self.delivery_details(delivery_attempt_id)
+    NexmoOutboundMessage.where(:delivery_attempt_id => delivery_attempt_id)
+  end
+
 
   protected
 

@@ -225,6 +225,19 @@ class Delivery::Provider::NexmoTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_details:
+  #------------------
+  test "delivery_details should return any associated outbound messages" do
+    messages = 2.times.map do
+      Factory.create(:nexmo_outbound_message, :delivery_attempt => @attempt)
+    end
+    Factory.create(:nexmo_outbound_message)
+
+    matched = @provider.class.delivery_details(@attempt.id)
+    assert_equal messages.map(&:id).sort, matched.map(&:id).sort
+  end
+
+  #----------------------------------------------------------------------------#
   # from:
   #------
   test "should be able to specify a custom from value" do

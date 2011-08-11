@@ -19,6 +19,13 @@ class Delivery::Provider::DummyTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_details:
+  #------------------
+  test "delivery_details should exist but return nil as its not supported" do
+    assert_nil @provider.class.delivery_details(5)
+  end
+
+  #----------------------------------------------------------------------------#
   # new:
   #-----
   test "should be able to create a new dummy provider directly" do

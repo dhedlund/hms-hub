@@ -181,6 +181,19 @@ class Delivery::Provider::IntellivrTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_details:
+  #------------------
+  test "delivery_details should return any associated outbound messages" do
+    messages = 2.times.map do
+      Factory.create(:intellivr_outbound_message, :delivery_attempt => @attempt)
+    end
+    Factory.create(:intellivr_outbound_message)
+
+    matched = @provider.class.delivery_details(@attempt.id)
+    assert_equal messages.map(&:id).sort, matched.map(&:id).sort
+  end
+
+  #----------------------------------------------------------------------------#
   # new:
   #-----
   test "should be able to create a new intellivr provider directly" do

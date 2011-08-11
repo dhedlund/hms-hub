@@ -81,6 +81,10 @@ class Delivery::Provider::Intellivr
     end
   end
 
+  def self.delivery_details(delivery_attempt_id)
+    IntellivrOutboundMessage.where(:delivery_attempt_id => delivery_attempt_id)
+  end
+
 
   protected
 
