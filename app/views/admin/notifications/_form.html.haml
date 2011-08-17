@@ -1,5 +1,5 @@
 = simple_form_for [:admin, @notification] do |f|
-  = f.input :notifier_id, :collection => Notifier.all.map { |n| [n.username, n.id] }
+  = f.input :notifier_id, :collection => Notifier.where(:username => 'internal').map { |n| [n.username, n.id] }, :include_blank => false
   = f.input :first_name
   = f.input :phone_number
   = f.input :delivery_method, :collection => ['SMS', 'IVR'], :as => :radio, :required => true

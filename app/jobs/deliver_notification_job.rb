@@ -1,7 +1,13 @@
 class DeliverNotificationJob < Struct.new(:notification_id)
   def perform
     notification = Notification.find(notification_id)
-    attempt = notification.delivery_attempts.last
+    attempts = notification.delivery_attempts
+    attempt = attempts.last
+
+    if attempts.size >= 3 && attempt.result == DeliveryAttempt::TEMP_FAIL
+      notification.update_attributes(:status => Notification::PERM_FAIL)
+      return
+    end
 
     # attempt delivery if never attempted or last was temporary failure
     if !attempt || attempt.result == DeliveryAttempt::TEMP_FAIL
@@ -16,11 +22,25 @@ class DeliverNotificationJob < Struct.new(:notification_id)
 
     when DeliveryAttempt::ASYNC_DELIVERY
       # enqueue job to check later after response returned from remote server
-      Delayed::Job.enqueue(DeliverNotificationJob.new(notification.id))
+      raise DeliveryAttempt::ASYNC_DELIVERY
+      #Delayed::Job.enqueue self, :attempts => 2, :run_at => 1.minute.from_no
 
     else # DELIVERED or PERM_FAIL
       # job should not be retried
     end
+  end
+
+  def reschedule_at(time, attempts);
+    time + 1.minutes
+  end
+
+  def max_attempts
+    5
+  end
+
+  def failure
+    notification = Notification.find(notification_id)
+    notification.update_attributes(:status => Notification::PERM_FAIL)
   end
 
 end
