@@ -16,8 +16,11 @@ set :branch, 'production'
 set :git_shallow_clone, 1
 set :scm_verbose, true
 
+set :shared_files, %w(config/database.yml config/priv/delivery.yml)
+
 set :user, 'meduser'
 set :deploy_to, "/var/www/apps/#{application}"
+
 
 
 
@@ -31,5 +34,7 @@ namespace :deploy do
 end
 
 task :after_update_code, :roles => :app do
-    run "cp #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    shared_files.each do |shared_file| 
+      run "cp #{shared_path}/#{shared_file} #{release_path}/#{shared_file}"
+    end
 end
