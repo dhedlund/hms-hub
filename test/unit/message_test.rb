@@ -38,6 +38,14 @@ class MessagesTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # language:
+  #----------
+  test "should be valid without a language" do
+    @message.language = nil
+    assert @message.valid?
+  end
+
+  #----------------------------------------------------------------------------#
   # message_stream:
   #----------------
   test "should be invalid without a message_stream_id" do

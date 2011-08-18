@@ -52,6 +52,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
                       properties:
                         name: { type: string }
                         title: { type: string }
+                        language: { type: string }
                         offset_days: { type: integer }
     YAMLEND
     assert_nothing_raised { JSON::Schema.validate(json_response, schema) }
@@ -71,6 +72,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
           'message' => {
             'name' => message.name,
             'title' => message.title,
+            'language' => message.language,
             'offset_days' => message.offset_days,
             'sms_text' => message.sms_text,
     } } } } } }
