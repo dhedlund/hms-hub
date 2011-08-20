@@ -1,4 +1,19 @@
+class CustomFormBuilder < SimpleForm::FormBuilder
+  def base_errors
+    errors = @object.errors[:base] or return
+    buffer = ActiveSupport::SafeBuffer.new
+    buffer << '<ul class="base_errors">'.html_safe
+    errors.each { |e| buffer << '<li>'.html_safe << e << '</li>'.html_safe }
+    buffer << '</ul>'.html_safe
+  end
+end
+
 module AdminHelper
+  def custom_form_for(object, *args, &block)
+    options = args.extract_options!
+    simple_form_for(object, *(args << options.merge(:builder => CustomFormBuilder)), &block)
+  end
+
   def primary_nav(selected=:dashboard)
     nav = [
       { :name => :dashboard,     :path => admin_path                   },
