@@ -8,15 +8,13 @@
     %tr
       %th Offset
       %th Title
-      %th Text
-      %th IVR
-      %th SMS
+      %th Language
+      %th Method
       %th Actions
     - stream.messages.each do |message|
       %tr{:class => cycle('even', 'odd')}
         %td= message.offset_days
         %td= message.title
-        %td.sms-text= message.sms_text
-        %td= message.ivr_code.present? ? 'X' : ''
-        %td= message.sms_text.present? ? 'X' : ''
+        %td= message.language
+        %td= message.sms_text.present? ? 'SMS' : 'IVR'
         %td.actions #{link_to 'View', [:admin, stream, message]}

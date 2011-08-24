@@ -5,8 +5,8 @@
   %tr
     %th ID
     %th Phone Number
+    %th Method
     %th Start
-    %th Expires
     %th Last Run
     %th Status
     %th Error Type
@@ -15,8 +15,8 @@
     %tr{:class => cycle('even', 'odd')}
       %td= notification.id
       %td= notification.phone_number
+      %td= notification.delivery_method
       %td= notification.delivery_start.strftime '%Y-%m-%d'
-      %td= notification.delivery_expires.strftime '%Y-%m-%d'
       %td= notification.last_run_at.try(:strftime, '%Y-%m-%d')
       %td= notification.status
       %td= notification.last_error_type

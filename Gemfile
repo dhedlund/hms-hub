@@ -2,6 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '~>3.0'
 
+gem 'capistrano-ext'
+gem 'capistrano'
+
 gem 'mysql'
 gem 'sqlite3'
 gem 'haml'

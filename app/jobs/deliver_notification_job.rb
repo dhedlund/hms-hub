@@ -31,11 +31,11 @@ class DeliverNotificationJob < Struct.new(:notification_id)
   end
 
   def reschedule_at(time, attempts);
-    time + 1.minutes
+    time + 1.hour
   end
 
   def max_attempts
-    5
+    1000
   end
 
   def failure

@@ -27,8 +27,6 @@ HmsHub::Application.routes.draw do
 
   post 'intellivr/confirmation' => 'intellivr#confirm_delivery'
 
-  root :to => "status_checks#dbcheck"
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

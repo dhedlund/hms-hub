@@ -15,7 +15,7 @@ Dir[File.expand_path('../seed_data/message_streams/*.yml', __FILE__)].each do |f
     stream.save!
   end
   data['messages'].each do |data|
-    data['sms_text'].strip!
+    data['sms_text'].strip! if data['sms_text']
     message = stream.messages.build(data)
     unless message.save
       puts "#{message.path}: not saved, validation errors."

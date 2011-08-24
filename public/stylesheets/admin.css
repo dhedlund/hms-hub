@@ -166,6 +166,12 @@ label.collection_radio {
   margin: 0px 10px 0px 2px;
 }
 
+.base_errors {
+  margin: 10px 20px;
+  color: #f00;
+  list-style: square;
+}
+
 .field_with_errors {
   position: relative;
 }
