@@ -4,7 +4,7 @@ class DeliverNotificationJob < Struct.new(:notification_id)
     attempts = notification.delivery_attempts
     attempt = attempts.last
 
-    if attempts.size >= 3 && attempt.result == DeliveryAttempt::TEMP_FAIL
+    if attempt && attempt.result == DeliveryAttempt::TEMP_FAIL && notification.delivery_expires < Time.zone.now
       notification.update_attributes(:status => Notification::PERM_FAIL)
       return
     end

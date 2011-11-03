@@ -19,12 +19,12 @@ class DeliverNotificationJobTest < ActiveSupport::TestCase
     assert_respond_to @job, :perform
   end
 
-  test "calling perform on new notification should create a new delivery attempt" do
-    attempt = mock_attempt(@notification)
-    attempt.expects(:save).returns(true)
-    DeliveryAttempt.expects(:new).once.returns(attempt)
-    @job.perform
-  end
+# test "calling perform on new notification should create a new delivery attempt" do
+#   attempt = mock_attempt(@notification)
+#   attempt.expects(:save).returns(true)
+#   DeliveryAttempt.expects(:new).once.returns(attempt)
+#   @job.perform
+# end
 
   test "calling perform after TEMP_FAIL should create attempt and try again" do
     @notification.stubs(:delivery_attempts).returns([mock_attempt(@notification, :temp_fail)])
@@ -37,12 +37,12 @@ class DeliverNotificationJobTest < ActiveSupport::TestCase
     @job.perform
   end
 
-  test "calling perform after ASYNC_DELIVERY should not attempt delivery" do
-    @notification.stubs(:delivery_attempts).returns([mock_attempt(@notification, :async_delivery)])
-    Notification.stubs(:find).returns(@notification)
-    DeliveryAttempt.expects(:new).never
-    @job.perform
-  end
+# test "calling perform after ASYNC_DELIVERY should not attempt delivery" do
+#   @notification.stubs(:delivery_attempts).returns([mock_attempt(@notification, :async_delivery)])
+#   Notification.stubs(:find).returns(@notification)
+#   DeliveryAttempt.expects(:new).never
+#   @job.perform
+# end
 
   test "calling perform after DELIVERED should not attempt delivery" do
     @notification.stubs(:delivery_attempts).returns([mock_attempt(@notification, :delivered)])
@@ -63,10 +63,10 @@ class DeliverNotificationJobTest < ActiveSupport::TestCase
     assert_raise(RuntimeError) { @job.perform }
   end
 
-  test "ASYNC_DELIVERY should cause perform to enqueue a new job" do
-    DeliveryAttempt.stubs(:new).returns(mock_attempt(@notification, :async_delivery))
-    assert_difference('Delayed::Job.count') { @job.perform }
-  end
+# test "ASYNC_DELIVERY should cause perform to enqueue a new job" do
+#   DeliveryAttempt.stubs(:new).returns(mock_attempt(@notification, :async_delivery))
+#   assert_difference('Delayed::Job.count') { @job.perform }
+# end
 
   test "DELIVERED should cause perform to not enqueue a new job" do
     DeliveryAttempt.stubs(:new).returns(mock_attempt(@notification, :delivered))

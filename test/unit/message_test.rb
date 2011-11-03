@@ -168,15 +168,9 @@ class MessagesTest < ActiveSupport::TestCase
     assert @message.valid?
   end
 
-  test "should allow sms_text messages up to 160 characters" do
-    @message.sms_text = 'x'*160
+  test "should allow sms_text messages up to at least 1024 characters" do
+    @message.sms_text = 'x'*1024
     assert @message.valid?
-  end
-
-  test "should not allow sms_text messages greater than 160 characters "do
-    @message.sms_text = 'x'*161
-    assert @message.invalid?
-    assert @message.errors[:sms_text].any?
   end
 
   #----------------------------------------------------------------------------#
