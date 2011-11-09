@@ -22,6 +22,8 @@ class Notification < ActiveRecord::Base
   EARLIEST_HOUR = 9  # earliest a notification can be delivered, in hours
   LATEST_HOUR   = 21 # latest a notification can be delivered, in hours
 
+  serialize :variables
+
   validates :uuid, :presence => true, :uniqueness => { :scope => :notifier_id }
   validates :notifier_id, :presence => true
   validates :message_id, :presence => true
@@ -45,6 +47,10 @@ class Notification < ActiveRecord::Base
 
   def delivery_expires
     self[:delivery_expires] ||= delivery_start.try(:+, EXPIRES_AFTER.days)
+  end
+
+  def variables
+    self[:variables] || {}
   end
 
   def message_path=(path)

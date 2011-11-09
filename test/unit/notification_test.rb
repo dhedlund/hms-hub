@@ -496,4 +496,17 @@ class NotificationTest < ActiveSupport::TestCase
     assert n2.valid?
   end
 
+  #----------------------------------------------------------------------------#
+  # variables:
+  #-----------
+  test "should be valid without variables" do
+    @notification.variables = {}
+    assert @notification.valid?
+  end
+
+  test "should return an empty hash by default" do
+    @notification.variables = {}
+    assert_equal({}, @notification.variables)
+  end
+
 end
