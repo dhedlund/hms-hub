@@ -48,6 +48,13 @@ class Delivery::Provider::NexmoTest < ActiveSupport::TestCase
     assert_equal true, @provider.deliver(@attempt)
   end
 
+  test "deliver should attempt to interpolate variables in sms_text" do
+    @provider.stubs(:handle_request).returns(fake_response)
+    @attempt.message.expects(:sms_text).with({ 'foo' => 'bar' })
+    @attempt.notification.variables = { 'foo' => 'bar' }
+    @provider.deliver(@attempt)
+  end
+
   test "deliver should return false if one or more nexmo msgs not success" do
     @provider.stubs(:handle_request).returns(fake_response(['0','0','4','0']))
     assert_equal false, @provider.deliver(@attempt)

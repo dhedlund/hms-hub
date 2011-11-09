@@ -40,7 +40,7 @@ class Delivery::Provider::Nexmo
 
   def deliver(attempt)
     phone_number = attempt.phone_number
-    sms_text = attempt.message.sms_text
+    sms_text = attempt.message.sms_text(attempt.notification.variables)
 
     begin
       result = handle_request :get, json_endpoint, nil, :params => {
