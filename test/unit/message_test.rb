@@ -157,6 +157,11 @@ class MessagesTest < ActiveSupport::TestCase
     assert @message.valid?
   end
 
+  test "sms_text should return nil if assigned nil" do
+    @message.sms_text = nil
+    assert_nil @message.sms_text
+  end
+
   test "should be invalid if sms_text is empty (but not nil)" do
     @message.sms_text = ''
     assert @message.invalid?
@@ -171,6 +176,35 @@ class MessagesTest < ActiveSupport::TestCase
   test "should allow sms_text messages up to at least 1024 characters" do
     @message.sms_text = 'x'*1024
     assert @message.valid?
+  end
+
+  test "sms_text should interpolate symbol-based variables passed in" do
+    original = "The quick %color% fox jumps over the %adjective% dog"
+    expected = "The quick lavender fox jumps over the passive dog"
+    @message.sms_text = original
+    assert_equal expected, @message.sms_text(
+      :color => "lavender", :adjective => "passive"
+    )
+  end
+
+  test "sms_text should interpolate string-based variables passed in" do
+    original = "The quick %color% fox jumps over the %adjective% dog"
+    expected = "The quick lavender fox jumps over the passive dog"
+    @message.sms_text = original
+    assert_equal expected, @message.sms_text(
+      'color' => "lavender", 'adjective' => "passive"
+    )
+  end
+
+  test "sms_text should interpolate only variables passed in" do
+    @message.sms_text = "The quick %color% fox jumps over the %adjective% dog"
+    assert_match "%adjective%", @message.sms_text(:color => "lavender")
+  end
+
+  test "sms_text interpolation should not affect original sms_text" do
+    @message.sms_text = "The quick %color% fox jumps over the %adjective% dog"
+    @message.sms_text(:color => "lavender")
+    assert_match "%color", @message.sms_text
   end
 
   #----------------------------------------------------------------------------#

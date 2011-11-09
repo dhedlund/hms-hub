@@ -19,4 +19,13 @@ class Message < ActiveRecord::Base
   def path
     "#{message_stream.name}/#{name}" if message_stream.name && name
   end
+
+  def sms_text(variables=nil)
+    return unless self[:sms_text]
+    return self[:sms_text] unless variables
+
+    # interpolates text, replacing %xyz% with variables[xyz] for each variable
+    variables.inject(self[:sms_text]) { |r,(k,v)| r.gsub("%#{k}%", v) }
+  end
+
 end
