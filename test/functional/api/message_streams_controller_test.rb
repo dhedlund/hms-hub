@@ -53,6 +53,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
                         name: { type: string }
                         title: { type: string }
                         language: { type: string }
+                        expire_days: { type: integer }
                         offset_days: { type: integer }
     YAMLEND
     assert_nothing_raised { JSON::Schema.validate(json_response, schema) }
@@ -60,7 +61,8 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
 
   test "GET /api/message_streams contains all expected values" do
     streams = 2.times.map { Factory.create(:message_stream) }
-    3.times { Factory.create(:message, :message_stream => streams.first) }
+    messages = 3.times.map { Factory.create(:message, :message_stream => streams.first) }
+    messages.first.expire_days = 4
 
     get :index, :format => :json
 
@@ -73,6 +75,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
             'name' => message.name,
             'title' => message.title,
             'language' => message.language,
+            'expire_days' => message.expire_days,
             'offset_days' => message.offset_days,
             'sms_text' => message.sms_text,
     } } } } } }
