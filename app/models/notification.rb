@@ -16,8 +16,8 @@ class Notification < ActiveRecord::Base
   IVR = 'IVR'
   VALID_DELIVERY_METHODS = [ SMS, IVR ]
 
-  WINDOW_SIZE   = 6  # default delivery window size, in hours
-  WINDOW_START  = 12 # default delivery start hour, in hours
+  WINDOW_SIZE   = 4  # default delivery window size, in hours
+  WINDOW_START  = 14 # default delivery start hour, in hours
   EXPIRES_AFTER = 7  # default expiration date offset, in days
   EARLIEST_HOUR = 9  # earliest a notification can be delivered, in hours
   LATEST_HOUR   = 21 # latest a notification can be delivered, in hours

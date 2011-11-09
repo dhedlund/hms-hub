@@ -110,8 +110,8 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.errors[:delivery_window].any?
   end
 
-  test "delivery_window should default to 6 hours" do
-    assert_equal 6, Notification.new.delivery_window
+  test "delivery_window should default to 4 hours" do
+    assert_equal 4, Notification.new.delivery_window
   end
 
   test "should be invalid if delivery_window is not a whole number" do
@@ -333,15 +333,15 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test "set_delivery_range should have default delivery window of 6 hours" do
+  test "set_delivery_range should have default delivery window of 4 hours" do
     @notification.set_delivery_range('2011-05-03', '2011-05-05')
-    assert_equal 6, @notification.delivery_window
+    assert_equal 4, @notification.delivery_window
   end
 
-  test "set_delivery_range defaults start time to 12pm local to notifer" do
+  test "set_delivery_range defaults start time to 14pm local to notifer" do
     @notification.set_delivery_range('2011-05-03')
     Time.use_zone(@notifier.timezone) do
-      start = Time.zone.parse('2011-05-03 12:00:00')
+      start = Time.zone.parse('2011-05-03 14:00:00')
       assert_equal start, @notification.delivery_start
     end
   end
@@ -349,7 +349,7 @@ class NotificationTest < ActiveSupport::TestCase
   test "set_delivery_range should ignore any 'time parts' passed in" do
     @notification.set_delivery_range('2011-05-03 16:17:00', '2011-05-07 01:04:00')
     Time.use_zone(@notifier.timezone) do
-      start = Time.zone.parse('2011-05-03 12:00:00')
+      start = Time.zone.parse('2011-05-03 14:00:00')
       expires = Time.zone.parse('2011-05-07 00:00:00')
       assert_equal start, @notification.delivery_start
       assert_equal expires, @notification.delivery_expires
@@ -367,7 +367,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "set_delivery_range: invalid preferred time ranges are ignored" do
     Time.use_zone(@notifier.timezone) do
-      start = Time.zone.parse('2011-05-03 12:00:00')
+      start = Time.zone.parse('2011-05-03 14:00:00')
       @notification.set_delivery_range('2011-05-03', nil, '6x4')
       assert_equal start, @notification.delivery_start
       @notification.set_delivery_range('2011-05-03', nil, '10')
@@ -412,7 +412,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "set_delivery_range: preferred time ranges < 2 hours are ignored" do
     Time.use_zone(@notifier.timezone) do
-      start = Time.zone.parse('2011-05-03 12:00:00')
+      start = Time.zone.parse('2011-05-03 14:00:00')
       @notification.set_delivery_range('2011-05-03', nil, '11-12')
       assert_equal start, @notification.delivery_start
       @notification.set_delivery_range('2011-05-03', nil, '08-10') # 9-10
