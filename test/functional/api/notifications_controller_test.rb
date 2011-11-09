@@ -103,6 +103,7 @@ class Api::NotificationsControllerTest < ActionController::TestCase
       'delivery_date'    => Date.parse('2011-05-03').strftime('%Y-%m-%d'),
       'delivery_expires' => Date.parse('2011-05-08').strftime('%Y-%m-%d'),
       'preferred_time'   => '10-14',
+      'variables'        => { 'foo' => 'bar', 'wibble' => 'wobble' },
     }
 
     assert_difference 'Notification.count', 1 do

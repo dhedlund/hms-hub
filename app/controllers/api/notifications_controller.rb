@@ -10,6 +10,7 @@ class Api::NotificationsController < ApiController
       :phone_number    => params[:notification][:phone_number],
       :delivery_method => params[:notification][:delivery_method],
       :message_path    => params[:notification][:message_path],
+      :variables       => params[:notification][:variables],
     }
 
     @notification.set_delivery_range(
