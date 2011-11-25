@@ -1,6 +1,6 @@
 object @notification
 attributes :uuid, :first_name, :phone_number, :delivery_method,
-  :delivery_date, :delivery_expires, :preferred_time, :status
+  :delivery_date, :delivery_expires, :preferred_time, :status, :variables
 
 start, expires, preferred_time = @notification.get_delivery_range
 code(:delivery_date) { start }
