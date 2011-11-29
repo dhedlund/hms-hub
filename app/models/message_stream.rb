@@ -4,6 +4,7 @@ class MessageStream < ActiveRecord::Base
 
   validates :name,  :presence => true, :uniqueness => true
   validates :title, :presence => true
+  validates :delivery_method, :presence => true
 
   default_scope order('name')
 

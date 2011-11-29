@@ -10,6 +10,15 @@ class MessageStreamTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_method:
+  #-----------------
+  test "should be invalid without a delivery_method" do
+    @stream.delivery_method = nil
+    assert @stream.invalid?
+    assert @stream.errors[:delivery_method].any?
+  end
+
+  #----------------------------------------------------------------------------#
   # messages:
   #----------
   test "can associate multiple messages with a message stream" do
@@ -19,6 +28,14 @@ class MessageStreamTest < ActiveSupport::TestCase
         @stream.messages << message
       end
     end
+  end
+
+  #----------------------------------------------------------------------------#
+  # language:
+  #----------
+  test "should be valid without a language" do
+    @stream.language = nil
+    assert @stream.valid?
   end
 
   #----------------------------------------------------------------------------#
