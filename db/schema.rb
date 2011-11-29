@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103171516) do
+ActiveRecord::Schema.define(:version => 20111129010727) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20111103171516) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "program_id"
   end
 
   add_index "message_streams", ["name"], :name => "index_message_streams_on_name", :unique => true
@@ -144,6 +145,15 @@ ActiveRecord::Schema.define(:version => 20111103171516) do
   end
 
   add_index "notifiers", ["username"], :name => "index_notifiers_on_username", :unique => true
+
+  create_table "programs", :force => true do |t|
+    t.string   "name"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "programs", ["name"], :name => "index_programs_on_name", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "username"

@@ -38,6 +38,14 @@ class MessageStreamTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # program:
+  #---------
+  test "can access program from message_stream" do
+    assert @stream.program
+  end
+
+
+  #----------------------------------------------------------------------------#
   # scopes:
   #--------
   test "should be sorted by name in ascending order" do

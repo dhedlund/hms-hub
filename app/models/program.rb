@@ -1,6 +1,5 @@
-class MessageStream < ActiveRecord::Base
-  has_many :messages
-  belongs_to :program
+class Program < ActiveRecord::Base
+  has_many :message_streams
 
   validates :name,  :presence => true, :uniqueness => true
   validates :title, :presence => true
