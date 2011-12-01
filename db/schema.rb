@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111129020727) do
+ActiveRecord::Schema.define(:version => 20111201053320) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(:version => 20111129020727) do
     t.string   "language"
   end
 
-  add_index "message_streams", ["name"], :name => "index_message_streams_on_name", :unique => true
+  add_index "message_streams", ["name"], :name => "index_message_streams_on_name"
 
   create_table "messages", :force => true do |t|
     t.integer  "message_stream_id"
