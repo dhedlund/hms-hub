@@ -47,12 +47,49 @@ class MessageStreamTest < ActiveSupport::TestCase
     assert @stream.errors[:name].any?
   end
 
-  test "cannot have two message streams with the same name" do
-    Factory.create(:message_stream, :name => 'mystream')
+  test "cannot have two streams with same name, delivery method and language" do
+    Factory.create(:message_stream,
+      :name => 'mystream',
+      :language => 'English',
+      :delivery_method => 'SMS'
+    )
+
     @stream.name = 'mystream'
+    @stream.language = 'English'
+    @stream.delivery_method = 'SMS'
+
     assert @stream.invalid?
     assert @stream.errors[:name].any?
   end
+
+  test "can have two streams w/ same name if delivery method different" do
+    Factory.create(:message_stream,
+      :name => 'mystream',
+      :language => 'English',
+      :delivery_method => 'SMS'
+    )
+
+    @stream.name = 'mystream'
+    @stream.language = 'English'
+    @stream.delivery_method = 'IVR'
+
+    assert @stream.valid?
+  end
+
+  test "can have two streams w/ same name if language different" do
+    Factory.create(:message_stream,
+      :name => 'mystream',
+      :language => 'English',
+      :delivery_method => 'SMS'
+    )
+
+    @stream.name = 'mystream'
+    @stream.language = 'German'
+    @stream.delivery_method = 'SMS'
+
+    assert @stream.valid?
+  end
+
 
   #----------------------------------------------------------------------------#
   # program:
