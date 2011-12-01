@@ -4,6 +4,7 @@ gem 'rails', '~>3.0'
 
 gem 'capistrano-ext'
 gem 'capistrano'
+gem 'yaml_db'
 
 gem 'mysql'
 gem 'sqlite3'

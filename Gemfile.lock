@@ -115,6 +115,7 @@ GEM
     uuid (2.3.2)
       macaddr (~> 1.0)
     yajl-ruby (0.8.2)
+    yaml_db (0.2.2)
 
 PLATFORMS
   ruby
@@ -139,3 +140,4 @@ DEPENDENCIES
   sqlite3
   uuid
   yajl-ruby
+  yaml_db
