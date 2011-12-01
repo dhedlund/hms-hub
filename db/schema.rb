@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201053320) do
+ActiveRecord::Schema.define(:version => 20111201063352) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -81,9 +81,11 @@ ActiveRecord::Schema.define(:version => 20111201053320) do
     t.string   "title"
     t.string   "language"
     t.integer  "expire_days"
+    t.string   "uuid"
   end
 
   add_index "messages", ["message_stream_id", "name"], :name => "index_messages_on_message_stream_id_and_name", :unique => true
+  add_index "messages", ["uuid"], :name => "index_messages_on_uuid", :unique => true
 
   create_table "nexmo_inbound_messages", :force => true do |t|
     t.string   "ext_message_id"

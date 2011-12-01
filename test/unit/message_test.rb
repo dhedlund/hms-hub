@@ -229,4 +229,21 @@ class MessagesTest < ActiveSupport::TestCase
     assert @message.errors[:title].any?
   end
 
+  #----------------------------------------------------------------------------#
+  # uuid:
+  #------
+  test "should generate a new uuid on creation" do
+    message =  Factory.build(:message, :uuid => nil)
+    message.save!
+    assert_not_nil message.uuid
+  end
+
+  test "should not generate a new uuid on update" do
+    @message.save!
+    old_uuid = @message.uuid
+    @message.title = 'Foo Msg'
+    @message.save!
+    assert_equal old_uuid, @message.uuid
+  end
+
 end

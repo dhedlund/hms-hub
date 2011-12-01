@@ -1,6 +1,10 @@
+require 'uuid'
+
 class Message < ActiveRecord::Base
   belongs_to :message_stream
   has_many :notifications
+
+  before_create :generate_uuid
 
   validates :message_stream_id, :presence => true
   validates :name, :presence => true, :uniqueness => { :scope => :message_stream_id }
@@ -26,6 +30,13 @@ class Message < ActiveRecord::Base
 
     # interpolates text, replacing %xyz% with variables[xyz] for each variable
     variables.inject(self[:sms_text]) { |r,(k,v)| r.gsub("%#{k}%", v) }
+  end
+
+
+  protected
+
+  def generate_uuid
+    write_attribute :uuid, UUID.generate
   end
 
 end
