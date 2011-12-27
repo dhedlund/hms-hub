@@ -11,6 +11,15 @@ class MessagesTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_method:
+  #-----------------
+  test "should be invalid without a delivery_method" do
+    @message.delivery_method = nil
+    assert @message.invalid?
+    assert @message.errors[:delivery_method].any?
+  end
+
+  #----------------------------------------------------------------------------#
   # expire_days:
   #-------------
   test "should be valid without an expire_days" do
