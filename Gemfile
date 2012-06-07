@@ -5,7 +5,7 @@ gem 'rails', '~>3.0'
 gem 'capistrano-ext'
 gem 'capistrano'
 
-gem 'mysql'
+gem 'mysql2', '< 0.3'
 gem 'sqlite3'
 gem 'haml'
 gem 'sass'
