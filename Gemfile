@@ -6,7 +6,7 @@ gem 'capistrano-ext'
 gem 'capistrano'
 gem 'yaml_db'
 
-gem 'mysql'
+gem 'mysql2', '< 0.3'
 gem 'sqlite3'
 gem 'haml'
 gem 'sass'
