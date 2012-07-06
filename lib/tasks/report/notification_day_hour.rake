@@ -2,7 +2,8 @@ require 'csv'
 
 namespace :report do
   desc "deliveries by day of week, and time of day"
-  task :notification_day_hour => :environment do
+  task :notification_day_hour,[:month,:report_type] => :environment do |t,args|
+    puts "month: #{args.month} report_type: #{args.report_type}"
     delivered_table('SMS')
     delivered_table('IVR')
   end
@@ -13,7 +14,7 @@ namespace :report do
     delivery_day_hour = Hash.new(0)
     (0..6).each { |n| delivery_day_hour[n] = Hash.new(0) }
     Notification.where("notifications.delivered_at is not null and delivery_method = ?", message_type).find_each { 
-      |n| dtime = n.delivered_at.in_time_zone("Africa/Johannesburg") 
+      |n| dtime = n.delivered_at.in_time_zone("Africa/Blantyre") 
           delivery_day_hour[ dtime.wday ][ dtime.hour] += 1 }
     #puts delivery_day_hour.sort
     (0..23).each { |hour| row = Array.new()
