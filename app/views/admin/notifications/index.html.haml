@@ -1,6 +1,10 @@
 - @nav_hierarchy = [:notifications]
 
 %h2 Notifications
+
+#paginator
+  = paginate @notifications, :remote => true
+
 %table.admin-table
   %tr
     %th ID

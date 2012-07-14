@@ -1,8 +1,8 @@
 class Admin::NotificationsController < AdminController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   def index
-    @notifications = Notification.scoped
+    @notifications = Notification.page(params[:page])
     respond_with @notifications
   end
 
