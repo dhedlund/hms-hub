@@ -1,6 +1,10 @@
 - @nav_hierarchy = [:attempts]
 
 %h2 Delivery Attempts
+
+#paginator
+  = paginate @delivery_attempts, :remote => true
+
 %table.admin-table
   %tr
     %th ID

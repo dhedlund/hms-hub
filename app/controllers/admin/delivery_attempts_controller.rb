@@ -1,8 +1,8 @@
 class Admin::DeliveryAttemptsController < AdminController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   def index
-    @delivery_attempts = DeliveryAttempt.scoped
+    @delivery_attempts = DeliveryAttempt.page(params[:page])
     respond_with @delivery_attempts
   end
 
