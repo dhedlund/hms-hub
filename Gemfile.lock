@@ -57,6 +57,8 @@ GEM
     highline (1.6.2)
     i18n (0.5.0)
     jsonschema (2.0.1)
+    kaminari (0.12.4)
+      rails (>= 3.0.0)
     macaddr (1.0.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
@@ -66,7 +68,7 @@ GEM
     mime-types (1.16)
     mocha (0.9.12)
     multi_json (1.0.3)
-    mysql (2.8.1)
+    mysql2 (0.2.18)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -127,8 +129,9 @@ DEPENDENCIES
   haml
   haml-rails
   jsonschema
+  kaminari
   mocha
-  mysql
+  mysql2 (< 0.3)
   rabl
   rails (~> 3.0)
   rails3-generators

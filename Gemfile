@@ -17,6 +17,7 @@ gem 'rabl'
 gem 'delayed_job'
 gem 'rest-client'
 gem 'simple_form'
+gem 'kaminari'
 
 group :development do
   gem 'rvm'
