@@ -6,26 +6,14 @@
   = paginate @notifications, :remote => true
 
 %table.admin-table
-  %tr
-    %th ID
-    %th Phone Number
-    %th Method
-    %th Start
-    %th Last Run
-    %th Status
-    %th Error Type
-    %th Actions
-  - @notifications.each do |notification|
-    %tr{:class => cycle('even', 'odd')}
-      %td= notification.id
-      %td= notification.phone_number
-      %td= notification.delivery_method
-      %td= notification.delivery_start.strftime '%Y-%m-%d'
-      %td= notification.last_run_at.try(:strftime, '%Y-%m-%d')
-      %td= notification.status
-      %td= notification.last_error_type
-      %td.actions
-        #{link_to 'View', [:admin, notification]}
-        | #{link_to 'Edit', [:edit, :admin, notification]}
-
-.actions= link_to 'New Notification', new_admin_notification_path
+  %thead
+    %tr
+      %th ID
+      %th Enrollment
+      %th Message
+      %th Start
+      %th Status
+      %th Delivered At
+      %th Actions
+  %tbody#notifications
+    = render @notifications
