@@ -1,0 +1,2 @@
+$('#notifications').html('#{escape_javascript render(@notifications)}');
+$('#paginator').html('#{escape_javascript(paginate(@notifications, :remote => true).to_s)}');

@@ -1,0 +1,5 @@
+%tr{:class => cycle('even', 'odd')}
+  %td= notification.id
+  %td= notification.message_id
+  %td= notification.delivered_at.try(:strftime, '%Y-%m-%d')
+  %td.actions #{link_to 'View', [:admin, notification]}

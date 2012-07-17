@@ -1,14 +1,32 @@
 - @nav_hierarchy = [:dashboard]
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper lobortis
-varius. Phasellus placerat velit ut odio porttitor ultrices. Mauris nec
-purus egestas velit ultrices bibendum. Maecenas semper accumsan egestas.
-Nullam ac dolor eget mauris facilisis adipiscing. Donec ut risus lacus.
-Vivamus vel justo nibh, condimentum congue arcu. Vivamus sed nisl at nibh
-volutpat blandit id interdum urna. Integer vehicula metus at velit porta ut
-tincidunt lectus condimentum. Ut nibh ligula, pulvinar nec posuere luctus,
-tincidunt ut arcu. Donec vel nisl urna. Pellentesque non tellus vitae enim
-porttitor dictum eu at metus. Proin faucibus semper fringilla. Aliquam erat
-volutpat. Aenean posuere arcu ac sem gravida aliquam. Ut mollis magna et
-felis cursus commodo tempus diam fringilla. Maecenas nisi purus, sodales
-pellentesque sollicitudin non, consequat ut diam. Morbi non augue velit.
+.dashboard-breakdown
+  %h2 Last 24 Hours
+  %div Total Notifications: #{@notification_cnt[:day]}
+  %div Delivered: #{@delivered_cnt[:day]} / Failed: #{@failed_cnt[:day]}
+
+.dashboard-breakdown
+  %h2 Last Week
+  %div Total Notifications: #{@notification_cnt[:week]}
+  %div Delivered: #{@delivered_cnt[:week]} / Failed: #{@failed_cnt[:week]}
+
+.dashboard-breakdown
+  %h2 Last Month
+  %div Total Notifications: #{@notification_cnt[:month]}
+  %div Delivered: #{@delivered_cnt[:month]} / Failed: #{@failed_cnt[:month]}
+
+%h2 Failed Notifications
+%table.admin-table
+  %thead
+    %tr
+      %th ID
+      %th Enrollment
+      %th Message
+      %th Start
+      %th Status
+      %th Delivered At
+      %th Actions
+  %tbody#notifications
+    - @failed_notifications.each do |notification|
+      = render 'admin/notifications/notification', :notification => notification
+
