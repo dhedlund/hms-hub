@@ -1,67 +1,69 @@
 - @nav_hierarchy = [:notifications, @notification]
 
 %h2 View Notification
-= form_for(admin_notification_path(@notification), :html => { :class => 'admin-view' }) do |f|
-  %fieldset
-    .field
-      = f.label :id, 'ID'
-      = @notification.id
-    .field
-      = f.label :uuid, 'UUID'
-      = @notification.uuid
-    .field
-      = f.label :enrollment_id, 'Enrollment ID'
-      = link_to @notification.enrollment_id, admin_enrollment_path(@notification.enrollment_id)
-    .field
-      = f.label :message_id, 'Message ID'
-      = @notification.message_id
-    .field
-      = f.label :delivery_date, 'Delivery Date'
-      = @notification.delivery_date.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :status
-      = @notification.status
-    .field
-      = f.label :delivered_at, 'Delivered At'
-      = @notification.delivered_at.try(:strftime, '%b %e, %Y @ %r %Z')
-    .field
-      = f.label :date_created, 'Date Created'
-      = @notification.created_at.strftime '%b %e, %Y @ %r %Z'
-    .field
-      = f.label :last_updated, 'Last Updated'
-      = @notification.updated_at.strftime '%b %e, %Y @ %r %Z'
+.field
+  %label= label_for @notification, :id
+  = @notification.id
+.field
+  %label= label_for @notification, :uuid
+  = @notification.uuid
+.field
+  %label= label_for @notification, :notifier
+  = link_to @notifier_name, admin_notifier_path(@notification.notifier_id)
+.field
+  %label= label_for @notification, :message
+  = link_to @message.path, [:admin, @message.message_stream, @message]
+.field
+  %label= label_for @notification, :phone_number
+  = @notification.phone_number
+.field
+  %label= label_for @notification, :first_name
+  = @notification.first_name
+.field
+  %label= label_for @notification, :delivery_method
+  = @notification.delivery_method
+.field
+  %label= label_for @notification, :delivery_start
+  = l(@notification.delivery_start) if @notification.delivery_start
+.field
+  %label= label_for @notification, :delivery_expires
+  = l(@notification.delivery_expires) if @notification.delivery_expires
+.field
+  %label= label_for @notification, :delivery_window
+  = @notification.delivery_window
+.field
+  %label= label_for @notification, :last_run_at
+  = l(@notification.last_run_at) if @notification.last_run_at
+.field
+  %label= label_for @notification, :status
+  = @notification.status
+.field
+  %label= label_for @notification, :last_error_type
+  = @notification.last_error_type
+.field
+  %label= label_for @notification, :last_error_msg
+  = @notification.last_error_msg
+.field
+  %label= label_for @notification, :created_at
+  = l(@notification.created_at)
+.field
+  %label= label_for @notification, :updated_at
+  = l(@notification.updated_at)
 
-%h2 Updates
+%h2 Delivery Attempts
 %table.admin-table
   %tr
     %th ID
+    %th Method
     %th Date
-    %th Action
-    %th Uploaded
-    %th Response
+    %th Result
+    %th Error Type
     %th Actions
-  - @notification_updates.each do |update|
+  - @attempts.each do |attempt|
     %tr{:class => cycle('even', 'odd')}
-      %td= update.id
-      %td= update.created_at.strftime '%Y-%m-%d'
-      %td= update.action
-      %td= update.uploaded_at.present? ? 'Y' : ''
-      %td= update.response_code
-      %td.actions #{link_to 'View', admin_notification_notification_update_path(@notification, update)}
-
-%h2 Responses
-- reset_cycle
-%table.admin-table
-  %tr
-    %th ID
-    %th Date
-    %th Status
-    %th Error
-    %th Actions
-  - @notification_responses.each do |response|
-    %tr{:class => cycle('even', 'odd')}
-      %td= response.id
-      %td= response.created_at.strftime '%Y-%m-%d'
-      %td= response.status
-      %td= response.error_type
-      %td.actions #{link_to 'View', admin_notification_notification_response_path(@notification, response)}
+      %td= attempt.id
+      %td= attempt.delivery_method
+      %td= time_ago_in_words(attempt.created_at)
+      %td= attempt.result
+      %td= attempt.error_type
+      %td.actions #{link_to 'View', [:admin, attempt]}

@@ -212,3 +212,9 @@ label.collection_radio {
   clear: left;
   white-space: pre-wrap;
 }
+
+.dashboard-breakdown {
+  float: left;
+  width: 33%;
+  margin-bottom: 20px;
+}

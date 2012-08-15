@@ -8,6 +8,8 @@ class Admin::NotificationsController < AdminController
 
   def show
     @notification = Notification.find(params[:id])
+    @notifier_id = @notification.notifier.id
+    @notifier_name = @notification.notifier.username
     @attempts = @notification.delivery_attempts
     @message = @notification.message
     respond_with @notification
