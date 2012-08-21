@@ -1,25 +1,4 @@
-- @nav_hierarchy = [:attempts]
-
+= render 'top'
+= render 'search'
 %h2 Delivery Attempts
-
-#paginator
-  = paginate @delivery_attempts, :remote => true
-
-%table.admin-table
-  %tr
-    %th ID
-    %th Notification
-    %th Method
-    %th Age
-    %th Result
-    %th Error Type
-    %th Actions
-  - @delivery_attempts.each do |attempt|
-    %tr{:class => cycle('even', 'odd')}
-      %td= attempt.id
-      %td.actions #{link_to attempt.notification_id, admin_notification_path(attempt.notification)}
-      %td= attempt.delivery_method
-      %td= time_ago_in_words(attempt.created_at)
-      %td= attempt.result
-      %td= attempt.error_type
-      %td.actions #{link_to 'View', [:admin, attempt]}
+= render 'table'
