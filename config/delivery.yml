@@ -4,8 +4,8 @@
 
 development:
   delivery_providers:
-    sms: nexmo
-    ivr: intellivr
+    sms: dummy
+    ivr: dummy
 
   nexmo:
     #class: Delivery::Provider::Nexmo
