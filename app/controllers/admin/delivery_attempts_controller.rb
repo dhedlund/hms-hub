@@ -2,7 +2,7 @@ class Admin::DeliveryAttemptsController < AdminController
   respond_to :html, :json, :js
 
   def index
-    @delivery_attempts = DeliveryAttempt.page(params[:page])
+    @delivery_attempts = DeliveryAttempt.order('created_at DESC').page(params[:page])
     respond_with @delivery_attempts
   end
 

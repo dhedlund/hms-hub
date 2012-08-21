@@ -2,7 +2,7 @@ class Admin::NotificationsController < AdminController
   respond_to :html, :json, :js
 
   def index
-    @notifications = Notification.page(params[:page])
+    @notifications = Notification.order('delivery_start DESC').page(params[:page])
     respond_with @notifications
   end
 
