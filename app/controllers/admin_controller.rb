@@ -29,6 +29,10 @@ class AdminController < ApplicationController
     @current_user
   end
 
+  def phone_normalize(phone_number)
+    phone_number.to_s.gsub(/[ ()+-]/,"").gsub(/^0/,'265')
+  end
+
   protected
 
   def authenticate

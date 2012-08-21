@@ -14,4 +14,15 @@ class Admin::DeliveryAttemptsController < AdminController
 
     respond_with @delivery_attempt
   end
+
+  def phone
+    @phone_number = params[:id]
+    @delivery_attempts = DeliveryAttempt.where( :phone_number => @phone_number ).page(params[:page])
+    respond_with @delivery_attempts
+  end
+
+  def search
+    redirect_to admin_delivery_attempts_phone_url phone_normalize(params[:phone])
+  end
+
 end

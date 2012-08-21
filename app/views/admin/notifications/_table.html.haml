@@ -1,0 +1,16 @@
+#paginator
+  = paginate @notifications, :remote => true
+
+%table.admin-table
+  %thead
+    %tr
+      %th ID
+      %th Notifier
+      %th Method
+      %th Message
+      %th Start
+      %th Status
+      %th Delivered At
+      %th Actions
+  %tbody#notifications
+    = render @notifications
