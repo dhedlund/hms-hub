@@ -1,13 +1,25 @@
 class Admin::NotificationsController < AdminController
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   def index
-    @notifications = Notification.scoped
+    @notifications = Notification.page(params[:page])
     respond_with @notifications
+  end
+
+  def phone
+    @phone_number = params[:id]
+    @notifications = Notification.where( :phone_number => @phone_number ).page(params[:page])
+    respond_with @notifications
+  end
+
+  def search
+    redirect_to admin_notifications_phone_url phone_normalize(params[:phone])
   end
 
   def show
     @notification = Notification.find(params[:id])
+    @notifier_id = @notification.notifier.id
+    @notifier_name = @notification.notifier.username
     @attempts = @notification.delivery_attempts
     @message = @notification.message
     respond_with @notification

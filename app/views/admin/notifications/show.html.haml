@@ -8,14 +8,14 @@
   %label= label_for @notification, :uuid
   = @notification.uuid
 .field
-  %label= label_for @notification, :notifier_id
-  = link_to @notification.notifier_id, admin_notifier_path(@notification.notifier_id)
+  %label= label_for @notification, :notifier
+  = link_to @notifier_name, admin_notifier_path(@notification.notifier_id)
 .field
   %label= label_for @notification, :message
   = link_to @message.path, [:admin, @message.message_stream, @message]
 .field
   %label= label_for @notification, :phone_number
-  = @notification.phone_number
+  = link_to @notification.phone_number, admin_notifications_phone_path(@notification.phone_number)
 .field
   %label= label_for @notification, :first_name
   = @notification.first_name

@@ -11,8 +11,10 @@ class Admin::MessagesController < AdminController
   end
 
   def show
-    @message_stream = MessageStream.find(params[:message_stream_id])
-    @message = @message_stream.messages.find(params[:id])
+#    @message_stream = MessageStream.find(params[:message_stream_id])
+#    @message = @message_stream.messages.find(params[:id])
+     @message = Message.find(params[:id])
+     @message_stream = @message.message_stream
     respond_with @message
   end
 
