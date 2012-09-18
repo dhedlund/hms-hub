@@ -100,6 +100,10 @@ a:link, a:visited, a:active {
   text-align: right;
 }
 
+.admin-table .reports {
+  text-align: left;
+}
+
 .actions a:link, .actions a:visited, .actions a:active {
   color: #b40f0f;
   font-weight: bold;

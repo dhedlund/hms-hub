@@ -23,6 +23,7 @@ module AdminHelper
       { :name => :attempts,      :path => admin_delivery_attempts_path },
       { :name => :jobs,          :path => admin_jobs_path              },
       { :name => :users,         :path => admin_users_path             },
+      { :name => :reports,       :path => admin_reports_path           },
     ]
 
     nav.each { |i| i[:title] ||= i[:name].to_s.titleize }
