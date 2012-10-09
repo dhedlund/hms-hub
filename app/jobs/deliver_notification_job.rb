@@ -4,9 +4,19 @@ class DeliverNotificationJob < Struct.new(:notification_id)
     attempts = notification.delivery_attempts
     attempt = attempts.last
 
-    if attempt && attempt.result == DeliveryAttempt::TEMP_FAIL && notification.delivery_expires < Time.zone.now
-      notification.update_attributes(:status => Notification::PERM_FAIL)
-      return
+    if notification.delivery_expires < Time.zone.now
+      # past notification's expiration date
+
+      if notification.delivery_expires < 7.days.ago
+        # something got lost and we're tired of waiting
+        notification.update_attributes(:status => Notification::PERM_FAIL)
+        return
+
+      elsif attempt && attempt.result == DeliveryAttempt::TEMP_FAIL
+        # last attempt failed and now we're expired so don't try again
+        notification.update_attributes(:status => Notification::PERM_FAIL)
+        return
+      end
     end
 
     # attempt delivery if never attempted or last was temporary failure
@@ -31,7 +41,19 @@ class DeliverNotificationJob < Struct.new(:notification_id)
   end
 
   def reschedule_at(time, attempts);
-    time + 1.hour
+    notification = Notification.find(notification_id)
+    time_offset = notification.delivery_start - notification.delivery_start.beginning_of_day
+    today_start = Time.zone.now.beginning_of_day + time_offset
+    today_end = today_start + 5.hours # notification.delivery_window.hours
+
+    next_run_at = time + 1.hour
+    if next_run_at < today_start
+      next_run_at = today_start + rand(3000).seconds # 50 minutes
+    elsif next_run_at >= today_end
+      next_run_at = today_start + 1.day + rand(3000).seconds
+    end
+
+    next_run_at
   end
 
   def max_attempts
