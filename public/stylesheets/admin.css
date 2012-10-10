@@ -79,6 +79,7 @@ a:link, a:visited, a:active {
 .admin-table {
   width: 100%;
   white-space: nowrap;
+  margin-bottom: 20px;
 }
 
 .admin-table th {
@@ -96,8 +97,11 @@ a:link, a:visited, a:active {
 }
 
 .admin-table .actions {
-  text-align: left;
   text-align: right;
+}
+
+.admin-table .left {
+  text-align: left;
 }
 
 .admin-table .reports {

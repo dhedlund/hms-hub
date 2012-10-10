@@ -33,12 +33,9 @@ HmsHub::Application.routes.draw do
     resources :notifiers, :except => [:destroy]
     resources :jobs, :only => [:index, :show]
     resources :users, :only => [:index, :show]
-    resources :reports, :only => [:index] do
-      collection do
-        resources :download, :to => "reports#download", :only => [:show], :on => :member,
-          :as => 'reports_download'
-      end
-    end
+
+    get 'reports'       => 'reports#index'
+    get 'reports/*path' => 'reports#download', :as => 'reports_download'
   end
 
   match 'api/*url' => 'api#not_found'
