@@ -30,7 +30,7 @@ class AdminController < ApplicationController
   end
 
   def phone_normalize(phone_number)
-    phone_number.to_s.gsub(/[ ()+-]/,"").gsub(/^0/,'265')
+    phone_number.to_s.gsub(/[^\d]/,'').gsub(/^0/,'265')
   end
 
   protected

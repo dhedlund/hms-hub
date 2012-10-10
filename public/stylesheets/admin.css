@@ -76,6 +76,14 @@ a:link, a:visited, a:active {
   font-weight: normal;
 }
 
+.search { float: right; }
+.search input {
+  padding: 2px;
+  line-height: 1.4em;
+  font-family: Arial;
+  font-size: 14px;
+}
+
 .admin-table {
   width: 100%;
   white-space: nowrap;

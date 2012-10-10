@@ -10,26 +10,12 @@ HmsHub::Application.routes.draw do
 
   namespace :admin do
     get '/' => :index
-    resources :delivery_attempts, :only => [:index, :show] do
-      collection do
-        resources :phone, :to => "delivery_attempts#phone",:only => [:show], :on => :member,
-          :as => 'delivery_attempts_phone'
-        resources :search, :to => "delivery_attempts#search",:only => [:index], :on => :member,
-          :as => 'delivery_attempts_search'
-      end
-    end
+    resources :delivery_attempts, :only => [:index, :show]
     resources :message_streams, :path => :streams, :only => [:index, :show] do
       resources :messages, :only => [:index, :show]
     end
     resources :messages, :only => [:index, :show]
-    resources :notifications, :except => [:destroy] do
-      collection do
-        resources :phone, :to => "notifications#phone",:only => [:show], :on => :member,
-          :as => 'notifications_phone'
-        resources :search, :to => "notifications#search",:only => [:index], :on => :member,
-          :as => 'notifications_search'
-      end
-    end
+    resources :notifications, :except => [:destroy]
     resources :notifiers, :except => [:destroy]
     resources :jobs, :only => [:index, :show]
     resources :users, :only => [:index, :show]

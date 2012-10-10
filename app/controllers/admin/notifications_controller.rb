@@ -3,17 +3,14 @@ class Admin::NotificationsController < AdminController
 
   def index
     @notifications = Notification.order('delivery_start DESC').page(params[:page])
-    respond_with @notifications
-  end
 
-  def phone
-    @phone_number = params[:id]
-    @notifications = Notification.where( :phone_number => @phone_number ).page(params[:page])
-    respond_with @notifications
-  end
+    if params[:phone_number]
+      @notifications = @notifications.where('phone_number LIKE :phone_number',
+        :phone_number => "%#{phone_normalize(params[:phone_number])}%"
+      )
+    end
 
-  def search
-    redirect_to admin_notifications_phone_url phone_normalize(params[:phone])
+    respond_with @notifications
   end
 
   def show

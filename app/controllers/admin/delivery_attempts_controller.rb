@@ -3,6 +3,13 @@ class Admin::DeliveryAttemptsController < AdminController
 
   def index
     @delivery_attempts = DeliveryAttempt.order('created_at DESC').page(params[:page])
+
+    if params[:phone_number]
+      @notifications = @notifications.where('phone_number LIKE :phone_number',
+        :phone_number => "%#{phone_normalize(params[:phone_number])}%"
+      )
+    end
+
     respond_with @delivery_attempts
   end
 
@@ -13,16 +20,6 @@ class Admin::DeliveryAttemptsController < AdminController
     @provider = @delivery_attempt.provider
 
     respond_with @delivery_attempt
-  end
-
-  def phone
-    @phone_number = params[:id]
-    @delivery_attempts = DeliveryAttempt.where( :phone_number => @phone_number ).page(params[:page])
-    respond_with @delivery_attempts
-  end
-
-  def search
-    redirect_to admin_delivery_attempts_phone_url phone_normalize(params[:phone])
   end
 
 end
