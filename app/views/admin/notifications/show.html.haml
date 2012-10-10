@@ -15,7 +15,7 @@
   = link_to @message.path, [:admin, @message.message_stream, @message]
 .field
   %label= label_for @notification, :phone_number
-  = link_to @notification.phone_number, admin_notifications_phone_path(@notification.phone_number)
+  = link_to @notification.phone_number, admin_notifications_path(:phone_number => @notification.phone_number)
 .field
   %label= label_for @notification, :first_name
   = @notification.first_name

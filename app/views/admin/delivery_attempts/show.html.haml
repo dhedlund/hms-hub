@@ -13,7 +13,7 @@
   = link_to @delivery_attempt.message.path, [:admin, @message.message_stream, @message]
 .field
   %label= label_for @delivery_attempt, :phone_number
-  = link_to @delivery_attempt.phone_number, admin_notifications_phone_path(@delivery_attempt.phone_number)
+  = link_to @delivery_attempt.phone_number, admin_notifications_path(:phone_number => @delivery_attempt.phone_number)
 .field
   %label= label_for @delivery_attempt, :delivery_method
   = @delivery_attempt.delivery_method
