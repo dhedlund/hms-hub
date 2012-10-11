@@ -3,7 +3,7 @@
   %td #{link_to notification.notifier.username, admin_notifier_path(notification.notifier_id)}
   %td= notification.delivery_method
   %td #{link_to notification.message_id, [:admin, @message_stream, notification.message]}
-  %td= notification.created_at.try(:strftime, '%Y-%m-%d')
+  %td= notification.delivery_start.try(:strftime, '%Y-%m-%d')
   %td= notification.status
   %td= notification.delivered_at.try(:strftime, '%Y-%m-%d')
   %td.actions #{link_to 'View', [:admin, notification]}
