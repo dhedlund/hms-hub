@@ -35,7 +35,7 @@ class Admin::NotificationsController < AdminController
   def create
     @notification = Notification.new
     @notification.attributes = params[:notification]
-    @notification.uuid ||= UUID.generate
+    @notification.uuid ||= SecureRandom.uuid
     @notification.delivery_start ||= Time.zone.now
     @notification.save
     respond_with :admin, @notification

@@ -4,6 +4,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'test/unit'
 require 'mocha/setup'
 require 'rails/test_help'
+require 'factory_girl_rails'
 
 class ActiveSupport::TestCase
   def encode_credentials(username, password)

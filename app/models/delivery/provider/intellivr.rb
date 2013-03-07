@@ -89,7 +89,7 @@ class Delivery::Provider::Intellivr
   protected
 
   def generate_payload(attempt)
-    ext_message_id = UUID.generate
+    ext_message_id = SecureRandom.uuid
     phone_number = attempt.phone_number
     audio_src, language = attempt.message.ivr_code.to_s.split('/')
 

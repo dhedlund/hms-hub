@@ -1,29 +1,29 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.0'
+gem 'rails', '3.2.12'
+gem 'mysql2'
+
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'rest-client' # nexmo and intellivr delivery providers
 
 gem 'capistrano-ext'
 gem 'capistrano'
 
-gem 'mysql2'
 gem 'haml'
-gem 'sass'
-gem 'uuid'
-
-gem 'yajl-ruby', :require => 'yajl'
 gem 'rabl'
-
-gem 'delayed_job'
-gem 'delayed_job_active_record'
-gem 'rest-client'
 gem 'simple_form'
 gem 'kaminari'
-gem 'haml'
+
+group :assets do
+  gem 'sass-rails'
+  gem 'jquery-rails'
+end
 
 group :development, :test do
-  gem 'sqlite3'
-  gem 'factory_girl_rails'
-  gem 'jsonschema'
+  gem 'factory_girl_rails', :require => false
+  gem 'jsonschema', :require => false
   gem 'mocha', :require => false
   gem 'pry-rails'
+  gem 'sqlite3'
 end
