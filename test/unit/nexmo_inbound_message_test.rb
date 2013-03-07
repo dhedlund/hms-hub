@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NexmoInboundMessageTest < ActiveSupport::TestCase
   setup do
-    @message = Factory.build(:nexmo_inbound_message)
+    @message = FactoryGirl.build(:nexmo_inbound_message)
   end
 
   test "valid message should be valid" do
@@ -24,7 +24,7 @@ class NexmoInboundMessageTest < ActiveSupport::TestCase
 
   test "two inbound messages cannot share the same ext_message_id" do
     @message.save!
-    m2 = @message.clone
+    m2 = @message.dup
     m2.ext_message_id = @message.ext_message_id
     assert m2.invalid?
     assert m2.errors[:ext_message_id].any?

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MessagesTest < ActiveSupport::TestCase
   setup do
-    @message = Factory.build(:message)
+    @message = FactoryGirl.build(:message)
     @stream = @message.message_stream
   end
 
@@ -28,8 +28,8 @@ class MessagesTest < ActiveSupport::TestCase
   #--------------
   test "searching for a message by its path returns correct message" do
     [
-      Factory.build(:message, :message_stream => @stream),
-      Factory.build(:message),
+      FactoryGirl.build(:message, :message_stream => @stream),
+      FactoryGirl.build(:message),
       @message
     ].shuffle.each { |m| m.save! }
 
@@ -82,7 +82,7 @@ class MessagesTest < ActiveSupport::TestCase
 
   test "two messages within the same stream cannot share the same name" do
     @message.save!
-    m2 = @message.clone
+    m2 = @message.dup
     m2.name = @message.name
     assert m2.invalid?
     assert m2.errors[:name].any?
@@ -90,9 +90,9 @@ class MessagesTest < ActiveSupport::TestCase
 
   test "messages can have the same name if belonging to different streams" do
     @message.save!
-    m2 = @message.clone
+    m2 = @message.dup
     m2.name = @message.name
-    m2.message_stream = Factory.create(:message_stream)
+    m2.message_stream = FactoryGirl.create(:message_stream)
     assert m2.valid?
   end
 
@@ -102,7 +102,7 @@ class MessagesTest < ActiveSupport::TestCase
   test "can associate multiple notifications with a message" do
     assert_difference('@message.notifications.size', 2) do
       2.times do
-        notification = Factory.build(:notification, :message => @message)
+        notification = FactoryGirl.build(:notification, :message => @message)
         @message.notifications << notification
       end
     end
@@ -155,9 +155,9 @@ class MessagesTest < ActiveSupport::TestCase
   # scopes:
   #--------
   test "should be sorted by offset_days in ascending order" do
-    s = Factory.create(:message_stream)
+    s = FactoryGirl.create(:message_stream)
     [10,6,29,8,3].each do |offset|
-      Factory.create(:message, :message_stream => s, :offset_days => offset)
+      FactoryGirl.create(:message, :message_stream => s, :offset_days => offset)
     end
     assert_equal s.messages.map(&:offset_days).sort, s.messages.map(&:offset_days)
   end

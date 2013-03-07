@@ -6,18 +6,18 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-if Rails.env.development?
-  User.create!(
-    :username => 'webdev',
-    :password => 'webdevpwd',
-    :timezone => 'Africa/Blantyre'
-  )
-  Notifier.create!(
-    :username => 'apidev',
-    :password => 'apidevpwd',
-    :timezone => 'Africa/Blantyre'
-  )
-end
+# if Rails.env.development?
+#   User.create!(
+#     :username => 'webdev',
+#     :password => 'webdevpwd',
+#     :timezone => 'Africa/Blantyre'
+#   )
+#   Notifier.create!(
+#     :username => 'apidev',
+#     :password => 'apidevpwd',
+#     :timezone => 'Africa/Blantyre'
+#   )
+# end
 
 
 # populates message_streams

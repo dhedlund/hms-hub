@@ -2,8 +2,8 @@ require 'test_helper'
 
 class NotificationTest < ActiveSupport::TestCase
   setup do
-    @notifier = Factory.create(:notifier, :timezone => 'Sydney')
-    @notification = Factory.build(:notification, :notifier => @notifier)
+    @notifier = FactoryGirl.create(:notifier, :timezone => 'Sydney')
+    @notification = FactoryGirl.build(:notification, :notifier => @notifier)
     @message = @notification.message
   end
 
@@ -30,7 +30,7 @@ class NotificationTest < ActiveSupport::TestCase
   test "can associate multiple delivery_attempts with a notification" do
     assert_difference('@notification.delivery_attempts.size', 2) do
       2.times do
-        a = Factory.build(:delivery_attempt, :notification => @notification)
+        a = FactoryGirl.build(:delivery_attempt, :notification => @notification)
         @notification.delivery_attempts << a
       end
     end
@@ -274,9 +274,9 @@ class NotificationTest < ActiveSupport::TestCase
   #--------
   test "run: notifications that have had a delivery attempt made" do
     (0..5).map { |h| Date.today + h.hours }.map do |lra|
-      Factory.create(:notification, :notifier => @notifier, :last_run_at => lra)
+      FactoryGirl.create(:notification, :notifier => @notifier, :last_run_at => lra)
     end
-    not_run = Factory.create(:notification, :notifier => @notifier)
+    not_run = FactoryGirl.create(:notification, :notifier => @notifier)
 
     matched = @notifier.notifications.run
     assert_equal 6, matched.count
@@ -285,7 +285,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "run_since: restrict to notifications run since given datetime" do
     ns = (0..5).map { |h| Date.today + h.hours }.map do |lra|
-      Factory.create(:notification, :notifier => @notifier, :last_run_at => lra)
+      FactoryGirl.create(:notification, :notifier => @notifier, :last_run_at => lra)
     end
 
     assert_equal 3, @notifier.notifications.run_since(ns[2].last_run_at).count
@@ -482,7 +482,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "two notifications for the same notifier cannot share the same uuid" do
     @notification.save!
-    n2 = @notification.clone
+    n2 = @notification.dup
     n2.uuid = @notification.uuid
     assert n2.invalid?
     assert n2.errors[:uuid].any?
@@ -490,9 +490,9 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "notifications can have same uuid if different notifiers" do
     @notification.save!
-    n2 = @notification.clone
+    n2 = @notification.dup
     n2.uuid = @notification.uuid
-    n2.notifier = Factory.create(:notifier)
+    n2.notifier = FactoryGirl.create(:notifier)
     assert n2.valid?
   end
 

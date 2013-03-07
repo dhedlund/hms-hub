@@ -1,9 +1,8 @@
 require 'test_helper'
-require 'mocha'
 
 class DeliverNotificationJobTest < ActiveSupport::TestCase
   setup do
-    @notification = Factory.create(:notification)
+    @notification = FactoryGirl.create(:notification)
     @job = DeliverNotificationJob.new(@notification.id)
   end
 

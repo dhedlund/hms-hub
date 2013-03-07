@@ -63,7 +63,7 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   test "authenticating with valid credentials should set current_user" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     with_valid_user_creds user do
       get :index
       assert_equal user, @controller.current_user
@@ -71,7 +71,7 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   test "authenticating with valid user should change timezone to their own "do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     with_valid_user_creds user do
       get :index
       assert_equal user.timezone, Time.zone.name

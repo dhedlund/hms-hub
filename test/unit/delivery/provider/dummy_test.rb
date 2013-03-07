@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Delivery::Provider::DummyTest < ActiveSupport::TestCase
   setup do
-    @attempt = Factory.build(:delivery_attempt)
+    @attempt = FactoryGirl.build(:delivery_attempt)
     @provider = Delivery::Provider::Dummy.new
   end
 

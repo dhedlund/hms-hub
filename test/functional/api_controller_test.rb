@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ApiControllerTest < ActionController::TestCase
   setup do
-    @notifier = Factory.create(:notifier)
+    @notifier = FactoryGirl.create(:notifier)
   end
 
   test "api calls without auth credentials should fail with unauthorized" do

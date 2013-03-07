@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::MessageStreamsControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
   end
 
@@ -20,7 +20,7 @@ class Admin::MessageStreamsControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of message streams (JSON)" do
-    4.times { Factory.create(:message_stream) }
+    4.times { FactoryGirl.create(:message_stream) }
 
     get :index, :format => :json
     assert_response :success
@@ -28,7 +28,7 @@ class Admin::MessageStreamsControllerTest < ActionController::TestCase
   end
 
   test "show should return a message stream and messages (HTML)" do
-    stream = Factory.create(:message_stream)
+    stream = FactoryGirl.create(:message_stream)
 
     get :show, :id => stream.id
     assert_response :success
@@ -37,7 +37,7 @@ class Admin::MessageStreamsControllerTest < ActionController::TestCase
   end
 
   test "show should return a message stream (JSON)" do
-    stream = Factory.create(:message_stream)
+    stream = FactoryGirl.create(:message_stream)
 
     get :show, :id => stream.id, :format => :json
     assert_response :success

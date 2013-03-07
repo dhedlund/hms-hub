@@ -2,10 +2,10 @@ require 'test_helper'
 
 class Admin::NotifiersControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
 
-    @notifier = Factory.build(:notifier)
+    @notifier = FactoryGirl.build(:notifier)
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
@@ -22,7 +22,7 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of notifiers (JSON)" do
-    4.times { Factory.create(:notifier) }
+    4.times { FactoryGirl.create(:notifier) }
 
     get :index, :format => :json
     assert_response :success
@@ -30,7 +30,7 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   end
 
   test "index should not include notifier passwords (JSON)" do
-    4.times { Factory.create(:notifier) }
+    4.times { FactoryGirl.create(:notifier) }
 
     get :index, :format => :json
     assert_response :success
@@ -38,7 +38,7 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   end
 
   test "show should return a notifier (HTML)" do
-    notifier = Factory.create(:notifier)
+    notifier = FactoryGirl.create(:notifier)
 
     get :show, :id => notifier.id
     assert_response :success
@@ -46,7 +46,7 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   end
 
   test "show should return a notifier (JSON)" do
-    notifier = Factory.create(:notifier)
+    notifier = FactoryGirl.create(:notifier)
 
     get :show, :id => notifier.id, :format => :json
     assert_response :success
@@ -54,7 +54,7 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
   end
 
   test "show should not include notifier password (JSON)" do
-    notifier = Factory.create(:notifier)
+    notifier = FactoryGirl.create(:notifier)
 
     get :show, :id => notifier.id, :format => :json
     assert_response :success

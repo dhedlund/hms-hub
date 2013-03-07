@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   setup do
-    @user = Factory.build(:user)
+    @user = FactoryGirl.build(:user)
   end
 
   test "valid user should be valid" do
@@ -43,7 +43,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "cannot have two users with the same username" do
-    Factory.create(:user, :username => 'myuser')
+    FactoryGirl.create(:user, :username => 'myuser')
     @user.username = 'myuser'
     assert @user.invalid?
     assert @user.errors[:username].any?

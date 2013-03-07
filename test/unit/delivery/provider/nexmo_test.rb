@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'restclient'
-require 'mocha'
 
 # minimum configuration required to initialize a new nexmo provider
 NEXMO_CONFIG = { :api_key => 'foo', :api_secret => 'bar' }
@@ -10,7 +9,7 @@ class Delivery::Provider::NexmoTest < ActiveSupport::TestCase
 
   setup do
     @provider = Delivery::Provider::Nexmo.new(NEXMO_CONFIG)
-    @attempt = Factory.create(:delivery_attempt)
+    @attempt = FactoryGirl.create(:delivery_attempt)
   end
 
   #----------------------------------------------------------------------------#
@@ -236,9 +235,9 @@ class Delivery::Provider::NexmoTest < ActiveSupport::TestCase
   #------------------
   test "delivery_details should return any associated outbound messages" do
     messages = 2.times.map do
-      Factory.create(:nexmo_outbound_message, :delivery_attempt => @attempt)
+      FactoryGirl.create(:nexmo_outbound_message, :delivery_attempt => @attempt)
     end
-    Factory.create(:nexmo_outbound_message)
+    FactoryGirl.create(:nexmo_outbound_message)
 
     matched = @provider.class.delivery_details(@attempt.id)
     assert_equal messages.map(&:id).sort, matched.map(&:id).sort

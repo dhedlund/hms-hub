@@ -3,7 +3,7 @@ require 'jsonschema'
 
 class Api::MessageStreamsControllerTest < ActionController::TestCase
   setup do
-    @notifier = Factory.create(:notifier)
+    @notifier = FactoryGirl.create(:notifier)
     with_valid_notifier_creds @notifier
   end
 
@@ -21,8 +21,8 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
   end
 
   test "GET /api/streams conforms to JSON schema" do
-    streams = 2.times.map { Factory.create(:message_stream) }
-    3.times { Factory.create(:message, :message_stream => streams.first) }
+    streams = 2.times.map { FactoryGirl.create(:message_stream) }
+    3.times { FactoryGirl.create(:message, :message_stream => streams.first) }
 
     get :index, :format => :json
 
@@ -60,8 +60,8 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
   end
 
   test "GET /api/message_streams contains all expected values" do
-    streams = 2.times.map { Factory.create(:message_stream) }
-    messages = 3.times.map { Factory.create(:message, :message_stream => streams.first) }
+    streams = 2.times.map { FactoryGirl.create(:message_stream) }
+    messages = 3.times.map { FactoryGirl.create(:message, :message_stream => streams.first) }
     messages.first.expire_days = 4
 
     get :index, :format => :json

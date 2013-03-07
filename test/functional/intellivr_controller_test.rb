@@ -2,7 +2,7 @@ require 'test_helper'
 
 class IntellivrControllerTest < ActionController::TestCase
   setup do
-    @outbound_msg = Factory.create(:intellivr_outbound_message)
+    @outbound_msg = FactoryGirl.create(:intellivr_outbound_message)
   end
 
   #----------------------------------------------------------------------------#

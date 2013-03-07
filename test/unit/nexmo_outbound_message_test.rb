@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NexmoOutboundMessageTest < ActiveSupport::TestCase
   setup do
-    @message = Factory.build(:nexmo_outbound_message)
+    @message = FactoryGirl.build(:nexmo_outbound_message)
   end
 
   test "valid message should be valid" do
@@ -15,7 +15,7 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   test "should not update attempt w/ delivered if any nexmo message pending" do
     @message.save!
     attempt = @message.delivery_attempt
-    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+    FactoryGirl.create(:nexmo_outbound_message, :delivery_attempt => attempt)
 
     attempt.expects(:save).never
     @message.update_attributes(:status => NexmoOutboundMessage::DELIVERED)
@@ -24,7 +24,7 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   test "should update delivery attempt if all nexmo messages DELIVERED" do
     @message.save!
     attempt = @message.delivery_attempt
-    Factory.create(:nexmo_outbound_message,
+    FactoryGirl.create(:nexmo_outbound_message,
       :delivery_attempt => attempt,
       :status => NexmoOutboundMessage::DELIVERED
     )
@@ -37,7 +37,7 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   test "should update delivery attempt if nexmo message EXPIRED" do
     @message.save!
     attempt = @message.delivery_attempt
-    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+    FactoryGirl.create(:nexmo_outbound_message, :delivery_attempt => attempt)
 
     attempt.expects(:save).once
     @message.update_attributes(:status => NexmoOutboundMessage::EXPIRED)
@@ -48,7 +48,7 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   test "should update delivery attempt if nexmo message FAILED" do
     @message.save!
     attempt = @message.delivery_attempt
-    Factory.create(:nexmo_outbound_message, :delivery_attempt => attempt)
+    FactoryGirl.create(:nexmo_outbound_message, :delivery_attempt => attempt)
 
     attempt.expects(:save).once
     @message.update_attributes(:status => NexmoOutboundMessage::FAILED)
@@ -84,7 +84,7 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
 
   test "two outbound messages cannot share the same ext_message_id" do
     @message.save!
-    m2 = @message.clone
+    m2 = @message.dup
     m2.ext_message_id = @message.ext_message_id
     assert m2.invalid?
     assert m2.errors[:ext_message_id].any?

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::JobsControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
   end
 
@@ -20,7 +20,7 @@ class Admin::JobsControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of pending jobs (JSON)" do
-    4.times { Factory.create(:notification) }
+    4.times { FactoryGirl.create(:notification) }
 
     get :index, :format => :json
     assert_response :success
@@ -28,7 +28,7 @@ class Admin::JobsControllerTest < ActionController::TestCase
   end
 
   test "show should return a job (HTML)" do
-    job = Factory.create(:notification)
+    job = FactoryGirl.create(:notification)
 
     get :show, :id => job.id
     assert_response :success
@@ -36,7 +36,7 @@ class Admin::JobsControllerTest < ActionController::TestCase
   end
 
   test "show should return a job (JSON)" do
-    job = Factory.create(:notification)
+    job = FactoryGirl.create(:notification)
 
     get :show, :id => job.id, :format => :json
     assert_response :success

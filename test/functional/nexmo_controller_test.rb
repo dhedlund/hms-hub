@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NexmoControllerTest < ActionController::TestCase
   setup do
-    @outbound_msg = Factory.create(:nexmo_outbound_message)
+    @outbound_msg = FactoryGirl.create(:nexmo_outbound_message)
   end
 
   #----------------------------------------------------------------------------#

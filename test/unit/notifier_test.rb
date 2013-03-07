@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NotifierTest < ActiveSupport::TestCase
   setup do
-    @notifier = Factory.build(:notifier)
+    @notifier = FactoryGirl.build(:notifier)
   end
 
   test "valid notifier should be valid" do
@@ -31,7 +31,7 @@ class NotifierTest < ActiveSupport::TestCase
   test "can associate multiple notifications with a notifier" do
     assert_difference('@notifier.notifications.size', 2) do
       2.times do
-        notification = Factory.build(:notification, :notifier => @notifier)
+        notification = FactoryGirl.build(:notification, :notifier => @notifier)
         @notifier.notifications << notification
       end
     end
@@ -82,7 +82,7 @@ class NotifierTest < ActiveSupport::TestCase
   end
 
   test "cannot have two notifiers with the same username" do
-    Factory.create(:notifier, :username => 'mynotifier')
+    FactoryGirl.create(:notifier, :username => 'mynotifier')
     @notifier.username = 'mynotifier'
     assert @notifier.invalid?
     assert @notifier.errors[:username].any?

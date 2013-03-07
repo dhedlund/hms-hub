@@ -1,9 +1,8 @@
 require 'test_helper'
-require 'mocha'
 
 class DeliveryAttemptTest < ActiveSupport::TestCase
   setup do
-    @attempt = Factory.build(:delivery_attempt)
+    @attempt = FactoryGirl.build(:delivery_attempt)
     @notification = @attempt.notification
     @message = @attempt.message
   end
@@ -57,23 +56,23 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
   end
 
   test "assigning a notification should set message and message_id" do
-    notification = Factory.build(:notification)
-    attempt = Factory.build(:delivery_attempt, :notification => nil)
+    notification = FactoryGirl.build(:notification)
+    attempt = FactoryGirl.build(:delivery_attempt, :notification => nil)
     attempt.notification = notification
     assert_equal notification.message.id, attempt.message.id
     assert_equal notification.message_id, attempt.message_id
   end
 
   test "assigning a notification should set phone_number" do
-    notification = Factory.build(:notification)
-    attempt = Factory.build(:delivery_attempt, :notification => nil)
+    notification = FactoryGirl.build(:notification)
+    attempt = FactoryGirl.build(:delivery_attempt, :notification => nil)
     attempt.notification = notification
     assert_equal notification.phone_number, attempt.phone_number
   end
 
   test "assigning a notification should set delivery_method" do
-    notification = Factory.build(:notification)
-    attempt = Factory.build(:delivery_attempt, :notification => nil)
+    notification = FactoryGirl.build(:notification)
+    attempt = FactoryGirl.build(:delivery_attempt, :notification => nil)
     attempt.notification = notification
     assert_equal notification.delivery_method, attempt.delivery_method
   end
@@ -189,7 +188,7 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
 
   test "should update notification with delivery status on failure" do
     ['TEMP_FAIL', 'PERM_FAIL'].each do |result|
-      attempt = Factory.create(:delivery_attempt)
+      attempt = FactoryGirl.create(:delivery_attempt)
       notification = attempt.notification
       attempt.update_attributes(
         :result     => result,
@@ -200,7 +199,6 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
       assert_equal attempt.result, notification.status
       assert_equal attempt.error_type, notification.last_error_type
       assert_equal attempt.error_msg, notification.last_error_msg
-      assert_equal attempt.updated_at, notification.last_run_at
     end
   end
 

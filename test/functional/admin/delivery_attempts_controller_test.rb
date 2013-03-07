@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
   end
 
@@ -14,7 +14,7 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of delivery_attempts (JSON)" do
-    4.times { Factory.create(:delivery_attempt) }
+    4.times { FactoryGirl.create(:delivery_attempt) }
 
     get :index, :format => :json
     assert_response :success
@@ -22,7 +22,7 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
   end
 
   test "show should return a delivery_attempt (HTML)" do
-    attempt = Factory.create(:delivery_attempt)
+    attempt = FactoryGirl.create(:delivery_attempt)
 
     get :show, :id => attempt.id
     assert_response :success
@@ -30,7 +30,7 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
   end
 
   test "show should return a delivery_attempt (JSON)" do
-    attempt = Factory.create(:delivery_attempt)
+    attempt = FactoryGirl.create(:delivery_attempt)
 
     get :show, :id => attempt.id, :format => :json
     assert_response :success

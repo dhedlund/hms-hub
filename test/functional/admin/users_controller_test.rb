@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::UsersControllerTest < ActionController::TestCase
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
   end
 
@@ -20,7 +20,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of users (JSON)" do
-    4.times { Factory.create(:user) }
+    4.times { FactoryGirl.create(:user) }
 
     get :index, :format => :json
     assert_response :success
@@ -28,7 +28,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
   end
 
   test "index should not include user passwords (JSON)" do
-    4.times { Factory.create(:user) }
+    4.times { FactoryGirl.create(:user) }
 
     get :index, :format => :json
     assert_response :success
@@ -36,7 +36,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
   end
 
   test "show should return a user (HTML)" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
 
     get :show, :id => user.id
     assert_response :success
@@ -44,7 +44,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
   end
 
   test "show should return a user (JSON)" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
 
     get :show, :id => user.id, :format => :json
     assert_response :success
@@ -52,7 +52,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
   end
 
   test "show should not include user password (JSON)" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
 
     get :show, :id => user.id, :format => :json
     assert_response :success

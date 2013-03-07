@@ -1,3 +1,5 @@
-Factory.define :delivery_attempt do |f|
-  f.association     :notification
+FactoryGirl.define do
+  factory :delivery_attempt do
+    notification
+  end
 end

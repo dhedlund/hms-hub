@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Api::NotificationsControllerTest < ActionController::TestCase
   setup do
-    @notifier = Factory.create(:notifier)
+    @notifier = FactoryGirl.create(:notifier)
     with_valid_notifier_creds @notifier
   end
 
@@ -15,7 +15,7 @@ class Api::NotificationsControllerTest < ActionController::TestCase
 
   test "GET /api/notifications/updated should return status updates" do
     notifications = 3.times.map do
-      Factory.build(:notification, :notifier => @notifier)
+      FactoryGirl.build(:notification, :notifier => @notifier)
     end
 
     @notifier.last_status_req_at = 1.hour.ago
@@ -48,14 +48,14 @@ class Api::NotificationsControllerTest < ActionController::TestCase
     @notifier.save!
 
     notifications = [
-      Factory.create(:notification,
+      FactoryGirl.create(:notification,
         :notifier => @notifier,
         :status => 'PERM_FAIL',
         :last_error_type => 'INVALID_PHONE_NUMBER',
         :last_error_msg => 'Phone number not in service.',
         :last_run_at => 1.hour.ago
       ),
-      Factory.create(:notification,
+      FactoryGirl.create(:notification,
         :notifier => @notifier,
         :status => 'DELIVERED',
         :delivered_at => 1.hour.ago,
@@ -92,7 +92,7 @@ class Api::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "POST /api/notifications of valid notification creates and returns it" do
-    notification = Factory.build(:notification, :notifier => @notifier)
+    notification = FactoryGirl.build(:notification, :notifier => @notifier)
 
     json_data = {
       'uuid'             => '81455384',

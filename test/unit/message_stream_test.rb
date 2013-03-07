@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MessageStreamTest < ActiveSupport::TestCase
   setup do
-    @stream = Factory.build(:message_stream)
+    @stream = FactoryGirl.build(:message_stream)
   end
 
   test "valid message stream should be valid" do
@@ -15,7 +15,7 @@ class MessageStreamTest < ActiveSupport::TestCase
   test "can associate multiple messages with a message stream" do
     assert_difference('@stream.messages.size', 2) do
       2.times do
-        message = Factory.build(:message, :message_stream => @stream)
+        message = FactoryGirl.build(:message, :message_stream => @stream)
         @stream.messages << message
       end
     end
@@ -31,7 +31,7 @@ class MessageStreamTest < ActiveSupport::TestCase
   end
 
   test "cannot have two message streams with the same name" do
-    Factory.create(:message_stream, :name => 'mystream')
+    FactoryGirl.create(:message_stream, :name => 'mystream')
     @stream.name = 'mystream'
     assert @stream.invalid?
     assert @stream.errors[:name].any?
@@ -42,7 +42,7 @@ class MessageStreamTest < ActiveSupport::TestCase
   #--------
   test "should be sorted by name in ascending order" do
     ['w','b','e','x','n'].each do |name|
-      Factory.create(:message_stream, :name => name)
+      FactoryGirl.create(:message_stream, :name => name)
     end
     assert_equal MessageStream.all.map(&:name).sort, MessageStream.all.map(&:name)
   end

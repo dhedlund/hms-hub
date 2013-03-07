@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NotificationObserverTest < ActiveSupport::TestCase
   setup do
-    @notification = Factory.build(:notification)
+    @notification = FactoryGirl.build(:notification)
   end
 
 # test "should enqueue a new delivery job on notification creation" do

@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'restclient'
-require 'mocha'
 
 # minimum configuration required to initialize an intellivr provider
 INTELLIVR_CONFIG = { :api_key => 'foo', :base_url => 'localhost', :callback_url => 'localhost' }
@@ -10,7 +9,7 @@ class Delivery::Provider::IntellivrTest < ActiveSupport::TestCase
 
   setup do
     @provider = Delivery::Provider::Intellivr.new(INTELLIVR_CONFIG)
-    @attempt = Factory.create(:delivery_attempt, :delivery_method => 'IVR')
+    @attempt = FactoryGirl.create(:delivery_attempt, :delivery_method => 'IVR')
   end
 
   #----------------------------------------------------------------------------#
@@ -185,9 +184,9 @@ class Delivery::Provider::IntellivrTest < ActiveSupport::TestCase
   #------------------
   test "delivery_details should return any associated outbound messages" do
     messages = 2.times.map do
-      Factory.create(:intellivr_outbound_message, :delivery_attempt => @attempt)
+      FactoryGirl.create(:intellivr_outbound_message, :delivery_attempt => @attempt)
     end
-    Factory.create(:intellivr_outbound_message)
+    FactoryGirl.create(:intellivr_outbound_message)
 
     matched = @provider.class.delivery_details(@attempt.id)
     assert_equal messages.map(&:id).sort, matched.map(&:id).sort
