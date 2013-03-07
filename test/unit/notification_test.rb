@@ -482,7 +482,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "two notifications for the same notifier cannot share the same uuid" do
     @notification.save!
-    n2 = @notification.dup
+    n2 = FactoryGirl.build(:notification, @notification.attributes)
     n2.uuid = @notification.uuid
     assert n2.invalid?
     assert n2.errors[:uuid].any?
@@ -490,7 +490,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "notifications can have same uuid if different notifiers" do
     @notification.save!
-    n2 = @notification.dup
+    n2 = FactoryGirl.build(:notification, @notification.attributes)
     n2.uuid = @notification.uuid
     n2.notifier = FactoryGirl.create(:notifier)
     assert n2.valid?

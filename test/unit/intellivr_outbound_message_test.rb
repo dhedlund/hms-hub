@@ -106,7 +106,7 @@ class IntellivrOutboundMessageTest < ActiveSupport::TestCase
 
   test "two outbound messages cannot share the same ext_message_id" do
     @message.save!
-    m2 = @message.dup
+    m2 = FactoryGirl.build(:intellivr_outbound_message, @message.attributes)
     m2.ext_message_id = @message.ext_message_id
     assert m2.invalid?
     assert m2.errors[:ext_message_id].any?

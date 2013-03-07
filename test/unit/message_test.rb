@@ -82,7 +82,7 @@ class MessagesTest < ActiveSupport::TestCase
 
   test "two messages within the same stream cannot share the same name" do
     @message.save!
-    m2 = @message.dup
+    m2 = FactoryGirl.build(:message, @message.attributes)
     m2.name = @message.name
     assert m2.invalid?
     assert m2.errors[:name].any?
@@ -90,7 +90,7 @@ class MessagesTest < ActiveSupport::TestCase
 
   test "messages can have the same name if belonging to different streams" do
     @message.save!
-    m2 = @message.dup
+    m2 = FactoryGirl.build(:message, @message.attributes)
     m2.name = @message.name
     m2.message_stream = FactoryGirl.create(:message_stream)
     assert m2.valid?
