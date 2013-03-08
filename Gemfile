@@ -7,9 +7,6 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'rest-client' # nexmo and intellivr delivery providers
 
-gem 'capistrano-ext'
-gem 'capistrano'
-
 gem 'haml'
 gem 'rabl'
 gem 'simple_form'
