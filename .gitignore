@@ -1,7 +1,7 @@
 .bundle
 config/priv/
-vendor/bundle/
-vendor/cache/
+vendor/bundle
+vendor/cache
 db/*.sqlite3
 db/*.sqlite3-journal
 db/seed_data/
