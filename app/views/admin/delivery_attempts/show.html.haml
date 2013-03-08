@@ -1,41 +1,44 @@
-- @nav_hierarchy = [:attempts, @delivery_attempt]
+:ruby
+  @nav_hierarchy = [:attempts, @delivery_attempt]
 
-%h2 View Delivery Attempt
-.field
-  %label= label_for @delivery_attempt, :id
-  = @delivery_attempt.id
-.field
-  %label= label_for @delivery_attempt, :notification
-  - if @delivery_attempt.notification
-    = link_to @delivery_attempt.notification_id, [:admin, @delivery_attempt.notification]
-.field
-  %label= label_for @delivery_attempt, :message
-  = link_to @delivery_attempt.message.path, [:admin, @message.message_stream, @message]
-.field
-  %label= label_for @delivery_attempt, :phone_number
-  = link_to @delivery_attempt.phone_number, admin_notifications_path(:phone_number => @delivery_attempt.phone_number)
-.field
-  %label= label_for @delivery_attempt, :delivery_method
-  = @delivery_attempt.delivery_method
-.field
-  %label= label_for @delivery_attempt, :provider
-  = @delivery_attempt.provider
-.field
-  %label= label_for @delivery_attempt, :result
-  = @delivery_attempt.result
-.field
-  %label= label_for @delivery_attempt, :error_type
-  = @delivery_attempt.error_type
-.field
-  %label= label_for @delivery_attempt, :error_msg
-  .block-text= @delivery_attempt.error_msg
-.field
-  %label= label_for @delivery_attempt, :created_at
-  = l(@delivery_attempt.created_at)
-.field
-  %label= label_for @delivery_attempt, :updated_at
-  = l(@delivery_attempt.updated_at)
+%h2= t('.title')
+
+.admin-form
+  .field
+    .label= t('.labels.id')
+    .value= @delivery_attempt.id
+  .field
+    .label= t('.labels.notification')
+    .value
+      - if @delivery_attempt.notification
+        = link_to @delivery_attempt.notification_id, admin_notification_path(@delivery_attempt.notification)
+  .field
+    .label= t('.labels.message')
+    .value= link_to @delivery_attempt.message.path, [:admin, @message.message_stream, @message]
+  .field
+    .label= t('.labels.phone_number')
+    .value= link_to @delivery_attempt.phone_number, admin_notifications_path(:phone_number => @delivery_attempt.phone_number)
+  .field
+    .label= t('.labels.delivery_method')
+    .value= @delivery_attempt.delivery_method
+  .field
+    .label= t('.labels.provider')
+    .value= @delivery_attempt.provider
+  .field
+    .label= t('.labels.result')
+    .value= @delivery_attempt.result
+  .field
+    .label= t('.labels.error_type')
+    .value= @delivery_attempt.error_type
+  .field
+    .label= t('.labels.error_msg')
+    .value= simple_format(@delivery_attempt.error_msg)
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@delivery_attempt.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@delivery_attempt.updated_at)
 
 - if @provider && @delivery_details
-  %h2 Provider Specific Details
   = render "admin/#{@provider.to_s.underscore}/list", :details => @delivery_details

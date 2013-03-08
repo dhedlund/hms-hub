@@ -1,29 +1,31 @@
+%h2= t('.title')
+
 - details.each do |message|
-  .admin-delivery-details
+  .admin-form.admin-delivery-details
     .field
-      %label= label_for message, :id
-      = message.id
+      .label= t('.labels.id')
+      .value= message.id
     .field
-      %label= label_for message, :ext_message_id
-      = message.ext_message_id
+      .label= t('.labels.ext_message_id')
+      .value= message.ext_message_id
     .field
-      %label= label_for message, :status
-      = message.status
+      .label= t('.labels.status')
+      .value= message.status
     .field
-      %label= label_for message, :to_msisdn
-      = message.to_msisdn
+      .label= t('.labels.to_msisdn')
+      .value= message.to_msisdn
     .field
-      %label= label_for message, :network_code
-      = message.network_code
+      .label= t('.labels.network_code')
+      .value= message.network_code
     .field
-      %label= label_for message, :mo_tag
-      = message.mo_tag
+      .label= t('.labels.mo_tag')
+      .value= message.mo_tag
     .field
-      %label= label_for message, :scts
-      = message.scts
+      .label= t('.labels.scts')
+      .value= message.scts
     .field
-      %label= label_for message, :created_at
-      = l(message.created_at)
+      .label= t('.labels.created_at')
+      .value= l(message.created_at)
     .field
-      %label= label_for message, :updated_at
-      = l(message.updated_at)
+      .label= t('.labels.updated_at')
+      .value= l(message.updated_at)

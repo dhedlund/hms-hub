@@ -2,4 +2,287 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      delayed_job: "Job" # not being pulled in through model :(
+      delivery_attempt: "Delivery Attempt"
+      message: "Message"
+      message_stream: "Message Stream"
+      notification: "Notification"
+      notifier: "Notifier"
+      user: "User"
+    attributes: # not being pulled in through model :(
+      delayed_job: &delayed_job_attributes
+        id: "ID"
+        notification: "Notification"
+        run_at: "Run At"
+        queue: "Queue"
+        priority: "Priority"
+        attempts: "Attempts"
+        failed_at: "Failed At"
+        last_error: "Last Error"
+        handler: "Handler"
+        locked_at: "Locked At"
+        locked_by: "Locked By"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      delivery_attempt: &delivery_attempt_attributes
+        id: "ID"
+        notification: "Notification"
+        phone_number: "Phone Number"
+        delivery_method: "Delivery Method"
+        provider: "Provider"
+        message: "Message"
+        result: "Result"
+        error_type: "Error Type"
+        error_msg: "Error Message"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      message: &message_attributes
+        id: "ID"
+        message_stream: "Message Stream"
+        name: "Name"
+        title: "Title"
+        language: "Language"
+        sms_text: "SMS Text"
+        ivr_code: "IVR Code"
+        offset_days: "Offset Days"
+        expire_days: "Expire Days"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      message_stream: &message_stream_attributes
+        id: "ID"
+        name: "Name"
+        title: "Title"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      notification: &notification_attributes
+        id: "ID"
+        uuid: "UUID"
+        notifier: "Notifier"
+        message: "Message"
+        phone_number: "Phone Number"
+        first_name: "First Name"
+        delivery_method: "Delivery Method"
+        delivery_start: "Delivery Start"
+        delivery_expires: "Delivery Expires"
+        delivery_window: "Delivery Window"
+        delivered_at: "Delivered At"
+        last_run_at: "Last Run At"
+        status: "Status"
+        last_error_type: "Last Error Type"
+        last_error_msg: "Last Error Message"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      notifier: &notifier_attributes
+        id: "ID"
+        username: "Username"
+        timezone: "Timezone"
+        password: "Password"
+        created_at: "Created At"
+        updated_at: "Updated At"
+      user: &user_attributes
+        id: "ID"
+        username: "Username"
+        timezone: "Timezone"
+        created_at: "Created At"
+        updated_at: "Updated At"
+
+  admin:
+    site_title: "HMS Hub"
+    footer: "Unauthorized access prohibited."
+
+    user_nav:
+      app_name: "HMS"
+      app_product: "Hub"
+      signed_in: "Signed In:"
+
+    primary_nav:
+      dashboard: "Dashboard"
+      messages: "Messages"
+      notifiers: "Notifiers"
+      notifications: "Notifications"
+      attempts: "Attempts"
+      jobs: "Jobs"
+      users: "Users"
+      reports: "Reports"
+
+    common:
+      actions: &actions
+        view: "View"
+        edit: "Edit"
+        new: "New"
+        create: "Create"
+        save: "Save"
+    dashboard:
+      notifications_breakdown:
+        last_24: "Last 24 Hours"
+        last_week: "Last Week"
+        last_month: "Last Month"
+        total: "Total Notifications"
+        delivered: "Delivered"
+        failed: "Failed"
+      failed_notifications_title: "Failed Notifications"
+    delivery_attempts:
+      index:
+        title: "Delivery Attempts"
+        search_title: "Delivery Attempts for \"%{phone_number}\""
+        search_placeholder: "Search: Phone #"
+      show:
+        title: "View Delivery Attempt"
+        labels:
+          <<: *delivery_attempt_attributes
+      table:
+        labels:
+          <<: *delivery_attempt_attributes
+          age: "Age"
+          actions: ""
+        actions:
+          <<: *actions
+    delivery:
+      provider:
+        nexmo:
+          list:
+            title: "Details from Nexmo (SMS Provider)"
+            labels:
+              id: "ID"
+              ext_message_id: "Ext. Message ID"
+              status: "Status"
+              to_msisdn: "To MSISDN"
+              network_code: "Network Code"
+              mo_tag: "Mo Tag"
+              scts: "SCTS"
+              created_at: "Created At"
+              updated_at: "Updated At"
+        intellivr:
+          list:
+            title: "Details from IntellIVR (IVR Provider)"
+            labels:
+              id: "ID"
+              ext_message_id: "Ext. Message ID"
+              status: "Status"
+              callee: "Callee"
+              duration: "Duration"
+              connect_at: "Connected At"
+              disconnect_at: "Disconnected At"
+              request: "Request"
+              response: "Response"
+              callback_res: "Callback Response"
+              created_at: "Created At"
+              updated_at: "Updated At"
+    jobs:
+      index:
+        title: "Notification Jobs"
+      show:
+        title: "View Notification Job"
+        labels:
+          <<: *delayed_job_attributes
+      table:
+        labels:
+          <<: *delayed_job_attributes
+          actions: ""
+        actions:
+          <<: *actions
+    messages:
+      index:
+        title: "Messages"
+      show:
+        title: "View Message"
+        labels:
+          <<: *message_attributes
+          offset_days: "Offset (days)"
+          expire_days: "Expires (days)"
+          path: "Path"
+      table:
+        labels:
+          <<: *message_attributes
+          delivery_method: "Delivery Method"
+          offset: "Offset"
+          actions: ""
+        actions:
+          <<: *actions
+    message_streams:
+      index:
+        title: "Message Streams"
+      show:
+        title: "View Message Stream"
+        messages_title: "Messages"
+        labels:
+          <<: *message_stream_attributes
+      table:
+        labels:
+          <<: *message_stream_attributes
+          actions: ""
+        actions:
+          <<: *actions
+    notifications:
+      edit:
+        title: "Edit Notification"
+      form:
+        labels:
+          <<: *notification_attributes
+        actions:
+          <<: *actions
+          create: "Create Notification"
+      index:
+        title: "Notifications"
+        search_title: "Notifications for \"%{phone_number}\""
+        search_placeholder: "Search: Phone #"
+      new:
+        title: "New Notification"
+      show:
+        title: "View Notification"
+        delivery_attempts_title: "Delivery Attempts"
+        labels:
+          <<: *notification_attributes
+      table:
+        labels:
+          <<: *notification_attributes
+          actions: ""
+        actions:
+          <<: *actions
+    notifiers:
+      edit:
+        title: "Edit Notifier"
+      form:
+        labels:
+          <<: *notifier_attributes
+        actions:
+          <<: *actions
+          create: "Create Notifier"
+      index:
+        title: "Notifiers"
+        actions:
+          new: "New Notifier"
+      new:
+        title: "New Notifier"
+      show:
+        title: "View Notifier"
+        labels:
+          <<: *notifier_attributes
+      table:
+        labels:
+          <<: *notifier_attributes
+          last_status_req_at: "Last Req @"
+          notifications_count: "Notifications"
+          updates_pending: "Updates Pending"
+          actions: ""
+        actions:
+          <<: *actions
+    reports:
+      index:
+        title: "Reports and Files"
+        no_files: "No files"
+    users:
+      index:
+        title: "Users"
+      show:
+        title: "View User"
+        labels:
+          <<: *user_attributes
+      table:
+        labels:
+          <<: *user_attributes
+          actions: ""
+        actions:
+          <<: *actions

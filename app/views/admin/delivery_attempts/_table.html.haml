@@ -1,21 +1,22 @@
-#paginator
-  = paginate @delivery_attempts, :remote => true
+-# assumes `delivery_attempts` will be passed in
 
-%table.admin-table
-  %tr
-    %th ID
-    %th Notification
-    %th Method
-    %th Age
-    %th Result
-    %th Error Type
-    %th Actions
-  - @delivery_attempts.each do |attempt|
-    %tr{:class => cycle('even', 'odd')}
-      %td= attempt.id
-      %td #{link_to attempt.notification_id, admin_notification_path(attempt.notification)}
-      %td= attempt.delivery_method
-      %td= time_ago_in_words(attempt.created_at)
-      %td= attempt.result
-      %td= attempt.error_type
-      %td.actions #{link_to 'View', [:admin, attempt]}
+%table.admin-table.delivery_attempts
+  %thead
+    %tr
+      %th.id= t('.labels.id')
+      %th.notification= t('.labels.notification')
+      %th.delivery_method= t('.labels.delivery_method')
+      %th.age= t('.labels.age')
+      %th.result= t('.labels.result')
+      %th.error_type= t('.labels.error_type')
+      %th.actions= t('.labels.actions')
+  %tbody
+    - delivery_attempts.each do |attempt|
+      %tr.delivery_attempt{:class => cycle('even', 'odd')}
+        %td.id= attempt.id
+        %td.notification= link_to(attempt.notification_id, admin_notification_path(attempt.notification))
+        %td.delivery_method= attempt.delivery_method
+        %td.age= time_ago_in_words(attempt.created_at)
+        %td.result= attempt.result
+        %td.error_type= attempt.error_type
+        %td.actions #{link_to t('.actions.view'), [:admin, attempt]}

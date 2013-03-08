@@ -1,18 +1,21 @@
-- @nav_hierarchy = [:users]
+:ruby
+  @nav_hierarchy = [:users, @user]
 
-%h2 View User
-.field
-  %label= label_for @user, :id
-  = @user.id
-.field
-  %label= label_for @user, :username
-  = @user.username
-.field 
-  %label= label_for @user, :timezone
-  = @user.timezone
-.field
-  %label= label_for @user, :created_at
-  = l(@user.created_at)
-.field
-  %label= label_for @user, :updated_at
-  = l(@user.updated_at)
+%h2= t('.title')
+
+.admin-form
+  .field
+    .label= t('.labels.id')
+    .value= @user.id
+  .field
+    .label= t('.labels.username')
+    .value= @user.username
+  .field
+    .label= t('.labels.timezone')
+    .value= @user.timezone
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@user.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@user.updated_at)

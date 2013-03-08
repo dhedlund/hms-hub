@@ -1,18 +1,21 @@
-- @nav_hierarchy = [:notifiers, @notifier]
+:ruby
+  @nav_hierarchy = [:notifiers, @notifier]
 
-%h2 View Notifier
-.field
-  %label= label_for @notifier, :id
-  = @notifier.id
-.field
-  %label= label_for @notifier, :username
-  = @notifier.username
-.field
-  %label= label_for @notifier, :timezone
-  = @notifier.timezone
-.field
-  %label= label_for @notifier, :created_at
-  = l(@notifier.created_at)
-.field
-  %label= label_for @notifier, :updated_at
-  = l(@notifier.updated_at)
+%h2= t('.title')
+
+.admin-form
+  .field
+    .label= t('.labels.id')
+    .value= @notifier.id
+  .field
+    .label= t('.labels.username')
+    .value= @notifier.username
+  .field
+    .label= t('.labels.timezone')
+    .value= @notifier.timezone
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@notifier.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@notifier.updated_at)

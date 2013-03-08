@@ -1,0 +1,20 @@
+-# assumes `messages` will be passed in
+
+%table.admin-table.messages
+  %thead
+    %tr
+      %th.offset= t('.labels.offset')
+      %th.title= t('.labels.title')
+      %th.sms_text= t('.labels.sms_text')
+      %th.language= t('.labels.language')
+      %th.delivery_method= t('.labels.delivery_method')
+      %th.actions= t('.labels.actions')
+  %tbody
+    - messages.each do |message|
+      %tr.message{:class => cycle('even', 'odd')}
+        %td.offset_days= message.offset_days
+        %td.title= message.title
+        %td.sms_text= message.sms_text
+        %td.language= message.language
+        %td.delivery_method= message.sms_text.present? ? 'SMS' : 'IVR'
+        %td.actions #{link_to t('.actions.view'), [:admin, @message_stream, message]}

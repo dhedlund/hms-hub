@@ -1,19 +1,4 @@
-class CustomFormBuilder < SimpleForm::FormBuilder
-  def base_errors
-    errors = @object.errors[:base] or return
-    buffer = ActiveSupport::SafeBuffer.new
-    buffer << '<ul class="base_errors">'.html_safe
-    errors.each { |e| buffer << '<li>'.html_safe << e << '</li>'.html_safe }
-    buffer << '</ul>'.html_safe
-  end
-end
-
 module AdminHelper
-  def custom_form_for(object, *args, &block)
-    options = args.extract_options!
-    simple_form_for(object, *(args << options.merge(:builder => CustomFormBuilder)), &block)
-  end
-
   def primary_nav(selected=:dashboard)
     nav = [
       { :name => :dashboard,     :path => admin_path                   },
@@ -26,7 +11,7 @@ module AdminHelper
       { :name => :reports,       :path => admin_reports_path           },
     ]
 
-    nav.each { |i| i[:title] ||= i[:name].to_s.titleize }
+    nav.each { |i| i[:title] ||= t("admin.primary_nav.#{i[:name]}") }
     nav.select { |i| i[:name] == selected }[0][:selected] = true
     nav
   end
@@ -35,29 +20,27 @@ module AdminHelper
     paths = Hash[primary_nav.map { |n| [n[:name], n[:path]] }]
     hierarchy.map do |node|
       case node
-      when Symbol
-        title = node.to_s.titleize
+      when Symbol # toplevel nav/collection or action
+        title = t("admin.primary_nav.#{node}", :default => [:"admin.common.actions.#{node}"])
         paths[node] ? link_to(title, paths[node]) : title
       when MessageStream
-        link_to("Stream: #{node.title}", [:admin, node])
+        link_to("#{node.class.model_name.human}: #{node.title}", [:admin, node])
       when Message
-        link_to("Message: #{node.title}", [:admin, node.message_stream, node])
+        link_to("#{node.class.model_name.human}: #{node.title}", [:admin, node.message_stream, node])
       when Notifier
-        link_to("Notifier: #{node.username}", [:admin, node])
+        link_to("#{node.class.model_name.human}: #{node.username}", [:admin, node])
       when Notification
-        link_to("Notification: #{node.id}", [:admin, node])
+        link_to("#{node.class.model_name.human}: #{node.id}", [:admin, node])
+      when Delayed::Job
+        link_to("#{node.class.model_name.human}: #{node.id}", admin_job_path(node))
       when DeliveryAttempt
-        link_to("Attempt: #{node.id}", [:admin, node])
+        link_to("#{node.class.model_name.human}: #{node.id}", [:admin, node])
       when User
-        link_to("User: #{node.username}", [:admin, node])
+        link_to("#{node.class.model_name.human}: #{node.username}", [:admin, node])
       else
         node
       end
     end
-  end
-
-  def label_for(object, attribute)
-    object.class.human_attribute_name attribute
   end
 
 end

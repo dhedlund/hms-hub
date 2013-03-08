@@ -1,14 +1,16 @@
-- @nav_hierarchy = [:reports]
+:ruby
+  @nav_hierarchy = [:reports]
 
-%h2 Reports and Files
+%h2= t('.title')
 
 - @report_dirs.keys.sort.each do |dir|
-  %table.admin-table
-    %tr
-      %th.left{:colspan=>2}= dir + '/'
-    - @report_dirs[dir].each do |filename|
-      %tr{:class => cycle('even', 'odd')}
-        %td.left= link_to filename, admin_reports_download_path([dir,filename].join('/'))
+  %table.admin-table.reports
+    %thead
+      %tr
+        %th.filename= dir + '/'
+    %tbody
+      - @report_dirs[dir].each do |filename|
+        %tr.report{:class => cycle('even', 'odd')}
+          %td.filename= link_to filename, admin_reports_download_path([dir,filename].join('/'))
 
-- if @report_dirs.blank?
-  No files
+= t('.no_files') if @report_dirs.blank?

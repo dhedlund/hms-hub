@@ -1,0 +1,14 @@
+-# assumes `message_streams` will be passed in
+
+%table.admin-table.message_streams
+  %thead
+    %tr
+      %th.name= t('.labels.name')
+      %th.title= t('.labels.title')
+      %th.actions= t('.labels.actions')
+  %tbody
+    - message_streams.each do |message_stream|
+      %tr.message_stream{:class => cycle('even', 'odd')}
+        %td.name= message_stream.name
+        %td.title= message_stream.title
+        %td.actions= link_to t('.actions.view'), [:admin, message_stream]

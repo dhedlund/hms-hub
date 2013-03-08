@@ -5,8 +5,9 @@ class Admin::DeliveryAttemptsController < AdminController
     @delivery_attempts = DeliveryAttempt.order('created_at DESC').page(params[:page])
 
     if params[:phone_number]
-      @notifications = @notifications.where('phone_number LIKE :phone_number',
-        :phone_number => "%#{phone_normalize(params[:phone_number])}%"
+      @phone_number = phone_normalize(params[:phone_number])
+      @delivery_attempts = @delivery_attempts.where('phone_number LIKE :phone_number',
+        :phone_number => "%#{@phone_number}"
       )
     end
 

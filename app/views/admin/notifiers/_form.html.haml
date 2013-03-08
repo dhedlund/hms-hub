@@ -1,6 +1,23 @@
-= custom_form_for [:admin, @notifier] do |f|
-  = f.base_errors
-  = f.input :username
-  = f.input :password, :required => @notifier.new_record?, :input_html => { :value => nil }, :as => :string
-  = f.input :timezone, :as => :time_zone
-  = f.button :submit
+= form_for [:admin, @notifier], :html => { :class => 'admin-form' } do |f|
+  - if f.object.errors[:base].any?
+    .error-msg= f.object.errors[:base].join(', ')
+  .field.username.required
+    .label= f.label :username, t('.labels.username')
+    .value
+      = f.text_field :username
+      - if f.object.errors[:username].any?
+        .error-msg= f.object.errors[:username].join(', ')
+  .field.password{:class => (@notifier.new_record? ? 'required' : '')}
+    .label= f.label :password, t('.labels.password')
+    .value
+      = f.password_field :password
+      - if f.object.errors[:password].any?
+        .error-msg= f.object.errors[:password].join(', ')
+  .field.timezone.required
+    .label= f.label :timezone, t('.labels.timezone')
+    .value
+      = f.time_zone_select :timezone
+      - if f.object.errors[:timezone].any?
+        .error-msg= f.object.errors[:timezone].join(', ')
+
+  .actions= f.submit :value => t(@notifier.new_record? ? '.actions.create' : '.actions.save')

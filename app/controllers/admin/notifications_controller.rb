@@ -5,8 +5,9 @@ class Admin::NotificationsController < AdminController
     @notifications = Notification.order('delivery_start DESC').page(params[:page])
 
     if params[:phone_number]
+      @phone_number = phone_normalize(params[:phone_number])
       @notifications = @notifications.where('phone_number LIKE :phone_number',
-        :phone_number => "%#{phone_normalize(params[:phone_number])}%"
+        :phone_number => "%#{@phone_number}%"
       )
     end
 

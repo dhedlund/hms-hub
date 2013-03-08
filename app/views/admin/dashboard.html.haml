@@ -1,0 +1,25 @@
+- @nav_hierarchy = [:dashboard]
+
+.dashboard-breakdown
+  %h2= t('.notifications_breakdown.last_24')
+  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:day]}
+  %div
+    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:day]} /
+    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:day]}
+
+.dashboard-breakdown
+  %h2= t('.notifications_breakdown.last_week')
+  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:week]}
+  %div
+    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:week]} /
+    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:week]}
+
+.dashboard-breakdown
+  %h2= t('.notifications_breakdown.last_month')
+  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:month]}
+  %div
+    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:month]} /
+    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:month]}
+
+%h2= t('.failed_notifications_title')
+= render 'admin/notifications/table', :notifications => @failed_notifications

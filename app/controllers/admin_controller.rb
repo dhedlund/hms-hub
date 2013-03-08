@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   respond_to :html
 
-  before_filter :authenticate
+  before_filter :authenticate, :setup_i18n
 
   # GET /admin/index
   def index
@@ -17,6 +17,8 @@ class AdminController < ApplicationController
     @failed_cnt = Hash[notifications.map {|k,v| [k,v.merge(failed).count]}]
 
     @failed_notifications = failed.limit(25)
+
+    render :dashboard
   end
 
 
@@ -45,6 +47,12 @@ class AdminController < ApplicationController
         @current_user = user
       end
     end
+  end
+
+  def setup_i18n
+    @i18n_defaults = {
+      :raise => true,
+    }
   end
 
 end

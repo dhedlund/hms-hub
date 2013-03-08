@@ -9,7 +9,6 @@ gem 'rest-client' # nexmo and intellivr delivery providers
 
 gem 'haml'
 gem 'rabl'
-gem 'simple_form'
 gem 'kaminari'
 
 group :assets do

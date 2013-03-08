@@ -1,10 +1,15 @@
+- content_for :javascripts do
+  = javascript_include_tag 'application'
+
 - content_for :stylesheets do
   = stylesheet_link_tag 'application'
 
 - content_for :content do
   #user-nav
-    .site-title <strong>HMS</strong> Hub
-    .user-logged-in Signed In: #{@current_user.username}
+    .site-title
+      %strong= t('admin.user_nav.app_name')
+      = t('admin.user_nav.app_product')
+    .user-logged-in #{t('admin.user_nav.signed_in')}: #{@current_user.username}
   #main
     #primary-nav
       %ul
@@ -14,6 +19,6 @@
       #nav-hierarchy= nav_hierarchy(@nav_hierarchy).join(' &raquo; ').html_safe
     #content
       = yield
-    #footer Unauthorized access prohibited.
+    #footer= t('admin.footer')
 
 = render :file => 'layouts/application'

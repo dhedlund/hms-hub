@@ -1,36 +1,39 @@
-- @nav_hierarchy = [:messages, @message_stream, @message]
+:ruby
+  @nav_hierarchy = [:messages, @message_stream, @message]
 
-%h2 View Message
-.field
-  %label= label_for @message, :id
-  = @message.id
-.field
-  %label= label_for @message, :message_stream
-  = link_to @message_stream.title, [:admin, @message_stream]
-.field
-  %label= label_for @message, :name
-  = @message.name
-.field
-  %label= label_for @message, :title
-  = @message.title
-.field
-  %label= label_for @message, :language
-  = @message.language
-.field
-  %label= label_for @message, :path
-  = @message.path
-.field
-  %label= label_for @message, :offset_days
-  = @message.offset_days
-.field
-  %label= label_for @message, :ivr_code
-  = @message.ivr_code
-.field
-  %label= label_for @message, :sms_text
-  = @message.sms_text
-.field
-  %label= label_for @message, :created_at
-  = l(@message.created_at)
-.field
-  %label= label_for @message, :updated_at
-  = l(@message.updated_at)
+%h2= t('.title')
+
+.admin-form
+  .field
+    .label= t('.labels.id')
+    .value= @message.id
+  .field
+    .label= t('.labels.message_stream')
+    .value= link_to @message_stream.title, admin_message_stream_path(@message_stream)
+  .field
+    .label= t('.labels.name')
+    .value= @message.name
+  .field
+    .label= t('.labels.title')
+    .value= @message.title
+  .field
+    .label= t('.labels.language')
+    .value= @message.language
+  .field
+    .label= t('.labels.path')
+    .value= @message.path
+  .field
+    .label= t('.labels.offset_days')
+    .value= @message.offset_days
+  .field
+    .label= t('.labels.ivr_code')
+    .value= @message.ivr_code
+  .field
+    .label= t('.labels.sms_text')
+    .value= @message.sms_text
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@message.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@message.updated_at)

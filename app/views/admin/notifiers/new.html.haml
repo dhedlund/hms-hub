@@ -1,4 +1,5 @@
-- @nav_hierarchy = [:notifiers, :new]
+:ruby
+  @nav_hierarchy = [:notifiers, :new]
 
-%h2 New Notifier
+%h2= t('.title')
 = render 'form'

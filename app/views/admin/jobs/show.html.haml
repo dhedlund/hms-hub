@@ -1,41 +1,44 @@
-- @nav_hierarchy = [:jobs]
+:ruby
+  @nav_hierarchy = [:jobs, @job]
 
-%h2 View Notification Job
-.field
-  %label= label_for @job, :id
-  = @job.id
-- case @payload
-- when DeliverNotificationJob
+%h2= t('.title')
+
+.admin-form
   .field
-    %label= label_for @job, :notification
-    = link_to @payload.notification_id, admin_notification_path(@payload.notification_id)
-.field
-  %label= label_for @job, :run_at
-  = l(@job.run_at) if @job.run_at
-.field
-  %label= label_for @job, :priority
-  = @job.priority
-.field
-  %label= label_for @job, :attempts
-  = @job.attempts
-.field
-  %label= label_for @job, :failed_at
-  = l(@job.failed_at) if @job.failed_at
-.field
-  %label= label_for @job, :last_error
-  = @job.last_error
-.field
-  %label= label_for @job, :handler
-  = simple_format @job.handler
-.field
-  %label= label_for @job, :locked_at
-  = l(@job.locked_at) if @job.locked_at
-.field
-  %label= label_for @job, :locked_by
-  = @job.locked_by
-.field
-  %label= label_for @job, :created_at
-  = l(@job.created_at)
-.field
-  %label= label_for @job, :updated_at
-  = l(@job.updated_at)
+    .label= t('.labels.id')
+    .value= @job.id
+  - case @payload
+  - when DeliverNotificationJob
+    .field
+      .label= t('.labels.notification')
+      .value= link_to @payload.notification_id, admin_notification_path(@payload.notification_id)
+  .field
+    .label= t('.labels.run_at')
+    .value= l(@job.run_at) if @job.run_at
+  .field
+    .label= t('.labels.priority')
+    .value= @job.priority
+  .field
+    .label= t('.labels.attempts')
+    .value= @job.attempts
+  .field
+    .label= t('.labels.failed_at')
+    .value= l(@job.failed_at) if @job.failed_at
+  .field
+    .label= t('.labels.last_error')
+    .value= simple_format(@job.last_error.to_s.gsub("\\n", "\n"))
+  .field
+    .label= t('.labels.handler')
+    .value= simple_format(@job.handler)
+  .field
+    .label= t('.labels.locked_at')
+    .value= l(@job.locked_at) if @job.locked_at
+  .field
+    .label= t('.labels.locked_by')
+    .value= @job.locked_by
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@job.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@job.updated_at)

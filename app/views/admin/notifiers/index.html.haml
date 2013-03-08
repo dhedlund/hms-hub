@@ -1,22 +1,7 @@
-- @nav_hierarchy = [:notifiers]
+:ruby
+  @nav_hierarchy = [:notifiers]
 
-%h2 Notifiers
-%table.admin-table
-  %tr
-    %th Username
-    %th Last Req @
-    %th Notifications
-    %th Updates Pending
-    %th Actions
-  - @notifiers.each do |notifier|
-    %tr{:class => cycle('even', 'odd')}
-      - last_status_req_at = notifier.last_status_req_at
-      %td= notifier.username
-      %td= last_status_req_at.try(:strftime, '%Y-%m-%d')
-      %td= notifier.notifications.count
-      %td= notifier.notifications.run_since(last_status_req_at).count if last_status_req_at
-      %td.actions
-        #{link_to 'View', [:admin, notifier]}
-        | #{link_to 'Edit', [:edit, :admin, notifier]}
+%h2= t('.title')
+= render 'table', :notifiers => @notifiers
 
-.actions= link_to 'New Notifier', new_admin_notifier_path
+.actions= link_to t('.actions.new'), new_admin_notifier_path

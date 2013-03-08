@@ -1,4 +1,13 @@
-= render 'top'
-= render 'search'
-%h2 Delivery Attempts
-= render 'table'
+:ruby
+  @nav_hierarchy = [:attempts]
+
+%form.search
+  = text_field_tag :phone_number, params[:phone_number], :placeholder => t('.search_placeholder')
+
+- if @phone_number.present?
+  %h2= t('.search_title', :phone_number => @phone_number)
+- else
+  %h2= t('.title')
+
+#paginator= paginate @delivery_attempts, :remote => true
+= render 'table', :delivery_attempts => @delivery_attempts

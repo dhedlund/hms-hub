@@ -1,38 +1,40 @@
+%h2= t('.title')
+
 - details.each do |message|
-  .admin-delivery-details
+  .admin-form.admin-delivery-details
     .field
-      %label= label_for message, :id
-      = message.id
+      .label= t('.labels.id')
+      .value= message.id
     .field
-      %label= label_for message, :ext_message_id
-      = message.ext_message_id
+      .label= t('.labels.ext_message_id')
+      .value= message.ext_message_id
     .field
-      %label= label_for message, :status
-      = message.status
+      .label= t('.labels.status')
+      .value= message.status
     .field
-      %label= label_for message, :callee
-      = message.callee
+      .label= t('.labels.callee')
+      .value= message.callee
     .field
-      %label= label_for message, :duration
-      = message.duration
+      .label= t('.labels.duration')
+      .value= message.duration
     .field
-      %label= label_for message, :conenct_at
-      = l(message.connect_at) if message.connect_at
+      .label= t('.labels.connect_at')
+      .value= l(message.connect_at) if message.connect_at
     .field
-      %label= label_for message, :disconnect_at
-      = l(message.disconnect_at) if message.disconnect_at
+      .label= t('.labels.disconnect_at')
+      .value= l(message.disconnect_at) if message.disconnect_at
     .field
-      %label= label_for message, :request
-      .text-block= preserve(html_escape(message.request))
+      .label= t('.labels.request')
+      .value.text-block= preserve(html_escape(message.request))
     .field
-      %label= label_for message, :response
-      .text-block= preserve(html_escape(message.response))
+      .label= t('.labels.response')
+      .value.text-block= preserve(html_escape(message.response))
     .field
-      %label= label_for message, :callback_res
-      .text-block= preserve(html_escape(message.callback_res))
+      .label= t('.labels.callback_res')
+      .value.text-block= preserve(html_escape(message.callback_res))
     .field
-      %label= label_for message, :created_at
-      = l(message.created_at)
+      .label= t('.labels.created_at')
+      .value= l(message.created_at)
     .field
-      %label= label_for message, :updated_at
-      = l(message.updated_at)
+      .label= t('.labels.updated_at')
+      .value= l(message.updated_at)

@@ -9,27 +9,35 @@
 
 body {
   background-color: #f4fad2;
-  line-height: 1.4em;
+  line-height: 18px;
+  font-size: 12px;
   font-family: Arial;
-  font-size: 14px;
 }
 
 h1, h2 {
-  font-weight: bold;
   margin: 10px 0px 5px 0px;
+  font-weight: bold;
 }
 
 h1 { font-size: 20px; }
 h2 { font-size: 18px; }
 
 a:link, a:visited, a:active {
-  color: #b40f0f;
   text-decoration: none;
   font-weight: bold;
+  color: #b40f0f;
+}
+
+a:hover {
+  color: #e41;
+}
+
+input:focus {
+  border-color: #444 !important;
 }
 
 #main {
-  width: 800px;
+  width: 980px;
   padding: 20px;
 }
 
@@ -43,22 +51,37 @@ a:link, a:visited, a:active {
   background-color: #888;
   border-left: 5px solid #666;
   padding: 10px;
-  font-size: 10px;
+  font-size: 12px;
   color: #fff;
 }
 
 #primary-nav {
-  height: 40px;
+  height: 34px;
   border-bottom: 10px solid #222;
-  background-color: #888;
+  border-top: 6px solid #444;
+  background-color: #555;
 
-  ul { height: 40px; }
+  ul {
+    margin: -3px 0px 0px 8px;
+  }
 
   li {
-    height: 18px;
+    height: 20px;
+    margin: 0px 2px;
     display: block; float: left;
-    padding: 10px 15px;
-    font-size: 18px;
+    padding: 10px 12px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    background-color: rgba(144, 144, 144, 0.75);
+    border-left: 3px solid #888;
+    border-right: 3px solid #888;
+    cursor: pointer;
+  }
+
+  li:hover {
+    background-color: rgba(192, 192, 192, 0.75);
+    border-left: 3px solid #aaa;
+    border-right: 3px solid #aaa;
   }
 
   a:link, a:visited, a:active {
@@ -68,9 +91,13 @@ a:link, a:visited, a:active {
   }
 
   .selected {
-    background-color: #ff4242;
-    border-bottom: 10px solid #b40f0f;
-    border-top: 2px solid #b40f0f;
+    height: 20px;
+    margin: 0px 4px;
+    padding: 10px 13px;
+    background-color: rgba(255, 32, 32, 0.75) !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 18px solid transparent;
   }
 }
 
@@ -79,13 +106,27 @@ a:link, a:visited, a:active {
   background-color: #222;
   border-bottom: 5px solid #b40f0f;
   color: #ccc;
+
+  .site-title {
+    padding: 10px;
+    font-size: 24px;
+  }
+
+  .user-logged-in {
+    position: absolute;
+    top: 10px; right: 10px;
+  }
+
 }
 
 #nav-hierarchy {
-  background-color: #e1edb9;
-  padding: 5px 15px;
+  background-color: #fff;
+  padding: 12px 15px 5px 15px;
+  border-left: 5px solid #e1edb9;
 
   a:link, a:visited, a:active {
+    letter-spacing: 1px;
+    font-size: 14px;
     font-weight: normal;
   }
 }
@@ -94,10 +135,11 @@ a:link, a:visited, a:active {
   float: right;
 
   input {
-    padding: 2px;
+    padding: 2px 6px;
     line-height: 1.4em;
     font-family: Arial;
     font-size: 14px;
+    border: 2px solid #ccc;
   }
 }
 
@@ -106,138 +148,94 @@ a:link, a:visited, a:active {
   white-space: nowrap;
   margin-bottom: 20px;
 
-  th {
-    padding: 5px 10px;
-    background-color: #d4ee5e;
+  thead {
+    th {
+      padding: 5px 10px;
+      background-color: #d4ee5e;
+    }
   }
 
-  td {
-    padding: 5px 10px;
-    text-align: center;
-    vertical-align: top
-  }
+  tbody {
+    td {
+      padding: 5px 10px;
+      text-align: center;
+      vertical-align: top;
+    }
 
-  .odd {
-    background-color: #e1edb9;
-  }
+    tr.odd {
+      background-color: #e1edb9;
+    }
 
-  .actions {
-    text-align: right;
-  }
+    td.actions {
+      text-align: right;
+    }
 
-  .left, .reports {
-    text-align: left;
-  }
+    .message .sms_text {
+      font-size: 10px;
+      white-space: normal;
+      text-align: left;
+    }
 
-  .sms-text {
-    font-size: 10px;
-    white-space: normal;
-    text-align: left;
-    line-height: 1.2em;
   }
-
 }
 
-.actions a:link, .actions a:visited, .actions a:active {
-  color: #b40f0f;
-  font-weight: bold;
-  text-decoration: none;
+.admin-table.reports .filename {
+  text-align: left;
 }
 
-div.actions {
-  padding: 5px;
-}
-
-.button_to, .button_to div {
-  display: inline;
-}
-.action-button {
-  padding: 0px; margin: 0px;
-  background: none;
-  border: none;
-  color: #b40f0f;
-  font-weight: bold;
-  text-decoration: none;
+div.actions { /* action links outside of an admin table */
+  margin: 5px;
   font-size: 14px;
-  cursor: pointer;
 }
 
-.simple_form {
-  input[type="text"], .simple_form input[type="tel"] {
+.admin-form {
+  margin-bottom: 30px;
+
+  input[type="text"], input[type="password"] {
     width: 200px;
-    padding: 2px;
+    padding: 2px 6px;
+    line-height: 1.4em;
+    font-family: Arial;
+    font-size: 14px;
+    border: 1px solid #ccc;
   }
 
-  abbr {
-    float: right;
+  input[type="submit"] {
+    margin: 0px;
+    padding: 4px 6px;
+    font-size: 14px;
+    letter-spacing: 1px;
   }
 
-  label.collection_radio_buttons {
-    display: inline; float: none;
+  .field, .actions {
+    clear: left;
+    border-top: 1px dashed #ccc;
+    padding: 10px 0px 10px 180px;
+    min-height: 18px;
+
+    .label {
+      float: left;
+      width: 160px;
+      margin-left: -180px;
+      font-weight: bold;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      font-style: italic;
+      color: #f22;
+    }
   }
 
-  .hint {
-    display: block; clear: right;
-    font-size: 12px;
-    font-style: italic;
-    color: #888;
-    margin: 0px 10px 0px 2px;
+  .text-block {
+    white-space: pre-wrap;
   }
-
-  .base_errors {
-    margin: 10px 20px;
-    color: #f00;
-    list-style: square;
-  }
-
-  .field_with_errors {
-    position: relative;
-  }
-
-  .field_with_errors label {
-    color: #f00;
-  }
-
-  .error {
-    display: block; position: absolute;
-    top: 0px; right: 0px;
-    margin: 10px;
-    color: #f00;
-  }
-}
-
-.input, .field {
-  clear: left;
-  border-top: dashed 1px #ccc;
-  padding: 10px 0px;
-}
-
-label {
-  display: block; float: left;
-  width: 170px;
-  margin: 3px 10px 10px 0px;
-  font-weight: bold;
-}
-
-.site-title {
-  padding: 10px;
-  font-size: 24px;
-}
-
-.user-logged-in {
-  position: absolute;
-  top: 10px; right: 10px;
 }
 
 .admin-delivery-details {
   border-left: 5px solid #ccc;
-  padding: 0px 20px 20px 20px;
+  padding-left: 20px;
   margin-bottom: 20px;
-}
-
-.text-block {
-  clear: left;
-  white-space: pre-wrap;
 }
 
 .dashboard-breakdown {

@@ -1,17 +1,5 @@
-- @nav_hierarchy = [:jobs]
+:ruby
+  @nav_hierarchy = [:jobs]
 
-%h2 Notification Jobs
-%table.admin-table
-  %tr
-    %th ID
-    %th Attempts
-    %th Run At
-    %th Failed At
-    %th Actions
-  - @jobs.each do |job|
-    %tr{:class => cycle('even', 'odd')}
-      %td= job.id
-      %td= job.attempts
-      %td= job.run_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
-      %td= job.failed_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
-      %td.actions #{link_to 'View', admin_job_path(job)}
+%h2= t('.title')
+= render 'table', :jobs => @jobs

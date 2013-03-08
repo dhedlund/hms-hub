@@ -1,0 +1,12 @@
+-# assumes `users` is passed in
+
+%table.admin-table.users
+  %tr
+    %th.username= t('.labels.username')
+    %th.timezone= t('.labels.timezone')
+    %th.actions= t('.labels.actions')
+  - users.each do |user|
+    %tr{:class => cycle('even', 'odd')}
+      %td= user.username
+      %td= user.timezone
+      %td.actions #{link_to t('.actions.view'), [:admin, user]}

@@ -1,0 +1,21 @@
+-# assumes `notifiers` will be passed in
+
+%table.admin-table.notifiers
+  %thead
+    %tr
+      %th.username= t('.labels.username')
+      %th.last_status_req_at= t('.labels.last_status_req_at')
+      %th.notifications_count= t('.labels.notifications_count')
+      %th.updates_pending= t('.labels.updates_pending')
+      %th.actions= t('.labels.actions')
+  %tbody
+    - notifiers.each do |notifier|
+      %tr.notifier{:class => cycle('even', 'odd')}
+        - last_status_req_at = notifier.last_status_req_at
+        %td.username= notifier.username
+        %td.last_status_req_at= last_status_req_at.try(:strftime, '%Y-%m-%d') || '-'
+        %td.notifications_count= notifier.notifications.count
+        %td.updates_pending= notifier.notifications.run_since(last_status_req_at).count
+        %td.actions
+          #{link_to t('.actions.view'), [:admin, notifier]}
+          | #{link_to t('.actions.edit'), [:edit, :admin, notifier]}

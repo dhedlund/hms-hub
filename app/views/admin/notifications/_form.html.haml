@@ -1,8 +1,35 @@
-= custom_form_for [:admin, @notification] do |f|
-  = f.base_errors
-  = f.input :notifier_id, :collection => Notifier.where(:username => 'internal').map { |n| [n.username, n.id] }, :include_blank => false
-  = f.input :first_name
-  = f.input :phone_number
-  = f.input :delivery_method, :collection => ['SMS', 'IVR'], :as => :radio_buttons, :required => true
-  = f.input :message_id, :collection => Message.all.sort_by(&:path).map { |m| [m.path, m.id] }
-  = f.button :submit
+= form_for [:admin, @notification], :html => { :class => 'admin-form' } do |f|
+  - if f.object.errors[:base].any?
+    .error-msg= f.object.errors.join(', ')
+  .field.notifier.required
+    .label= f.label :notifier, t('.labels.notifier')
+    .value
+      = f.collection_select(:notifier_id, Notifier.where(:username => 'internal'), :id, :username, :include_blank => false)
+      - if f.object.errors[:notifier_id].any?
+        .error-msg= f.object.errors[:notifier_id].join(', ')
+  .field.first_name
+    .label= f.label :first_name, t('.labels.first_name')
+    .value
+      = f.text_field :first_name
+      - if f.object.errors[:first_name].any?
+        .error-msg= f.object.errors[:first_name].join(', ')
+  .field.phone_number.required
+    .label= f.label :phone_number, t('.labels.phone_number')
+    .value
+      = f.text_field :phone_number
+      - if f.object.errors[:phone_number].any?
+        .error-msg= f.object.errors[:phone_number].join(', ')
+  .field.delivery_method.required
+    .label= f.label :delivery_method, t('.labels.delivery_method')
+    .value
+      = f.collection_select(:delivery_method, Notification::VALID_DELIVERY_METHODS, :to_s, :to_s, :include_blank => '')
+      - if f.object.errors[:delivery_method].any?
+        .error-msg= f.object.errors[:delivery_method].join(', ')
+  .field.message.required
+    .label= f.label :message, t('.labels.message')
+    .value
+      = f.collection_select(:message_id, Message.all.sort_by(&:path), :id, :path, :include_blank => '')
+      - if f.object.errors[:message_id].any?
+        .error-msg= f.object.errors[:message_id].join(', ')
+
+  .actions= f.submit :value => t(@notification.new_record? ? '.actions.create' : '.actions.save')

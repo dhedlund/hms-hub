@@ -1,36 +1,25 @@
-- @nav_hierarchy = [:messages, @message_stream]
+:ruby
+  @nav_hierarchy = [:messages, @message_stream]
 
-%h2 View Message Stream
-.field
-  %label= label_for @message_stream, :id
-  = @message_stream.id
-.field
-  %label= label_for @message_stream, :name
-  = @message_stream.name
-.field
-  %label= label_for @message_stream, :title
-  = @message_stream.title
-.field
-  %label= label_for @message_stream, :created_at
-  = l(@message_stream.created_at)
-.field
-  %label= label_for @message_stream, :updated_at
-  = l(@message_stream.updated_at)
+%h2= t('.title')
 
-%h2 Messages
-%table.admin-table
-  %tr
-    %th Offset
-    %th Title
-    %th Text
-    %th IVR
-    %th SMS
-    %th Actions
-  - @messages.each do |message|
-    %tr{:class => cycle('even', 'odd')}
-      %td= message.offset_days
-      %td= message.title
-      %td.sms-text= message.sms_text
-      %td= message.ivr_code.present? ? 'X' : ''
-      %td= message.sms_text.present? ? 'X' : ''
-      %td.actions #{link_to 'View', [:admin, @message_stream, message]}
+.admin-form
+  .field
+    .label= t('.labels.id')
+    .value= @message_stream.id
+  .field
+    .label= t('.labels.name')
+    .value= @message_stream.name
+  .field
+    .label= t('.labels.title')
+    .value= @message_stream.title
+  .field
+    .label= t('.labels.created_at')
+    .value= l(@message_stream.created_at)
+  .field
+    .label= t('.labels.updated_at')
+    .value= l(@message_stream.updated_at)
+
+%h2= t('.messages_title')
+= render 'admin/messages/table', :messages => @messages
+

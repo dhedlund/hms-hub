@@ -7,3 +7,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+$(function() {
+  // add an asterisk to add required field labels
+  $('.field.required label').append('<span class="asterisk">*<span>')
+
+  // allow clicking on any part of primary nav button to navigate
+  $('#primary-nav li').click(function() {
+    window.location.href = $(this).find('a').attr('href');
+  });
+});

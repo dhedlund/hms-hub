@@ -1,0 +1,18 @@
+-# assumes `jobs` will be passed in
+
+%table.admin-table.jobs
+  %thead
+    %tr
+      %th.id= t('.labels.id')
+      %th.attempts= t('.labels.attempts')
+      %th.run_at= t('.labels.run_at')
+      %th.failed_at= t('.labels.failed_at')
+      %th.actions= t('.labels.actions')
+  %tbody
+    - jobs.each do |job|
+      %tr.job{:class => cycle('even', 'odd')}
+        %td.id= job.id
+        %td.attempts= job.attempts
+        %td.run_at= job.run_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
+        %td.failed_at= job.failed_at.try(:strftime, '%Y-%m-%d %H:%M:%S')
+        %td.actions #{link_to t('.actions.view'), admin_job_path(job)}
