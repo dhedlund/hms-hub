@@ -7,5 +7,6 @@ db/*.sqlite3-journal
 db/seed_data/
 log/*.log
 tmp/
+.ruby-version
 .rvmrc
 *.swp
