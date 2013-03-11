@@ -61,7 +61,8 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
 
   test "GET /api/message_streams contains all expected values" do
     streams = 2.times.map { FactoryGirl.create(:message_stream) }
-    messages = 3.times.map { FactoryGirl.create(:message, :message_stream => streams.first) }
+    messages = 3.times.map { FactoryGirl.create(:message, :message_stream => streams[0]) }
+    FactoryGirl.create(:message, :message_stream => streams[1])
     messages.first.expire_days = 4
 
     get :index, :format => :json

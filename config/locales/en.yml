@@ -28,6 +28,7 @@ en:
         updated_at: "Updated At"
       delivery_attempt: &delivery_attempt_attributes
         id: "ID"
+        notifier: "Notifier"
         notification: "Notification"
         phone_number: "Phone Number"
         delivery_method: "Delivery Method"
@@ -95,6 +96,8 @@ en:
     user_nav:
       app_name: "HMS"
       app_product: "Hub"
+      notifiers:
+        all: "All Notifiers"
       signed_in: "Signed In"
 
     primary_nav:

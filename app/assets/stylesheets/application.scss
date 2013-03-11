@@ -108,18 +108,37 @@ input:focus {
   width: 100%;
   background-color: #222;
   border-bottom: 5px solid #b40f0f;
+  padding: 8px;
   color: #ccc;
 
   .site-title {
-    padding: 10px;
     font-size: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+  }
+
+  .app-name {
+    display: inline;
+    font-weight: bold;
+  }
+
+  .app-product {
+    display: inline;
+  }
+
+  .current-notifier {
+    display: inline;
+    margin-left: 5px;
+    border-left: 2px solid #ccc;
+    padding-left: 15px;
+    font-size: 18px;
+    vertical-align: middle;
   }
 
   .user-logged-in {
     position: absolute;
     top: 10px; right: 10px;
   }
-
 }
 
 #nav-hierarchy {

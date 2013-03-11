@@ -6,9 +6,10 @@
 
 - content_for :content do
   #user-nav
-    .site-title
-      %strong= t('admin.user_nav.app_name')
-      = t('admin.user_nav.app_product')
+    %span.site-title
+      .app-name= t('admin.user_nav.app_name')
+      .app-product= t('admin.user_nav.app_product')
+      .current-notifier= t('admin.user_nav.notifiers.all')
     .user-logged-in #{t('admin.user_nav.signed_in')}: #{@current_user.username}
   #main
     #primary-nav

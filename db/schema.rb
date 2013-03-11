@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130307073153) do
+ActiveRecord::Schema.define(:version => 20130311093104) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20130307073153) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "provider"
+    t.integer  "notifier_id"
   end
 
   add_index "delivery_attempts", ["delivery_method", "created_at"], :name => "idx_delivery_method_created_at"

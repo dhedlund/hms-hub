@@ -50,8 +50,8 @@ class Admin::NotificationsController < AdminController
     %w(
       delivery_method_eq delivery_start_gteq delivery_start_lteq
       delivered_at_gteq delivered_at_lteq delivered_at_null
-      first_name_cont last_error_type_eq phone_number_cont
-      phone_number_eq status_eq
+      first_name_cont last_error_type_eq notifier_id_eq
+      phone_number_cont phone_number_eq status_eq
     )
   end
 

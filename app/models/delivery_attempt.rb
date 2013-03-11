@@ -1,4 +1,5 @@
 class DeliveryAttempt < ActiveRecord::Base
+  belongs_to :notifier
   belongs_to :notification
   belongs_to :message
 
@@ -15,6 +16,7 @@ class DeliveryAttempt < ActiveRecord::Base
   UNSUPPORTED_PROVIDER = 'UNSUPPORTED_PROVIDER'
 
   validates :message_id, :presence => true
+  validates :notifier_id, :presence => true
   validates :phone_number, :presence => true
   validates :delivery_method, :presence => true
   validates :result, :on => :create, :inclusion => VALID_RESULTS, :allow_nil => true
@@ -49,6 +51,8 @@ class DeliveryAttempt < ActiveRecord::Base
   def cache_notification_data
     self.message = notification.try(:message)
     self.message_id = notification.try(:message_id)
+    self.notifier = notification.try(:notifier)
+    self.notifier_id = notification.try(:notifier_id)
     self.phone_number = notification.try(:phone_number)
     self.delivery_method = notification.try(:delivery_method)
   end

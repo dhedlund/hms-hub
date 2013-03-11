@@ -63,6 +63,16 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_equal 'MySearchableFirstName', assigns(:notifications).first.first_name
   end
 
+  test "index should allow searching by notifier_id (eq)" do
+    notifier1, notifier2 = 2.times.map { FactoryGirl.create(:notifier) }
+    2.times { FactoryGirl.create(:notification, :notifier => notifier1) }
+    FactoryGirl.create(:notification, :notifier => notifier2)
+
+    get :index, :notifier_id_eq => notifier1.id
+    assert_response :success
+    assert_equal 2, assigns(:notifications).count
+  end
+
   test "index should allow searching by delivery_method (eq)" do
     2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS') }
     FactoryGirl.create(:notification, :delivery_method => 'IVR')

@@ -1,6 +1,11 @@
 :ruby
   # assumes a `search_params` has been passed in
 
+  notifier_id_eq_options = options_for_select(
+    Notifier.scoped.map {|n| [n.username, n.id] },
+    search_params[:notifier_id_eq]
+  )
+
   delivery_method_eq_options = options_for_select(
     Notification::VALID_DELIVERY_METHODS,
     search_params[:delivery_method_eq]
@@ -29,6 +34,11 @@
     .value
       %span.matcher.cont= t('.matchers.cont')
       = text_field_tag :first_name_cont, search_params[:first_name_cont]
+  .field.notifier
+    .label= label_tag :notifier_id_eq, t('.labels.notifier')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :notifier_id_eq, notifier_id_eq_options, :include_blank => true
   .field.delivery_method
     .label= label_tag :delivery_method_eq, t('.labels.delivery_method')
     .value

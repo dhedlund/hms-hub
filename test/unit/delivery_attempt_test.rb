@@ -44,6 +44,19 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # notifier:
+  #----------
+  test "should be invalid without a notifier_id" do
+    @attempt.notifier_id = nil
+    assert @attempt.invalid?
+    assert @attempt.errors[:notifier_id].any?
+  end
+
+  test "can access notifier from delivery attempt" do
+    assert @attempt.message
+  end
+
+  #----------------------------------------------------------------------------#
   # notification:
   #--------------
   test "should be valid without a notification_id" do
@@ -61,6 +74,14 @@ class DeliveryAttemptTest < ActiveSupport::TestCase
     attempt.notification = notification
     assert_equal notification.message.id, attempt.message.id
     assert_equal notification.message_id, attempt.message_id
+  end
+
+  test "assigning a notification should set notifier and notifier_id" do
+    notification = FactoryGirl.build(:notification)
+    attempt = FactoryGirl.build(:delivery_attempt, :notification => nil)
+    attempt.notification = notification
+    assert_equal notification.notifier.id, attempt.notifier.id
+    assert_equal notification.notifier_id, attempt.notifier_id
   end
 
   test "assigning a notification should set phone_number" do

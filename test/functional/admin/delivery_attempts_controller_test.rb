@@ -45,6 +45,15 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
     assert_equal '20999999443', assigns(:delivery_attempts).first.phone_number
   end
 
+ test "index should allow searching by notifier_id (eq)" do
+    notifications = 3.times.map { FactoryGirl.create(:notification) } # implicitly unique notifier_id
+    notifications.each {|n| FactoryGirl.create(:delivery_attempt, :notification => n) }
+
+    get :index, :notifier_id_eq => notifications.last.notifier_id
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+  end
+
   test "index should allow searching by delivery_method (eq)" do
     2.times { FactoryGirl.create(:delivery_attempt, :delivery_method => 'SMS') }
     FactoryGirl.create(:delivery_attempt, :delivery_method => 'IVR')

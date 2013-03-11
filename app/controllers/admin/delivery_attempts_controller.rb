@@ -24,7 +24,7 @@ class Admin::DeliveryAttemptsController < AdminController
   def allowed_search_params
     %w(
       created_at_gteq created_at_lteq delivery_method_eq error_type_eq
-      phone_number_cont phone_number_eq result_eq
+      notifier_id_eq phone_number_cont phone_number_eq result_eq
     )
   end
 
