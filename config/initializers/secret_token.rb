@@ -6,6 +6,6 @@
 # no regular words or you'll be exposed to dictionary attacks.
 token_file = Rails.root.join('config', 'priv', 'secret_token')
 unless token_file.exist?
-  token_file.open('w') {|f| f.write ActiveSupport::SecureRandom.hex(64) }
+  token_file.open('w') {|f| f.write SecureRandom.hex(64) }
 end
 HmsHub::Application.config.secret_token = token_file.read
