@@ -16,6 +16,14 @@ class Message < ActiveRecord::Base
     stream.messages.find_by_name($2)
   end
 
+  def delivery_method
+    sms_text.present? ? 'SMS' : ivr_code.present? ? 'IVR' : nil
+  end
+
+  def option_title
+    "#{offset_days}: #{title} (#{language})"
+  end
+
   def path
     "#{message_stream.name}/#{name}" if message_stream.name && name
   end

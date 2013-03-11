@@ -20,6 +20,9 @@ class Admin::NotificationsController < AdminController
 
   def new
     @notification = Notification.new
+    @notification[:message_id] = params[:message_id]
+    @notification[:delivery_method] = params[:delivery_method]
+
     respond_with :admin, @notification
   end
 
@@ -33,6 +36,11 @@ class Admin::NotificationsController < AdminController
     @notification.attributes = params[:notification]
     @notification.uuid ||= SecureRandom.uuid
     @notification.delivery_start ||= Time.zone.now
+
+    if @message = @notification.message
+      @notification.delivery_method = @message.delivery_method
+    end
+
     @notification.save
     respond_with :admin, @notification
   end

@@ -19,16 +19,10 @@
       = f.text_field :phone_number
       - if f.object.errors[:phone_number].any?
         .error-msg= f.object.errors[:phone_number].join(', ')
-  .field.delivery_method.required
-    .label= f.label :delivery_method, t('.labels.delivery_method')
-    .value
-      = f.collection_select(:delivery_method, Notification::VALID_DELIVERY_METHODS, :to_s, :to_s, :include_blank => '')
-      - if f.object.errors[:delivery_method].any?
-        .error-msg= f.object.errors[:delivery_method].join(', ')
   .field.message.required
     .label= f.label :message, t('.labels.message')
     .value
-      = f.collection_select(:message_id, Message.all.sort_by(&:path), :id, :path, :include_blank => '')
+      = f.grouped_collection_select(:message_id, MessageStream.all, :messages, :title, :id, :option_title, :include_blank => '')
       - if f.object.errors[:message_id].any?
         .error-msg= f.object.errors[:message_id].join(', ')
 

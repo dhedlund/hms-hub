@@ -218,6 +218,7 @@ en:
           offset_days: "Offset (days)"
           expire_days: "Expires (days)"
           path: "Path"
+        new_notification: "Manually Send Message"
       table:
         labels:
           <<: *message_attributes

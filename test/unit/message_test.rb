@@ -11,6 +11,26 @@ class MessagesTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # delivery_method:
+  #-----------------
+  test "delivery_method should return SMS if an SMS message" do
+    @message.sms_text = 'yay'
+    @message.ivr_code = nil
+    assert 'SMS', @message.delivery_method
+  end
+
+  test "delivery_method should return IVR if an IVR message" do
+    @message.ivr_code = 'foo:bar'
+    @message.sms_text = nil
+    assert 'IVR', @message.delivery_method
+  end
+
+  test "delivery_method should return nil if not known" do
+    @message.sms_text = @message.ivr_code = nil
+    assert_nil @message.delivery_method
+  end
+
+  #----------------------------------------------------------------------------#
   # expire_days:
   #-------------
   test "should be valid without an expire_days" do
@@ -132,6 +152,20 @@ class MessagesTest < ActiveSupport::TestCase
   test "should be valid if offset_days is zero" do
     @message.offset_days = 0
     assert @message.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # option_title:
+  #--------------
+  test "option_title includes option_days, title and language" do
+    @message.offset_days = 17
+    @message.title = "Om nom nom"
+    @message.language = "Latin"
+
+    option_title = @message.option_title
+    assert @message.option_title =~ /17/
+    assert @message.option_title =~ /Om nom nom/
+    assert @message.option_title =~ /Latin/
   end
 
   #----------------------------------------------------------------------------#
