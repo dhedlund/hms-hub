@@ -66,6 +66,8 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.6.1)
     mysql2 (0.3.11)
+    polyamorous (0.5.0)
+      activerecord (~> 3.0)
     polyglot (0.3.3)
     pry (0.9.12)
       coderay (~> 1.0.5)
@@ -98,6 +100,10 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.0.3)
+    ransack (0.7.2)
+      actionpack (~> 3.0)
+      activerecord (~> 3.0)
+      polyamorous (~> 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
     rest-client (1.6.7)
@@ -137,6 +143,7 @@ DEPENDENCIES
   pry-rails
   rabl
   rails (= 3.2.12)
+  ransack
   rest-client
   sass-rails
   sqlite3

@@ -32,4 +32,4 @@
       - if f.object.errors[:message_id].any?
         .error-msg= f.object.errors[:message_id].join(', ')
 
-  .actions= f.submit :value => t(@notification.new_record? ? '.actions.create' : '.actions.save')
+  .buttons= f.submit :value => t(@notification.new_record? ? '.actions.create' : '.actions.save')

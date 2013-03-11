@@ -1,0 +1,50 @@
+:ruby
+  # assumes a `search_params` has been passed in
+
+  delivery_method_eq_options = options_for_select(
+    Notification::VALID_DELIVERY_METHODS,
+    search_params[:delivery_method_eq]
+  )
+
+  result_eq_options = options_for_select(
+    DeliveryAttempt::VALID_RESULTS,
+    search_params[:result_eq]
+  )
+
+  error_type_eq_options = options_for_select(
+    DeliveryAttempt.order(:error_type).pluck('distinct error_type').select(&:present?),
+    search_params[:error_type_eq]
+  )
+
+
+%h2= t('.title')
+%form.admin-form.search-filters
+  .field.phone_number
+    .label= label_tag :phone_number_cont, t('.labels.phone_number')
+    .value
+      %span.matcher.cont= t('.matchers.cont')
+      = text_field_tag :phone_number_cont, @search_params[:phone_number_cont]
+  .field.delivery_method
+    .label= label_tag :delivery_method_eq, t('.labels.delivery_method')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :delivery_method_eq, delivery_method_eq_options, :include_blank => true
+  .field.result
+    .label= label_tag :result_eq, t('.labels.result')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :result_eq, result_eq_options, :include_blank => true
+  .field.error_type
+    .label= label_tag :error_type_eq, t('.labels.error_type')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :error_type_eq, error_type_eq_options, :include_blank => true
+  .field.created_at
+    .label= label_tag :created_at_gteq, t('.labels.created_at')
+    .value
+      %span.matcher.between= t('.matchers.between')
+      = text_field_tag :created_at_gteq, search_params[:created_at_gteq], :type => 'date', :placeholder => 'YYYY-MM-DD' 
+      %span.matcher.between_sep= t('.matchers.between_sep')
+      = text_field_tag :created_at_lteq, search_params[:created_at_lteq], :type => 'date', :placeholder => 'YYYY-MM-DD'
+
+  .actions= submit_tag :filter_search, :name => :filter_search, :value => t('.submit')

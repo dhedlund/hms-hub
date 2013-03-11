@@ -1,0 +1,64 @@
+:ruby
+  # assumes a `search_params` has been passed in
+
+  delivery_method_eq_options = options_for_select(
+    Notification::VALID_DELIVERY_METHODS,
+    search_params[:delivery_method_eq]
+  )
+
+  status_eq_options = options_for_select(
+    Notification::VALID_STATUSES,
+    search_params[:status_eq]
+  )
+
+  last_error_type_eq_options = options_for_select(
+    Notification.order(:last_error_type).pluck('distinct last_error_type').select(&:present?),
+    search_params[:last_error_type_eq]
+  )
+
+
+%h2= t('.title')
+%form.admin-form.search-filters
+  .field.phone_number
+    .label= label_tag :phone_number_cont, t('.labels.phone_number')
+    .value
+      %span.matcher.cont= t('.matchers.cont')
+      = text_field_tag :phone_number_cont, search_params[:phone_number_cont]
+  .field.first_name
+    .label= label_tag :first_name_cont, t('.labels.first_name')
+    .value
+      %span.matcher.cont= t('.matchers.cont')
+      = text_field_tag :first_name_cont, search_params[:first_name_cont]
+  .field.delivery_method
+    .label= label_tag :delivery_method_eq, t('.labels.delivery_method')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :delivery_method_eq, delivery_method_eq_options, :include_blank => true
+  .field.status
+    .label= label_tag :status_eq, t('.labels.status')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :status_eq, status_eq_options, :include_blank => true
+  .field.last_error_type
+    .label= label_tag :last_error_type_eq, t('.labels.last_error_type')
+    .value
+      %span.matcher.eq= t('.matchers.eq')
+      = select_tag :last_error_type_eq, last_error_type_eq_options, :include_blank => true
+  .field.delivery_start
+    .label= label_tag :delivery_start_gteq, t('.labels.delivery_start')
+    .value
+      %span.matcher.between= t('.matchers.between')
+      = text_field_tag :delivery_start_gteq, search_params[:delivery_start_gteq], :type => 'date', :placeholder => 'YYYY-MM-DD'
+      %span.matcher.between_sep= t('.matchers.between_sep')
+      = text_field_tag :delivery_start_lteq, search_params[:delivery_start_lteq], :type => 'date', :placeholder => 'YYYY-MM-DD'
+  .field.delivered_at
+    .label= label_tag :delivered_at_gteq, t('.labels.delivered_at')
+    .value
+      %span.matcher.between= t('.matchers.between')
+      = text_field_tag :delivered_at_gteq, search_params[:delivered_at_gteq], :type => 'date', :placeholder => 'YYYY-MM-DD'
+      %span.matcher.between_sep= t('.matchers.between_sep')
+      = text_field_tag :delivered_at_lteq, search_params[:delivered_at_lteq], :type => 'date', :placeholder => 'YYYY-MM-DD'
+      = check_box_tag :delivered_at_null, '1', search_params[:delivered_at_null]
+      %span.matcher.never_delivered= t('.matchers.never_delivered')
+
+  .buttons= submit_tag :filter_search, :name => :filter_search, :value => t('.submit')

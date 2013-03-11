@@ -10,6 +10,7 @@ gem 'rest-client' # nexmo and intellivr delivery providers
 gem 'haml'
 gem 'rabl'
 gem 'kaminari'
+gem 'ransack'
 
 group :assets do
   gem 'sass-rails'

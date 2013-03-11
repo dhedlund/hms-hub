@@ -12,15 +12,18 @@ body {
   line-height: 18px;
   font-size: 12px;
   font-family: Arial;
+  color: #000;
 }
 
 h1, h2 {
   margin: 10px 0px 5px 0px;
   font-weight: bold;
+  clear: left;
 }
 
 h1 { font-size: 20px; }
 h2 { font-size: 18px; }
+h3 { font-size: 16px; }
 
 a:link, a:visited, a:active {
   text-decoration: none;
@@ -140,6 +143,28 @@ input:focus {
     font-family: Arial;
     font-size: 14px;
     border: 2px solid #ccc;
+    background-color: #fff;
+    color: #000;
+  }
+
+  .show-search-filters, .hide-search-filters {
+    text-align: right;
+    font-style: italic;
+    margin-right: 4px;
+  }
+
+  .hide-search-filters {
+    margin-top: 15px;
+  }
+}
+
+.search-filters {
+  margin-left: 20px;
+  border-left: 5px solid #444;
+  padding: 5px 0px 10px 20px;
+
+  .matcher {
+    margin-right: 8px;
   }
 }
 
@@ -190,9 +215,15 @@ div.actions { /* action links outside of an admin table */
 
 .admin-form {
   margin-bottom: 30px;
+  clear: both;
 
-  input[type="text"], input[type="password"] {
-    width: 200px;
+  input {
+    margin-right: 8px;
+    background-color: #fff;
+    color: #000;
+  }
+
+  input[type="text"], input[type="password"], input[type="date"], select {
     padding: 2px 6px;
     line-height: 1.4em;
     font-family: Arial;
@@ -200,14 +231,19 @@ div.actions { /* action links outside of an admin table */
     border: 1px solid #ccc;
   }
 
+  input[type="text"], input[type="password"] {
+    width: 200px;
+  }
+
   input[type="submit"] {
     margin: 0px;
     padding: 4px 6px;
     font-size: 14px;
     letter-spacing: 1px;
+    background-color: #ddd;
   }
 
-  .field, .actions {
+  .field, .buttons {
     clear: left;
     border-top: 1px dashed #ccc;
     padding: 10px 0px 10px 180px;
@@ -218,6 +254,11 @@ div.actions { /* action links outside of an admin table */
       width: 160px;
       margin-left: -180px;
       font-weight: bold;
+
+      label {
+        display: block;
+        margin-top: 4px;
+      }
     }
 
     .error-msg {

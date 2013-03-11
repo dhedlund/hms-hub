@@ -20,4 +20,4 @@
       - if f.object.errors[:timezone].any?
         .error-msg= f.object.errors[:timezone].join(', ')
 
-  .actions= f.submit :value => t(@notifier.new_record? ? '.actions.create' : '.actions.save')
+  .buttons= f.submit :value => t(@notifier.new_record? ? '.actions.create' : '.actions.save')

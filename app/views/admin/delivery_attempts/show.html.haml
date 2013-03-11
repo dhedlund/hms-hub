@@ -17,7 +17,7 @@
     .value= link_to @delivery_attempt.message.path, [:admin, @message.message_stream, @message]
   .field
     .label= t('.labels.phone_number')
-    .value= link_to @delivery_attempt.phone_number, admin_notifications_path(:phone_number => @delivery_attempt.phone_number)
+    .value= link_to @delivery_attempt.phone_number, admin_delivery_attempts_path(:phone_number_eq => @delivery_attempt.phone_number)
   .field
     .label= t('.labels.delivery_method')
     .value= @delivery_attempt.delivery_method

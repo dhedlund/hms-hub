@@ -18,7 +18,7 @@
     .value= link_to @message.path, [:admin, @message.message_stream, @message]
   .field
     .label= t('.labels.phone_number')
-    .value= link_to @notification.phone_number, admin_notifications_path(:phone_number => @notification.phone_number)
+    .value= link_to @notification.phone_number, admin_notifications_path(:phone_number_eq => @notification.phone_number)
   .field
     .label= t('.labels.first_name')
     .value= @notification.first_name

@@ -36,7 +36,7 @@ en:
         result: "Result"
         error_type: "Error Type"
         error_msg: "Error Message"
-        created_at: "Created At"
+        created_at: "Date Attempted"
         updated_at: "Updated At"
       message: &message_attributes
         id: "ID"
@@ -95,7 +95,7 @@ en:
     user_nav:
       app_name: "HMS"
       app_product: "Hub"
-      signed_in: "Signed In:"
+      signed_in: "Signed In"
 
     primary_nav:
       dashboard: "Dashboard"
@@ -114,6 +114,15 @@ en:
         new: "New"
         create: "Create"
         save: "Save"
+      search_filters: &search_filters
+        show: "more search options"
+        hide: "less search options"
+        matchers: &search_filter_matchers
+          cont: "Contains"
+          eq: "Equals"
+          between: "Between"
+          between_sep: "and / or"
+        submit: "Search"
     dashboard:
       notifications_breakdown:
         last_24: "Last 24 Hours"
@@ -128,6 +137,11 @@ en:
         title: "Delivery Attempts"
         search_title: "Delivery Attempts for \"%{phone_number}\""
         search_placeholder: "Search: Phone #"
+      search_filters:
+        <<: *search_filters
+        title: "Delivery Attempt Search Filters"
+        labels:
+          <<: *delivery_attempt_attributes
       show:
         title: "View Delivery Attempt"
         labels:
@@ -226,10 +240,17 @@ en:
           create: "Create Notification"
       index:
         title: "Notifications"
-        search_title: "Notifications for \"%{phone_number}\""
         search_placeholder: "Search: Phone #"
       new:
         title: "New Notification"
+      search_filters:
+        <<: *search_filters
+        title: "Notification Search Filters"
+        labels:
+          <<: *notification_attributes
+        matchers:
+          <<: *search_filter_matchers
+          never_delivered: "Never Delivered"
       show:
         title: "View Notification"
         delivery_attempts_title: "Delivery Attempts"

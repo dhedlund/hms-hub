@@ -2,14 +2,9 @@ class Admin::NotificationsController < AdminController
   respond_to :html, :json, :js
 
   def index
-    @notifications = Notification.order('delivery_start DESC').page(params[:page])
-
-    if params[:phone_number]
-      @phone_number = phone_normalize(params[:phone_number])
-      @notifications = @notifications.where('phone_number LIKE :phone_number',
-        :phone_number => "%#{@phone_number}%"
-      )
-    end
+    @search_params = params.slice(*allowed_search_params)
+    @notifications = search(Notification, @search_params)
+    @notifications = @notifications.order('delivery_start DESC').page(params[:page])
 
     respond_with @notifications
   end
@@ -46,6 +41,18 @@ class Admin::NotificationsController < AdminController
     @notification = Notification.find(params[:id])
     @notification.update_attributes(params[:notification])
     respond_with :admin, @notification
+  end
+
+
+  private
+
+  def allowed_search_params
+    %w(
+      delivery_method_eq delivery_start_gteq delivery_start_lteq
+      delivered_at_gteq delivered_at_lteq delivered_at_null
+      first_name_cont last_error_type_eq phone_number_cont
+      phone_number_eq status_eq
+    )
   end
 
 end

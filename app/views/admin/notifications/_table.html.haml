@@ -6,7 +6,7 @@
       %th.id= t('.labels.id')
       %th.notifier= t('.labels.notifier')
       %th.delivery_method=  t('.labels.delivery_method')
-      %th.message= t('.labels.message')
+      %th.message= t('.labels.phone_number')
       %th.delivery_start= t('.labels.delivery_start')
       %th.status= t('.labels.status')
       %th.delivered_at= t('.labels.delivered_at')
@@ -17,7 +17,7 @@
         %td= notification.id
         %td= link_to(notification.notifier.username, admin_notifier_path(notification.notifier_id))    
         %td= notification.delivery_method
-        %td= link_to(notification.message_id, [:admin, @message_stream, notification.message])
+        %td= link_to(notification.phone_number, :phone_number_eq => notification.phone_number)
         %td= notification.delivery_start.try(:strftime, '%Y-%m-%d')
         %td= notification.status
         %td= notification.delivered_at.try(:strftime, '%Y-%m-%d')

@@ -6,6 +6,7 @@
       %th.id= t('.labels.id')
       %th.notification= t('.labels.notification')
       %th.delivery_method= t('.labels.delivery_method')
+      %th.phone_number= t('.labels.phone_number')
       %th.age= t('.labels.age')
       %th.result= t('.labels.result')
       %th.error_type= t('.labels.error_type')
@@ -16,6 +17,7 @@
         %td.id= attempt.id
         %td.notification= link_to(attempt.notification_id, admin_notification_path(attempt.notification))
         %td.delivery_method= attempt.delivery_method
+        %td= link_to(attempt.phone_number, :phone_number_eq => attempt.phone_number)
         %td.age= time_ago_in_words(attempt.created_at)
         %td.result= attempt.result
         %td.error_type= attempt.error_type

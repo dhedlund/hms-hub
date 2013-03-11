@@ -21,6 +21,67 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
     assert_equal 4, json_response.count
   end
 
+  test "index should ignore searches against unsupported matchers" do
+    2.times { FactoryGirl.create(:delivery_attempt, :delivery_method => 'SMS') }
+    FactoryGirl.create(:delivery_attempt, :delivery_method => 'IVR')
+
+    get :index, :delivery_method_cont => 'VR'
+    assert_response :success
+    assert_equal 3, assigns(:delivery_attempts).count
+  end
+
+  test "index should allow searching by phone number (eq and cont)" do
+    2.times { FactoryGirl.create(:delivery_attempt) }
+    FactoryGirl.create(:delivery_attempt, :phone_number => '20999999443')
+
+    get :index, :phone_number_eq => '20999999443'
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+    assert_equal '20999999443', assigns(:delivery_attempts).first.phone_number
+
+    get :index, :phone_number_cont => '0999-99x94 4' # should get normalized
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+    assert_equal '20999999443', assigns(:delivery_attempts).first.phone_number
+  end
+
+  test "index should allow searching by delivery_method (eq)" do
+    2.times { FactoryGirl.create(:delivery_attempt, :delivery_method => 'SMS') }
+    FactoryGirl.create(:delivery_attempt, :delivery_method => 'IVR')
+
+    get :index, :delivery_method_eq => 'SMS'
+    assert_response :success
+    assert_equal 2, assigns(:delivery_attempts).count
+  end
+
+  test "index should allow searching by result (eq)" do
+    2.times { FactoryGirl.create(:delivery_attempt, :result => 'PERM_FAIL') }
+    FactoryGirl.create(:delivery_attempt, :result => 'DELIVERED')
+
+    get :index, :result_eq => 'DELIVERED'
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+  end
+
+  test "index should allow searching by created at date (gteq, lteq)" do
+    FactoryGirl.create(:delivery_attempt, :created_at => '2013-02-06 13:00:00')
+    FactoryGirl.create(:delivery_attempt, :created_at => '2013-02-07 17:00:00')
+    FactoryGirl.create(:delivery_attempt, :created_at => '2013-02-08 21:00:00')
+
+    get :index, :created_at_gteq => '2013-02-07'
+    assert_response :success
+    assert_equal 2, assigns(:delivery_attempts).count
+
+    # end date should be inclusive (created_at is a datetime)
+    get :index, :created_at_lteq => '2013-02-06'
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+
+    get :index, :created_at_gteq => '2013-02-07', :created_at_lteq => '2013-02-07'
+    assert_response :success
+    assert_equal 1, assigns(:delivery_attempts).count
+  end
+
   test "show should return a delivery_attempt (HTML)" do
     attempt = FactoryGirl.create(:delivery_attempt)
 

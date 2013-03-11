@@ -31,11 +31,34 @@ class AdminController < ApplicationController
     @current_user
   end
 
-  def phone_normalize(phone_number)
-    phone_number.to_s.gsub(/[^\d]/,'').gsub(/^0/,'265')
-  end
 
   protected
+
+  def search(scope, search_params)
+    # don't change search_params outside of scope, might change form values
+    search_params = search_params.dup
+
+    # datetime fields are problematic if presented to user as a date, due
+    # to the expectation that the end date is inclusive.  try to compensate
+    dt_columns = scope.columns.select {|c| c.type == :datetime }.map(&:name)
+    dt_columns.map {|c| ["#{c}_lt", "#{c}_lteq"]}.flatten.each do |param|
+      if search_params[param] =~ /\A(\d{4}-\d{2}-\d{2})\Z/
+        inclusive_date = ($1.to_date + 1.day).strftime('%Y-%m-%d') rescue nil
+        search_params[param] = inclusive_date
+      end
+    end
+
+    # phone numbers are stored in a normalized form (just numbers)
+    phone_params = search_params.slice('phone_number_eq', 'phone_number_cont')
+    phone_params.select {|p,v| v.present? }.each do |param,value|
+      # TODO: move regexp/logic to configuration so other users
+      # and/or notifiers can customize normalization process
+      search_params[param] = value.gsub(/^0|[^\d]/, '')
+    end
+
+    scope.search(search_params).result
+  end
+
 
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|

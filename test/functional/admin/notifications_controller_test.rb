@@ -29,6 +29,116 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_equal 4, json_response.count
   end
 
+  test "index should ignore searches against unsupported matchers" do
+    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS') }
+    FactoryGirl.create(:notification, :delivery_method => 'IVR')
+
+    get :index, :delivery_method_cont => 'VR'
+    assert_response :success
+    assert_equal 3, assigns(:notifications).count
+  end
+
+  test "index should allow searching by phone number (eq and cont)" do
+    2.times { FactoryGirl.create(:notification) }
+    FactoryGirl.create(:notification, :phone_number => '20999999443')
+
+    get :index, :phone_number_eq => '20999999443'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+    assert_equal '20999999443', assigns(:notifications).first.phone_number
+
+    get :index, :phone_number_cont => '0999-99x94 4' # should get normalized
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+    assert_equal '20999999443', assigns(:notifications).first.phone_number
+  end
+
+  test "index should allow searching by first name (cont)" do
+    FactoryGirl.create(:notification, :first_name => 'MySearchableFirstName')
+    2.times { FactoryGirl.create(:notification) }
+
+    get :index, :first_name_cont => 'SearchableFirst'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+    assert_equal 'MySearchableFirstName', assigns(:notifications).first.first_name
+  end
+
+  test "index should allow searching by delivery_method (eq)" do
+    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS') }
+    FactoryGirl.create(:notification, :delivery_method => 'IVR')
+
+    get :index, :delivery_method_eq => 'SMS'
+    assert_response :success
+    assert_equal 2, assigns(:notifications).count
+  end
+
+  test "index should allow searching by status (eq)" do
+    2.times { FactoryGirl.create(:notification, :status => 'NEW') }
+    FactoryGirl.create(:notification, :status => 'DELIVERED')
+
+    get :index, :status_eq => 'DELIVERED'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+  end
+
+  test "index should allow searching by last error type (eq)" do
+    2.times { FactoryGirl.create(:notification, :last_error_type => 'REMOTE_ERROR') }
+    FactoryGirl.create(:notification, :last_error_type => 'REMOTE_TIMEOUT')
+
+    get :index, :last_error_type_eq => 'REMOTE_ERROR'
+    assert_response :success
+    assert_equal 2, assigns(:notifications).count
+  end
+
+  test "index should allow searching by delivery start date (gteq, lteq)" do
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-06 13:00:00')
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-07 17:00:00')
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-08 21:00:00')
+
+    get :index, :delivery_start_gteq => '2013-02-07'
+    assert_response :success
+    assert_equal 2, assigns(:notifications).count
+
+    # end date should be inclusive (delivery_start is a datetime)
+    get :index, :delivery_start_lteq => '2013-02-06'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+
+    get :index, :delivery_start_gteq => '2013-02-07', :delivery_start_lteq => '2013-02-07'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+  end
+
+  test "index should allow searching by delivered at date (gteq, lteq)" do
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-06 13:00:00')
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-07 17:00:00')
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00')
+    FactoryGirl.create(:notification, :delivered_at => nil)
+
+    get :index, :delivered_at_gteq => '2013-02-07'
+    assert_response :success
+    assert_equal 2, assigns(:notifications).count
+
+    # end date should be inclusive (delivered_at is a datetime)
+    get :index, :delivered_at_lteq => '2013-02-06'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+
+    get :index, :delivered_at_gteq => '2013-02-07', :delivered_at_lteq => '2013-02-07'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+  end
+
+  test "index should allow searching for non-delivered notifications (null)" do
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00')
+    FactoryGirl.create(:notification, :delivered_at => nil)
+
+    get :index, :delivered_at_null => '1'
+    assert_response :success
+    assert_equal 1, assigns(:notifications).count
+    assert_nil assigns(:notifications).first.delivered_at
+  end
+
   test "show should return a notification (HTML)" do
     notification = FactoryGirl.create(:notification)
 

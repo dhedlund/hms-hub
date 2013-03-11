@@ -3,7 +3,9 @@ class Delivery::Provider::Dummy
   end
 
   def deliver(attempt)
-    attempt.update_attributes({ :result => DeliveryAttempt::DELIVERED })
+    unless attempt.result
+      attempt.update_attributes(:result => DeliveryAttempt::DELIVERED)
+    end
     true
   end
 
