@@ -24,19 +24,19 @@ module AdminHelper
         title = t("admin.primary_nav.#{node}", :default => [:"admin.common.actions.#{node}"])
         paths[node] ? link_to(title, paths[node]) : title
       when MessageStream
-        link_to("#{node.class.model_name.human}: #{node.title}", [:admin, node])
+        link_to("#{t('activerecord.models.message_stream')}: #{node.title}", [:admin, node])
       when Message
-        link_to("#{node.class.model_name.human}: #{node.title}", [:admin, node.message_stream, node])
+        link_to("#{t('activerecord.models.message')}: #{node.title}", [:admin, node.message_stream, node])
       when Notifier
-        link_to("#{node.class.model_name.human}: #{node.username}", [:admin, node])
+        link_to("#{t('activerecord.models.notifier')}: #{node.username}", [:admin, node])
       when Notification
-        link_to("#{node.class.model_name.human}: #{node.id}", [:admin, node])
+        link_to("#{t('activerecord.models.notification')}: #{node.id}", [:admin, node])
       when Delayed::Job
-        link_to("#{node.class.model_name.human}: #{node.id}", admin_job_path(node))
+        link_to("#{t('activerecord.models.delayed_job')}: #{node.id}", admin_job_path(node))
       when DeliveryAttempt
-        link_to("#{node.class.model_name.human}: #{node.id}", [:admin, node])
+        link_to("#{t('activerecord.models.delivery_attempt')}: #{node.id}", [:admin, node])
       when User
-        link_to("#{node.class.model_name.human}: #{node.username}", [:admin, node])
+        link_to("#{t('activerecord.models.user')}: #{node.username}", [:admin, node])
       else
         node
       end

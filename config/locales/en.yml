@@ -89,6 +89,14 @@ en:
         created_at: "Created At"
         updated_at: "Updated At"
 
+  views:
+    pagination:
+      truncate: "…"
+      first: "« First"
+      previous: "‹ Prev"
+      next: "Next ›"
+      last: "Last »"
+
   admin:
     site_title: "HMS Hub"
     footer: "Unauthorized access prohibited."

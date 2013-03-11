@@ -10,6 +10,15 @@ class UserTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # locale:
+  #--------
+  test "should be invalid without a locale" do
+    @user.locale = nil
+    assert @user.invalid?
+    assert @user.errors[:locale]
+  end
+
+  #----------------------------------------------------------------------------#
   # password:
   #----------
   test "should be invalid without a password" do

@@ -88,4 +88,29 @@ class AdminControllerTest < ActionController::TestCase
     end
   end
 
+  #----------------------------------------------------------------------------#
+  # locales/translations:
+  #----------------------
+  test "should use user-defined locale if available" do
+    user = FactoryGirl.create(:user, :locale => 'en')
+    with_valid_user_creds user do
+      get :index
+      assert_equal 'en', assigns(:i18n_defaults)['locale']
+    end
+
+    user = FactoryGirl.create(:user, :locale => 'test')
+    with_valid_user_creds user do
+      get :index
+      assert_equal 'test', assigns(:i18n_defaults)['locale']
+    end
+  end
+
+  test "can override locale via a query parameter" do
+    user = FactoryGirl.create(:user, :locale => 'en')
+    with_valid_user_creds user do
+      get :index, :locale => 'test'
+      assert_equal 'test', assigns(:i18n_defaults)['locale']
+    end
+  end
+
 end

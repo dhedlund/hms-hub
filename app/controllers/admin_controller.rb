@@ -73,8 +73,13 @@ class AdminController < ApplicationController
   end
 
   def setup_i18n
+    locale = params[:locale].present? ? params[:locale] : nil
+    locale ||= @current_user.locale if @current_user
+    locale ||= 'en'
+
     @i18n_defaults = {
-      :raise => true,
+      :locale => locale,
+      :raise  => true,
     }
   end
 
