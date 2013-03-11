@@ -59,6 +59,35 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
     assert_nothing_raised { JSON::Schema.validate(json_response, schema) }
   end
 
+  test "GET /api/message_streams returns streams in name order" do
+    streams = %w(n1 n4 n2 n3).map {|n| FactoryGirl.create(:message_stream, :name => n) }
+    streams.map {|s| FactoryGirl.create(:message, :message_stream => s) }
+
+    get :index, :format => :json
+
+    names = json_response.map {|o| o['message_stream']['name'] }
+    assert_equal %w(n1 n2 n3 n4), names
+  end
+
+  test "GET /api/message_streams returns messages in offset_days, name order" do
+    stream = FactoryGirl.create(:message_stream)
+    [[2, 'n4'], [2, 'n2'], [2, 'n8'], [0, 'n1'], [9, 'n3']].map do |offset_days,name|
+      FactoryGirl.create(:message,
+        :message_stream => stream,
+        :name => name,
+        :offset_days => offset_days
+      )
+    end
+
+    get :index, :format => :json
+
+    messages = json_response[0]['message_stream']['messages'].map {|o| o['message'] }
+    actual = messages.map {|m| [m['offset_days'], m['name']] }
+
+    expected = [[0, 'n1'], [2, 'n2'], [2, 'n4'], [2, 'n8'], [9, 'n3']]
+    assert_equal expected, actual
+  end
+
   test "GET /api/message_streams contains all expected values" do
     streams = 2.times.map { FactoryGirl.create(:message_stream) }
     messages = 3.times.map { FactoryGirl.create(:message, :message_stream => streams[0]) }
@@ -67,7 +96,7 @@ class Api::MessageStreamsControllerTest < ActionController::TestCase
 
     get :index, :format => :json
 
-    data = streams.map { |stream| {
+    data = streams.sort_by(&:name).map { |stream| {
       'message_stream' => {
         'name' => stream.name,
         'title' => stream.title,

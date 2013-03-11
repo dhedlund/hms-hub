@@ -21,6 +21,21 @@ class MessageStreamTest < ActiveSupport::TestCase
     end
   end
 
+  test "messages should be ordered by offset_days then by name" do
+    @stream.save!
+    [[2, 'n4'], [2, 'n2'], [2, 'n8'], [0, 'n1'], [9, 'n3']].map do |offset_days,name|
+      FactoryGirl.create(:message,
+        :message_stream => @stream,
+        :name => name,
+        :offset_days => offset_days
+      )
+    end
+
+    actual = @stream.messages.map {|m| [m.offset_days, m.name] }
+    expected = [[0, 'n1'], [2, 'n2'], [2, 'n4'], [2, 'n8'], [9, 'n3']]
+    assert_equal expected, actual
+  end
+
   #----------------------------------------------------------------------------#
   # name:
   #------
