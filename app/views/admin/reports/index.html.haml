@@ -3,14 +3,25 @@
 
 %h2= t('.title')
 
-- @report_dirs.keys.sort.each do |dir|
-  %table.admin-table.reports
-    %thead
-      %tr
-        %th.filename= dir + '/'
-    %tbody
-      - @report_dirs[dir].each do |filename|
-        %tr.report{:class => cycle('even', 'odd')}
-          %td.filename= link_to filename, admin_reports_download_path([dir,filename].join('/'))
+.report-dir-trees
 
-= t('.no_files') if @report_dirs.blank?
+:javascript
+  $(function() {
+    var $elem = $('.report-dir-trees')
+    var $tree = $elem.tree({
+      data: #{@dir_trees.to_json.html_safe},
+      autoOpen: 0,
+      selectable: true,
+      onCanSelectNode: function(node) {
+        return node.children.length == 0
+      },
+    });
+
+    // open newest folder for each notifier directory
+    $tree.find('.jqtree-folder').find('.jqtree-folder.jqtree-closed:first').removeClass('jqtree-closed');
+
+    var baseUrl = window.location.pathname;
+    $tree.bind('tree.select', function(event) {
+      if (event.node.id) { window.location = baseUrl + event.node.id; };
+    });
+  });

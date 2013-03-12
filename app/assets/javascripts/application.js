@@ -6,6 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require tree.jquery
 //= require_tree .
 
 $(function() {

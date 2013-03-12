@@ -21,7 +21,7 @@ HmsHub::Application.routes.draw do
     resources :users, :only => [:index, :show]
 
     get 'reports'       => 'reports#index'
-    get 'reports/*path' => 'reports#download', :as => 'reports_download'
+    get 'reports/*path' => 'reports#download', :as => 'reports_download', :format => false
   end
 
   match 'api/*url' => 'api#not_found'

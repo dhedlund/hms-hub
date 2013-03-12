@@ -3,6 +3,7 @@
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require reset
+ *= require jqtree
  *= require_self
  *= require_tree . 
 */
@@ -352,5 +353,15 @@ div.actions { /* action links outside of an admin table */
       th.total, td.total {font-weight: bold;}
     }
     
+  }
+}
+
+.report-dir-trees {
+  margin-left: 20px;
+
+  .jqtree-selected div {
+    display: inline;
+    background: none !important;
+    border-bottom: 1px dotted #444;
   }
 }
