@@ -15,6 +15,7 @@ gem 'ransack'
 group :assets do
   gem 'sass-rails'
   gem 'jquery-rails'
+  gem 'jqtree-rails'
 end
 
 group :development, :test do
