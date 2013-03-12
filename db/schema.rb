@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "queue"
   end
 
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "result"
     t.string   "error_type"
     t.text     "error_msg"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "provider"
     t.integer  "notifier_id"
   end
@@ -57,15 +57,15 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "status"
     t.datetime "connect_at"
     t.datetime "disconnect_at"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "message_streams", :force => true do |t|
     t.string   "name"
     t.string   "title"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "message_streams", ["name"], :name => "index_message_streams_on_name", :unique => true
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "sms_text"
     t.string   "ivr_code"
     t.integer  "offset_days"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "title"
     t.string   "language"
     t.integer  "expire_days"
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "to_msisdn"
     t.string   "mo_tag"
     t.text     "text"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "nexmo_inbound_messages", ["ext_message_id"], :name => "index_nexmo_inbound_messages_on_ext_message_id", :unique => true
@@ -106,8 +106,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "mo_tag"
     t.string   "status"
     t.string   "scts"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "nexmo_outbound_messages", ["delivery_attempt_id"], :name => "index_nexmo_outbound_messages_on_delivery_attempt_id"
@@ -127,8 +127,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "last_error_type"
     t.text     "last_error_msg"
     t.datetime "last_run_at"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.datetime "delivered_at"
     t.text     "variables"
   end
@@ -142,8 +142,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "timezone"
     t.datetime "last_login_at"
     t.datetime "last_status_req_at"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "notifiers", ["username"], :name => "index_notifiers_on_username", :unique => true
@@ -152,8 +152,8 @@ ActiveRecord::Schema.define(:version => 20130311130836) do
     t.string   "username"
     t.string   "password"
     t.string   "timezone"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "locale",     :default => "en"
   end
 

@@ -43,4 +43,15 @@ module AdminHelper
     end
   end
 
+
+  def status_hours_ago_to_class(hrs)
+    if hrs < 24
+      'status-ok'
+    elsif hrs < 48
+      'status-warn'
+    else
+      'status-bad'
+    end
+  end
+
 end

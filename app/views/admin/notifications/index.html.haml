@@ -11,7 +11,7 @@
     = text_field_tag :phone_number_cont, @search_params[:phone_number_cont], :placeholder => t('.search_placeholder')
     .show-search-filters= link_to t('admin.common.search_filters.show'), @search_params.merge(:filter_search => 1)
 
-%h2= t('.title')
+%h2= @notifications_count.to_s + " " + t('.title')
 
 #paginator= paginate @notifications
 = render 'table', :notifications => @notifications

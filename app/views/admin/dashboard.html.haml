@@ -1,25 +1,45 @@
 - @nav_hierarchy = [:dashboard]
-
-.dashboard-breakdown
-  %h2= t('.notifications_breakdown.last_24')
-  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:day]}
-  %div
-    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:day]} /
-    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:day]}
-
-.dashboard-breakdown
-  %h2= t('.notifications_breakdown.last_week')
-  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:week]}
-  %div
-    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:week]} /
-    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:week]}
-
-.dashboard-breakdown
-  %h2= t('.notifications_breakdown.last_month')
-  %div #{t('.notifications_breakdown.total')}: #{@notification_cnt[:month]}
-  %div
-    #{t('.notifications_breakdown.delivered')}: #{@delivered_cnt[:month]} /
-    #{t('.notifications_breakdown.failed')}: #{@failed_cnt[:month]}
-
-%h2= t('.failed_notifications_title')
-= render 'admin/notifications/table', :notifications => @failed_notifications
+.dashboard
+  %h1= t('.title')
+  -@notifier_ids_by_code.each do |notifier_code, notifier_id|
+    - url_vars = {:filter_search=>1, :notifier_id_eq=>notifier_id}
+    .notifier
+      %h2= link_to( t('.notifications_for')+t('.notifier_labels.'+notifier_code), admin_notifications_path(url_vars) )
+      .sync_status
+        %h3= t('.connection_status.connection_status')
+        - hours_ago = @status[notifier_code]['last_notif_hours_ago']
+        .last_notif{:class=>status_hours_ago_to_class(hours_ago)} 
+          =t('.connection_status.last_notif_sync')+ ": "
+          #{@status[notifier_code]['last_notif_sync']} (#{hours_ago} #{t('.hours_ago')})
+        .last_report
+          =t('.connection_status.last_report_sync') + ": "
+          #{@status[notifier_code]['last_report_sync']}
+      -@delivery_methods.each do |method|
+        - url_vars[:delivery_method_eq] = method
+        %h3.method= link_to( t('.delivery_methods.'+method), admin_notifications_path(url_vars) )
+        %table
+          %thead
+            %tr
+              %th.nobottom
+              -@date_range_codes.each do |range_code|
+                %th.date_range.nobottom= t('.date_ranges.'+range_code)
+            %tr
+              %th.status= t('.notif_counts.status')
+              -@date_range_codes.each do |range_code|
+                %td= @date_range_data[range_code]['label']
+          %tbody
+            -@status_codes.each do |status|
+              - url_vars[:status_eq] = status
+              %tr
+                %td.status= t('.notif_counts.status_codes.'+status)
+                -@date_range_data.each do |range_code, range_data|
+                  - url_vars_with_dates = url_vars.merge( range_data['url_vars'] )
+                  - count = range_data['notif_counts'][ [notifier_id, method, status] ].try(&:to_s)
+                  %td.count= link_to(count || "??", admin_notifications_path(url_vars_with_dates))
+            %tr
+              %td.status.total= t('.notif_counts.status_codes.total')
+              -@date_range_data.each do |range_code, range_data|
+                - url_vars_with_dates_not_status = url_vars.merge( range_data['url_vars'] ).except(:status_eq)
+                - count = range_data['notif_counts'][ [notifier_id, method] ].try(&:to_s)
+                %td.count.total= link_to( count || "??", admin_notifications_path(url_vars_with_dates_not_status ) )
+                   

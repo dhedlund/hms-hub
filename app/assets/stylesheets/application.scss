@@ -298,8 +298,59 @@ div.actions { /* action links outside of an admin table */
   margin-bottom: 20px;
 }
 
-.dashboard-breakdown {
-  float: left;
-  width: 33%;
-  margin-bottom: 20px;
+.dashboard {
+  .notifier {
+    margin: 0 0 2em 2em;
+    padding: 0 0 1em 1em;
+    border-top: 2px solid black;
+    h2 {
+      margin: 0 0 0 -0.8em;
+      padding: 5px;
+      background: #eee;
+    }
+    .sync_status {
+      h3 {
+        font-size: 1.2em;
+      }
+      .last_notif, .last_report {
+        padding-left: 1em;
+        font-size: 1em;
+      }
+      .status-ok   {color: green;}
+      .status-warn {color: purple;}
+      .status-bad  {color: red;}
+    }
+    h3.method {
+      border-top: 1px dotted gray;
+      font-size: 1.2em;
+      margin-top: 0.6em;
+      padding-top: 3px;
+    }
+    table {
+      width: 75%;
+      margin: 0 0 1em 2em;
+      border-collapse: true;
+      td, th {
+        border-right: 1px solid gray; 
+        border-bottom: 1px solid gray; 
+        margin: 0;
+        text-align: right;
+        padding: 3px;
+      }
+
+      th.date_range {
+        min-width: 18%;
+      }
+      th.nobottom {
+        border-bottom: none;
+      }
+      td.status, th.status {padding: 3px 3px 3px 2em; text-align: left}
+      td.count  {
+       text-align: right;
+       padding: 3px 10px 3px 4px;
+      }
+      th.total, td.total {font-weight: bold;}
+    }
+    
+  }
 }

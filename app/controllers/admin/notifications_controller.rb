@@ -4,6 +4,7 @@ class Admin::NotificationsController < AdminController
   def index
     @search_params = params.slice(*allowed_search_params)
     @notifications = search(Notification, @search_params)
+    @notifications_count = @notifications.count
     @notifications = @notifications.order('delivery_start DESC').page(params[:page])
 
     respond_with @notifications

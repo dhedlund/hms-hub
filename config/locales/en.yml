@@ -28,7 +28,7 @@ en:
         updated_at: "Updated At"
       delivery_attempt: &delivery_attempt_attributes
         id: "ID"
-        notifier: "Notifier"
+        notifier: "Notifier/District"
         notification: "Notification"
         phone_number: "Phone Number"
         delivery_method: "Delivery Method"
@@ -60,7 +60,7 @@ en:
       notification: &notification_attributes
         id: "ID"
         uuid: "UUID"
-        notifier: "Notifier"
+        notifier: "Notifier/District"
         message: "Message"
         phone_number: "Phone Number"
         first_name: "First Name"
@@ -82,6 +82,10 @@ en:
         password: "Password"
         created_at: "Created At"
         updated_at: "Updated At"
+        labels: &notifier_labels
+          balaka-notifier: "Balaka"
+          nkhotakhota-notifier: "Nkhotakhota"
+        
       user: &user_attributes
         id: "ID"
         username: "Username"
@@ -130,19 +134,38 @@ en:
         hide: "less search options"
         matchers: &search_filter_matchers
           cont: "Contains"
-          eq: "Equals"
+          eq: ""
           between: "Between"
-          between_sep: "and / or"
+          between_sep: "and"
         submit: "Search"
     dashboard:
-      notifications_breakdown:
-        last_24: "Last 24 Hours"
-        last_week: "Last Week"
-        last_month: "Last Month"
-        total: "Total Notifications"
-        delivered: "Delivered"
-        failed: "Failed"
-      failed_notifications_title: "Failed Notifications"
+      title:  Message Delivery Dashboard
+      notifications_for: "Messages for "
+      notifier_labels: 
+        <<: *notifier_labels
+      connection_status:
+        connection_status:  "Hotline-Hub Connection Status"
+        last_notif_sync:  "Last Messages Sync"
+        last_report_sync:  "Last Reports Sync"
+      hours_ago: "Hours Ago"
+      delivery_methods:
+        SMS: "SMS Messages"
+        IVR: "IVR Messages"
+      date_ranges:
+        today: "Today"
+        yesterday: "Yesterday"
+        last_7: "Last 7 Days"
+        prev_7: "Previous 7 Days"
+      notif_counts: 
+        status: "Current Message Status"
+        status_codes:
+          NEW: "Upcoming (NEW)"
+          DELIVERED: "Success (DELIVERED)"
+          TEMP_FAIL:  "Still trying (TEMP_FAIL)"
+          PERM_FAIL:  "Failed (PERM_FAIL)"
+          CANCELLED:  "Unenrolled (CANCELLED)"
+          total:      "Total (all statuses)"
+    
     delivery_attempts:
       index:
         title: "Delivery Attempts"
