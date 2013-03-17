@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317172608) do
+ActiveRecord::Schema.define(:version => 20130317181345) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(:version => 20130317172608) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.boolean  "active",             :default => true
   end
 
   add_index "notifiers", ["username"], :name => "index_notifiers_on_username", :unique => true

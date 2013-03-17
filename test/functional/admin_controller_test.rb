@@ -79,12 +79,43 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   #----------------------------------------------------------------------------#
-  # landing page:
-  #--------------
+  # landing page/dashboard:
+  #------------------------
   test "accessing landing page w/ valid creds should return successful" do
     with_valid_user_creds do
       get :index
       assert_response :success
+    end
+  end
+
+  test "only active notifiers should be included on the dashboard" do
+    2.times { FactoryGirl.create(:notifier, :active => true) }
+    FactoryGirl.create(:notifier, :active => false)
+    with_valid_user_creds do
+      get :index
+      assert_equal 2, assigns(:notifiers).count
+    end
+  end
+
+  test "notifiers on dashboard should be ordered by their name" do
+    FactoryGirl.create(:notifier, :username => 'abc123', :name => 'Foo')
+    FactoryGirl.create(:notifier, :username => 'ghi789', :name => 'Bar')
+    FactoryGirl.create(:notifier, :username => 'def456', :name => 'Baz')
+
+    with_valid_user_creds do
+      get :index
+      assert_equal %w(Bar Baz Foo), assigns(:notifiers).map(&:name)
+    end
+  end
+
+  test "internal notifier should be at end of list on dashboard" do
+    notifier = FactoryGirl.create(:notifier, :username => 'internal', :name => 'Internal')
+    FactoryGirl.create(:notifier, :username => 'qux', :name => 'Qux')
+    FactoryGirl.create(:notifier, :username => 'bar', :name => 'Bar')
+
+    with_valid_user_creds do
+      get :index
+      assert_equal notifier, assigns(:notifiers).last
     end
   end
 

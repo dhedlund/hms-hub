@@ -7,7 +7,12 @@ class AdminController < ApplicationController
   def index
     @status_codes = Notification::VALID_STATUSES 
     @delivery_methods = Notification::VALID_DELIVERY_METHODS
-    @notifiers = Notifier.all
+    @notifiers = Notifier.active.order(:name)
+
+    # move the 'internal' notifier to the end
+    if internal_pos = @notifiers.index {|n| n.username == 'internal'}
+      @notifiers << @notifiers.delete_at(internal_pos)
+    end
 
     status_data = @notifiers.map do |notifier|
       #notif_time = Notifier.where(:username=>'balaka-notifier').first.last_status_req_at

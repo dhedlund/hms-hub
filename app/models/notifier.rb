@@ -5,5 +5,8 @@ class Notifier < ActiveRecord::Base
   validates :password, :presence => true, :length => { :minimum => 7 }
   validates :name,     :presence => true, :uniqueness => true
   validates :timezone, :presence => true
+  validates :active,   :inclusion => [true, false]
+
+  scope :active, lambda { where(:active => true) }
 
 end

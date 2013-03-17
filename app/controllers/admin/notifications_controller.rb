@@ -13,7 +13,7 @@ class Admin::NotificationsController < AdminController
   def show
     @notification = Notification.find(params[:id])
     @notifier_id = @notification.notifier.id
-    @notifier_name = @notification.notifier.username
+    @notifier_name = @notification.notifier.name
     @attempts = @notification.delivery_attempts
     @message = @notification.message
     respond_with @notification
@@ -35,6 +35,7 @@ class Admin::NotificationsController < AdminController
   def create
     @notification = Notification.new
     @notification.attributes = params[:notification]
+    @notification.notifier = Notifier.find_by_username('internal')
     @notification.uuid ||= SecureRandom.uuid
     @notification.delivery_start ||= Time.zone.now
 

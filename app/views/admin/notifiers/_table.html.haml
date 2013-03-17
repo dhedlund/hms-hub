@@ -4,6 +4,8 @@
   %thead
     %tr
       %th.username= t('.labels.username')
+      %th.name= t('.labels.name')
+      %th.active= t('.labels.active')
       %th.last_status_req_at= t('.labels.last_status_req_at')
       %th.notifications_count= t('.labels.notifications_count')
       %th.updates_pending= t('.labels.updates_pending')
@@ -13,6 +15,8 @@
       %tr.notifier{:class => cycle('even', 'odd')}
         - last_status_req_at = notifier.last_status_req_at
         %td.username= notifier.username
+        %td.name= notifier.name
+        %td.active= t(".values.active.#{notifier.active}")
         %td.last_status_req_at= last_status_req_at.try(:strftime, '%Y-%m-%d') || '-'
         %td.notifications_count= notifier.notifications.count
         %td.updates_pending= notifier.notifications.run_since(last_status_req_at).count

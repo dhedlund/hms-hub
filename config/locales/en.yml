@@ -78,8 +78,10 @@ en:
       notifier: &notifier_attributes
         id: "ID"
         username: "Username"
+        name: "Name"
         timezone: "Timezone"
         password: "Password"
+        active: "Active"
         created_at: "Created At"
         updated_at: "Updated At"
 
@@ -311,6 +313,10 @@ en:
         title: "View Notifier"
         labels:
           <<: *notifier_attributes
+        values:
+          active:
+            "true": "Yes / Active"
+            "false": "No / Inactive"
       table:
         labels:
           <<: *notifier_attributes
@@ -320,6 +326,10 @@ en:
           actions: ""
         actions:
           <<: *actions
+        values:
+          active:
+            "true": "✔"
+            "false": ""
     reports:
       index:
         title: "Reports and Files"

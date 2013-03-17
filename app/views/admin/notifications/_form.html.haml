@@ -1,12 +1,6 @@
 = form_for [:admin, @notification], :html => { :class => 'admin-form' } do |f|
   - if f.object.errors[:base].any?
     .error-msg= f.object.errors.join(', ')
-  .field.notifier.required
-    .label= f.label :notifier, t('.labels.notifier')
-    .value
-      = f.collection_select(:notifier_id, Notifier.where(:username => 'internal'), :id, :username, :include_blank => false)
-      - if f.object.errors[:notifier_id].any?
-        .error-msg= f.object.errors[:notifier_id].join(', ')
   .field.first_name
     .label= f.label :first_name, t('.labels.first_name')
     .value

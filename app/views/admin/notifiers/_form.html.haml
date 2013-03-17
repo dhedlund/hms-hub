@@ -13,11 +13,23 @@
       = f.password_field :password
       - if f.object.errors[:password].any?
         .error-msg= f.object.errors[:password].join(', ')
+  .field.name.required
+    .label= f.label :name, t('.labels.name')
+    .value
+      = f.text_field :name
+      - if f.object.errors[:name].any?
+        .error-msg= f.object.errors[:name].join(', ')
   .field.timezone.required
     .label= f.label :timezone, t('.labels.timezone')
     .value
       = f.time_zone_select :timezone
       - if f.object.errors[:timezone].any?
         .error-msg= f.object.errors[:timezone].join(', ')
+  .field.active.required
+    .label= f.label :active, t('.labels.active')
+    .value
+      = f.check_box :active
+      - if f.object.errors[:active].any?
+        .error-msg= f.object.errors[:active].join(', ')
 
   .buttons= f.submit :value => t(@notifier.new_record? ? '.actions.create' : '.actions.save')

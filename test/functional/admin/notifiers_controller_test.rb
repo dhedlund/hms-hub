@@ -37,6 +37,15 @@ class Admin::NotifiersControllerTest < ActionController::TestCase
     assert_nil json_response[0]['notifier']['password']
   end
 
+  test "index should include active and inactive notifiers" do
+    FactoryGirl.create(:notifier, :active => true)
+    FactoryGirl.create(:notifier, :active => false)
+
+    get :index
+    assert_equal 2, assigns(:notifiers).count
+    assert assigns(:notifiers).any? {|n| n.active == false }
+  end
+
   test "show should return a notifier (HTML)" do
     notifier = FactoryGirl.create(:notifier)
 

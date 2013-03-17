@@ -2,7 +2,7 @@ class Admin::NotifiersController < AdminController
   respond_to :html, :json
 
   def index
-    @notifiers = Notifier.scoped
+    @notifiers = Notifier.order(:username)
     respond_with @notifiers do |format|
       format.json { render :json => @notifiers, :except => 'password' }
     end

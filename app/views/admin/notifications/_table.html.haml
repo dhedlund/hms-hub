@@ -15,7 +15,7 @@
     - notifications.each do |notification|
       %tr.notification{:class => cycle('even', 'odd')}
         %td= notification.id
-        %td= link_to(notification.notifier.username, admin_notifier_path(notification.notifier_id))    
+        %td= link_to(notification.notifier.name, admin_notifier_path(notification.notifier_id))    
         %td= notification.delivery_method
         %td= link_to(notification.phone_number, :phone_number_eq => notification.phone_number)
         %td= notification.delivery_start.try(:strftime, '%Y-%m-%d')

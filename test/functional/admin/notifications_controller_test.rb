@@ -5,6 +5,7 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
 
+    @internal_notifier = FactoryGirl.create(:internal_notifier)
     @notification = FactoryGirl.build(:notification)
   end
 
@@ -175,7 +176,13 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_difference('Notification.count') do
       post :create, :notification => @notification.attributes.symbolize_keys
     end
+
     assert_redirected_to [:admin, assigns(:notification)]
+  end
+
+  test "create should associate notification with internal notifier" do
+    post :create, :notification => @notification.attributes.symbolize_keys
+    assert_equal @internal_notifier, assigns(:notification).notifier
   end
 
   test "create should automatically generate a UUID if not specified (HTML)" do

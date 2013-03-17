@@ -10,6 +10,19 @@ class NotifierTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # active:
+  #--------
+  test "active should default to true" do
+    assert_equal true, Notifier.new.active
+  end
+
+  test "should be invalid without an active value" do
+    @notifier.active = nil
+    assert @notifier.invalid?
+    assert @notifier.errors[:active].any?
+  end
+
+  #----------------------------------------------------------------------------#
   # last_login_at:
   #---------------
   test "should be valid without a last_login_at datetime" do

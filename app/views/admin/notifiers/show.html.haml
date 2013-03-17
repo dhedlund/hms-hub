@@ -11,6 +11,12 @@
     .label= t('.labels.username')
     .value= @notifier.username
   .field
+    .label= t('.labels.name')
+    .value= @notifier.name
+  .field
+    .label= t('.labels.active')
+    .value= t(".values.active.#{@notifier.active}")
+  .field
     .label= t('.labels.timezone')
     .value= @notifier.timezone
   .field

@@ -9,7 +9,7 @@
     .value= @delivery_attempt.id
   .field
     .label= t('.labels.notifier')
-    .value= link_to @delivery_attempt.notifier.username, admin_notifier_path(@delivery_attempt.notifier_id)
+    .value= link_to @delivery_attempt.notifier.name, admin_notifier_path(@delivery_attempt.notifier_id)
   .field
     .label= t('.labels.notification')
     .value

@@ -51,6 +51,14 @@ class ApiControllerTest < ActionController::TestCase
     end
   end
 
+  test "authenticating with an inactive notifier should treat as invalid credentials" do
+    notifier = FactoryGirl.create(:notifier, :active => false)
+    with_valid_notifier_creds(notifier) do
+      get :ping
+      assert_response 401
+    end
+  end
+
   test "GET /api/test/ping should return 'pong'" do
     with_valid_notifier_creds do
       get :ping
