@@ -60,3 +60,27 @@ From: /path/to/rails_app/app/controllers/my_controller.rb @ line 2 MyController#
 
 [1] pry(#<MyController>)>
 ```
+
+## Running Tests
+### Without Spork
+```plain
+bundle exec rake test # all tests
+bundle exec rake test:units # unit tests
+bundle exec rake test:functionals # functional/controller tests
+TEST=test/unit/notification_test.rb bundle exec rake test # single test file
+```
+
+### With Spork
+If you are running foreman with `spork=1` in your .foreman file then spork should already be running.  If you are using spork outside of foreman, you can start the spork server with:
+```plain
+bundle exec spork
+```
+
+To run tests using spork:
+```plain
+bundle exec testdrb # all tests
+bundle exec testdrb test/unit # unit tests
+bundle exec testdrb test/functional # functional/controller tests
+bundle exec testdrb test/unit/notification_test.rb # single test file
+bundle exec testdrb test/**/*_test.rb # all tests, example using wildcards
+```
