@@ -8,6 +8,7 @@ db/*.sqlite3-journal
 db/seed_data/
 log/*.log
 tmp/
+.foreman
 .ruby-version
 .rvmrc
 *.swp

@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 class IntellivrController < ApplicationController
   def confirm_delivery
     post_body = request.body.read

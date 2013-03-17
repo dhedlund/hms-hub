@@ -12,6 +12,9 @@ gem 'rabl'
 gem 'kaminari'
 gem 'ransack'
 
+gem 'foreman'
+gem 'thin'
+
 group :assets do
   gem 'sass-rails'
   gem 'jquery-rails'
@@ -23,6 +26,12 @@ group :development, :test do
   gem 'factory_girl_rails', :require => false
   gem 'jsonschema', :require => false
   gem 'mocha', :require => false
+  gem 'spork', :require => false
+  gem 'spork-testunit', :require => false
+
   gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'pry-debugger'
+
   gem 'sqlite3'
 end

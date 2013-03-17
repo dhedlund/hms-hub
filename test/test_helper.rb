@@ -1,48 +1,44 @@
-ENV["RAILS_ENV"] = "test"
+require 'rubygems'
+require 'spork'
+#uncomment the following line to use spork with the debugger
+#require 'spork/ext/ruby-debug'
 
-require File.expand_path('../../config/environment', __FILE__)
-require 'test/unit'
-require 'mocha/setup'
-require 'rails/test_help'
-require 'factory_girl_rails'
+Spork.prefork do
+  # Loading more in this block will cause your tests to run faster. However,
+  # if you change any configuration or code from libraries loaded here, you'll
+  # need to restart spork for it take effect.
 
-class ActiveSupport::TestCase
-  def encode_credentials(username, password)
-    "Basic #{Base64.encode64("#{username}:#{password}")}"
-  end
+  ENV["RAILS_ENV"] ||= 'test'
 
-  def json_response
-    ActiveSupport::JSON.decode @response.body
-  end
+  # test/ is not in our include path by default
+  $LOAD_PATH << File.expand_path('..', __FILE__)
 
-  def with_valid_user_creds(user=nil, &block)
-    u = user || FactoryGirl.create(:user)
-    use_auth_creds(encode_credentials(u.username, u.password), &block)
-  end
+  class Spork::TestFramework::TestUnit
+    alias_method :orig_run_tests, :run_tests
+    def run_tests(argv, stderr, stdout)
+      # run all tests if spork doesn't receive any filenames
+      argv << 'test' if argv.all? {|arg| arg =~ /^-/ }
 
-  def with_valid_notifier_creds(notifier=nil, &block)
-    n = notifier || FactoryGirl.create(:notifier)
-    use_auth_creds(encode_credentials(n.username, n.password), &block)
-  end
+      # allow directories as arguments, auto-expand to test filenames
+      argv = argv.map do |arg|
+        File.directory?(arg) ? Dir["#{arg}/**/*_test.rb"] : arg
+      end.flatten.uniq
 
-  def with_invalid_creds(&block)
-    use_auth_creds(encode_credentials('invalid', 'bah!'), &block)
-  end
-
-  def without_auth_creds(&block)
-    use_auth_creds(nil, &block)
-  end
-
-
-  protected
-
-  def use_auth_creds(creds, &block)
-    orig_auth = @request.env['HTTP_AUTHORIZATION']
-    @request.env['HTTP_AUTHORIZATION'] = creds
-    if block_given?
-      yield
-      @request.env['HTTP_AUTHORIZATION'] = orig_auth
+      orig_run_tests(argv, stderr, stdout)
     end
-    nil
   end
+
+  require File.expand_path('../../config/environment', __FILE__)
+  require 'test/unit'
+  require 'mocha/setup'
+  require 'rails/test_help'
+
+  Dir[Rails.root.join('test/support/**/*.rb')].each {|f| require f}
+
+  require 'factory_girl_rails'
+end
+
+Spork.each_run do
+  # This code will be run each time you run your specs.
+
 end
