@@ -201,19 +201,4 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:notification).delivery_start
   end
 
-  test "edit should return an existing notification form (HTML)" do
-    @notification.save!
-    get :edit, :id => @notification.id
-    assert_response :success
-    assert_equal @notification, assigns(:notification)
-  end
-
-  test "update should save an existing notification (HTML)" do
-    @notification.save!
-    @notification.first_name = 'Jenny'
-    @notification.phone_number = '867-5309'
-    put :update, :id => @notification.id, :notification => @notification.attributes.symbolize_keys
-    assert_equal 'Jenny', @notification.reload.first_name
-  end
-
 end

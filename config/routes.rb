@@ -15,7 +15,7 @@ HmsHub::Application.routes.draw do
       resources :messages, :only => [:index, :show]
     end
     resources :messages, :only => [:index, :show]
-    resources :notifications, :except => [:destroy]
+    resources :notifications, :only => [:index, :show, :new, :create]
     resources :notifiers, :except => [:destroy]
     resources :jobs, :only => [:index, :show]
     resources :users, :only => [:index, :show]

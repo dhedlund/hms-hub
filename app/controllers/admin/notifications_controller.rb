@@ -27,11 +27,6 @@ class Admin::NotificationsController < AdminController
     respond_with :admin, @notification
   end
 
-  def edit
-    @notification = Notification.find(params[:id])
-    respond_with :admin, @notification
-  end
-
   def create
     @notification = Notification.new
     @notification.attributes = params[:notification]
@@ -44,12 +39,6 @@ class Admin::NotificationsController < AdminController
     end
 
     @notification.save
-    respond_with :admin, @notification
-  end
-
-  def update
-    @notification = Notification.find(params[:id])
-    @notification.update_attributes(params[:notification])
     respond_with :admin, @notification
   end
 
