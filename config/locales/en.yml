@@ -88,6 +88,7 @@ en:
       user: &user_attributes
         id: "ID"
         username: "Username"
+        name: "Name"
         timezone: "Timezone"
         created_at: "Created At"
         updated_at: "Updated At"

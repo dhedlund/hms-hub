@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317181345) do
+ActiveRecord::Schema.define(:version => 20130317201655) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20130317181345) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "locale",     :default => "en"
+    t.string   "name"
   end
 
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true

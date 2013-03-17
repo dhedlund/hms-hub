@@ -19,6 +19,15 @@ class UserTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # name:
+  #------
+  test "should be invalid without a name" do
+    @user.name = nil
+    assert @user.invalid?
+    assert @user.errors[:name]
+  end
+
+  #----------------------------------------------------------------------------#
   # password:
   #----------
   test "should be invalid without a password" do

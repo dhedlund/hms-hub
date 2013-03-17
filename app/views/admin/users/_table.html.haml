@@ -4,11 +4,13 @@
   %thead
     %tr
       %th.username= t('.labels.username')
+      %th.name= t('.labels.name')
       %th.timezone= t('.labels.timezone')
       %th.actions= t('.labels.actions')
   %tbody
     - users.each do |user|
-      %tr{:class => cycle('even', 'odd')}
-        %td= user.username
-        %td= user.timezone
+      %tr.user{:class => cycle('even', 'odd')}
+        %td.username= user.username
+        %td.name= user.name
+        %td.timezone= user.timezone
         %td.actions #{link_to t('.actions.view'), [:admin, user]}

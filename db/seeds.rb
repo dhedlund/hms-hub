@@ -9,11 +9,13 @@
 if Rails.env.development?
   User.create!(
     :username => 'webdev',
+    :name     => 'Web Developer',
     :password => 'webdevpwd',
     :timezone => 'Africa/Blantyre'
   )
   Notifier.create!(
     :username => 'apidev',
+    :name     => 'API Developer',
     :password => 'apidevpwd',
     :timezone => 'Africa/Blantyre'
   )
