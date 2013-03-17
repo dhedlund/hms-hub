@@ -82,10 +82,7 @@ en:
         password: "Password"
         created_at: "Created At"
         updated_at: "Updated At"
-        labels: &notifier_labels
-          balaka-notifier: "Balaka"
-          nkhotakhota-notifier: "Nkhotakhota"
-        
+
       user: &user_attributes
         id: "ID"
         username: "Username"
@@ -141,8 +138,6 @@ en:
     dashboard:
       title:  Message Delivery Dashboard
       notifications_for: "Messages for "
-      notifier_labels: 
-        <<: *notifier_labels
       connection_status:
         connection_status:  "Hotline-Hub Connection Status"
         last_notif_sync:  "Last Messages Sync"
@@ -156,7 +151,7 @@ en:
         yesterday: "Yesterday"
         last_7: "Last 7 Days"
         prev_7: "Previous 7 Days"
-      notif_counts: 
+      notif_counts:
         status: "Current Message Status"
         status_codes:
           NEW: "Upcoming (NEW)"
@@ -165,7 +160,7 @@ en:
           PERM_FAIL:  "Failed (PERM_FAIL)"
           CANCELLED:  "Unenrolled (CANCELLED)"
           total:      "Total (all statuses)"
-    
+
     delivery_attempts:
       index:
         title: "Delivery Attempts"

@@ -26,6 +26,22 @@ class NotifierTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # name:
+  #------
+  test "should be invalid without a name" do
+    @notifier.name = nil
+    assert @notifier.invalid?
+    assert @notifier.errors[:name].any?
+  end
+
+  test "cannot have two notifiers with the same name" do
+    FactoryGirl.create(:notifier, :name => 'Notifier Name')
+    @notifier.name = 'Notifier Name'
+    assert @notifier.invalid?
+    assert @notifier.errors[:name].any?
+  end
+
+  #----------------------------------------------------------------------------#
   # notifications:
   #---------------
   test "can associate multiple notifications with a notifier" do

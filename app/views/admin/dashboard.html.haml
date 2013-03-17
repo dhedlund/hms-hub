@@ -1,19 +1,21 @@
 - @nav_hierarchy = [:dashboard]
+
 .dashboard
   %h1= t('.title')
-  -@notifier_ids_by_code.each do |notifier_code, notifier_id|
-    - url_vars = {:filter_search=>1, :notifier_id_eq=>notifier_id}
+  - @notifiers.each do |notifier|
+    - username, id = notifier.username, notifier.id
+    - url_vars = {:filter_search=>1, :notifier_id_eq=>id}
     .notifier
-      %h2= link_to( t('.notifications_for')+t('.notifier_labels.'+notifier_code), admin_notifications_path(url_vars) )
+      %h2= link_to( t('.notifications_for')+notifier.name, admin_notifications_path(url_vars) )
       .sync_status
         %h3= t('.connection_status.connection_status')
-        - hours_ago = @status[notifier_code]['last_notif_hours_ago']
+        - hours_ago = @status[username]['last_notif_hours_ago']
         .last_notif{:class=>status_hours_ago_to_class(hours_ago)} 
           =t('.connection_status.last_notif_sync')+ ": "
-          #{@status[notifier_code]['last_notif_sync']} (#{hours_ago} #{t('.hours_ago')})
+          #{@status[username]['last_notif_sync']} (#{hours_ago} #{t('.hours_ago')})
         .last_report
           =t('.connection_status.last_report_sync') + ": "
-          #{@status[notifier_code]['last_report_sync']}
+          #{@status[username]['last_report_sync']}
       -@delivery_methods.each do |method|
         - url_vars[:delivery_method_eq] = method
         %h3.method= link_to( t('.delivery_methods.'+method), admin_notifications_path(url_vars) )
@@ -34,12 +36,12 @@
                 %td.status= t('.notif_counts.status_codes.'+status)
                 -@date_range_data.each do |range_code, range_data|
                   - url_vars_with_dates = url_vars.merge( range_data['url_vars'] )
-                  - count = range_data['notif_counts'][ [notifier_id, method, status] ].try(&:to_s)
+                  - count = range_data['notif_counts'][ [id, method, status] ].try(&:to_s)
                   %td.count= link_to(count || "??", admin_notifications_path(url_vars_with_dates))
             %tr
               %td.status.total= t('.notif_counts.status_codes.total')
               -@date_range_data.each do |range_code, range_data|
                 - url_vars_with_dates_not_status = url_vars.merge( range_data['url_vars'] ).except(:status_eq)
-                - count = range_data['notif_counts'][ [notifier_id, method] ].try(&:to_s)
+                - count = range_data['notif_counts'][ [id, method] ].try(&:to_s)
                 %td.count.total= link_to( count || "??", admin_notifications_path(url_vars_with_dates_not_status ) )
                    
