@@ -281,6 +281,18 @@ div.actions { /* action links outside of an admin table */
       }
     }
 
+    .multi-checkbox {
+      list-style-position:inside;
+
+      li {
+        line-height: 20px;
+
+        input[type="checkbox"] {
+          float: left;
+        }
+      }
+    }
+
     .error-msg {
       font-size: 12px;
       font-style: italic;
@@ -288,8 +300,21 @@ div.actions { /* action links outside of an admin table */
     }
   }
 
+  .actions {
+    clear: left;
+    border-top: 1px dashed #ccc;
+    padding: 10px 0px;
+    min-height: 18px;
+  }
+
   .text-block {
     white-space: pre-wrap;
+  }
+}
+
+.admin-form.show {
+  .multi-checkbox {
+    list-style-type: square;
   }
 }
 

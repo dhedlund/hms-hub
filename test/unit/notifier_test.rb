@@ -117,4 +117,22 @@ class NotifierTest < ActiveSupport::TestCase
     assert @notifier.errors[:username].any?
   end
 
+  #----------------------------------------------------------------------------#
+  # users:
+  #-------
+  test "can associate multiple users with a notifier" do
+    assert_difference('@notifier.users.size', 2) do
+      2.times { @notifier.users << FactoryGirl.build(:user) }
+    end
+  end
+
+  test "users should be ordered by username" do
+    %w(n4 n2 n8 n1 n3).map do |username|
+      @notifier.users << FactoryGirl.create(:user, :username => username)
+    end
+
+    @notifier.save! && @notifier.reload
+    assert_equal %w(n1 n2 n3 n4 n8), @notifier.users.map(&:username)
+  end
+
 end

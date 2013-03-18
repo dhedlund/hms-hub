@@ -3,14 +3,16 @@ class Admin::DeliveryAttemptsController < AdminController
 
   def index
     @search_params = params.slice(*allowed_search_params)
-    @delivery_attempts = search(DeliveryAttempt, @search_params)
+    @notifiers = current_user.notifiers.reorder(:name)
+    @delivery_attempts = search(DeliveryAttempt.where(:notifier_id => @notifiers), @search_params)
     @delivery_attempts = @delivery_attempts.order('created_at DESC').page(params[:page])
 
     respond_with @delivery_attempts
   end
 
   def show
-    @delivery_attempt = DeliveryAttempt.find(params[:id])
+    @notifiers = current_user.notifiers.reorder(:name)
+    @delivery_attempt = DeliveryAttempt.where(:notifier_id => @notifiers).find(params[:id])
     @message = Message.find(@delivery_attempt.message_id)
     @delivery_details = @delivery_attempt.delivery_details
     @provider = @delivery_attempt.provider

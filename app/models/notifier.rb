@@ -1,5 +1,6 @@
 class Notifier < ActiveRecord::Base
   has_many :notifications
+  has_and_belongs_to_many :users, :order => :username
 
   validates :username, :presence => true, :uniqueness => true
   validates :password, :presence => true, :length => { :minimum => 7 }

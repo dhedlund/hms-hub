@@ -3,7 +3,7 @@
 
 %h2= t('.title')
 
-.admin-form
+.admin-form.show
   .field
     .label= t('.labels.id')
     .value= @user.id
@@ -17,8 +17,19 @@
     .label= t('.labels.timezone')
     .value= @user.timezone
   .field
+    .label= t('.labels.locale')
+    .value= t("admin.common.locales.#{@user.locale}")
+  .field
+    .label= t('.labels.notifiers')
+    .value
+      %ul.multi-checkbox
+        - @user.notifiers.each do |notifier|
+          %li= notifier.name
+  .field
     .label= t('.labels.created_at')
     .value= l(@user.created_at)
   .field
     .label= t('.labels.updated_at')
     .value= l(@user.updated_at)
+
+  .actions= link_to t('.actions.edit'), edit_admin_user_path(@user)

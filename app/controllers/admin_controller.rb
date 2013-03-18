@@ -3,11 +3,13 @@ class AdminController < ApplicationController
 
   before_filter :authenticate, :setup_i18n
 
+  helper_method :current_user
+
   # GET /admin/index
   def index
     @status_codes = Notification::VALID_STATUSES 
     @delivery_methods = Notification::VALID_DELIVERY_METHODS
-    @notifiers = Notifier.active.order(:name)
+    @notifiers = current_user.notifiers.active.reorder(:name)
 
     # move the 'internal' notifier to the end
     if internal_pos = @notifiers.index {|n| n.username == 'internal'}

@@ -3,7 +3,8 @@ class Admin::NotificationsController < AdminController
 
   def index
     @search_params = params.slice(*allowed_search_params)
-    @notifications = search(Notification, @search_params)
+    @notifiers = current_user.notifiers.reorder(:name)
+    @notifications = search(Notification.where(:notifier_id => @notifiers), @search_params)
     @notifications_count = @notifications.count
     @notifications = @notifications.order('delivery_start DESC').page(params[:page])
 
@@ -11,7 +12,8 @@ class Admin::NotificationsController < AdminController
   end
 
   def show
-    @notification = Notification.find(params[:id])
+    @notifiers = current_user.notifiers
+    @notification = Notification.where(:notifier_id => @notifiers).find(params[:id])
     @notifier_id = @notification.notifier.id
     @notifier_name = @notification.notifier.name
     @attempts = @notification.delivery_attempts

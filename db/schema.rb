@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317201655) do
+ActiveRecord::Schema.define(:version => 20130318103736) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -149,6 +149,13 @@ ActiveRecord::Schema.define(:version => 20130317201655) do
   end
 
   add_index "notifiers", ["username"], :name => "index_notifiers_on_username", :unique => true
+
+  create_table "notifiers_users", :id => false, :force => true do |t|
+    t.integer "notifier_id"
+    t.integer "user_id"
+  end
+
+  add_index "notifiers_users", ["user_id", "notifier_id"], :name => "index_notifiers_users_on_user_id_and_notifier_id", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "username"

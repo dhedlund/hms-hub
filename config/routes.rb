@@ -18,7 +18,7 @@ HmsHub::Application.routes.draw do
     resources :notifications, :only => [:index, :show, :new, :create]
     resources :notifiers, :except => [:destroy]
     resources :jobs, :only => [:index, :show]
-    resources :users, :only => [:index, :show]
+    resources :users, :except => [:destroy]
 
     get 'reports'       => 'reports#index'
     get 'reports/*path' => 'reports#download', :as => 'reports_download', :format => false

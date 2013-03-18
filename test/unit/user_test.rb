@@ -28,6 +28,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # notifications:
+  #---------------
+  test "can associate multiple notifiers with a user" do
+    assert_difference('@user.notifiers.size', 2) do
+      2.times { @user.notifiers << FactoryGirl.build(:notifier) }
+    end
+  end
+
+  test "notifiers should be ordered by username" do
+    %w(n4 n2 n8 n1 n3).map do |username|
+      @user.notifiers << FactoryGirl.create(:notifier, :username => username)
+    end
+
+    @user.save! && @user.reload
+    assert_equal %w(n1 n2 n3 n4 n8), @user.notifiers.map(&:username)
+  end
+
+  #----------------------------------------------------------------------------#
   # password:
   #----------
   test "should be invalid without a password" do
@@ -40,6 +58,17 @@ class UserTest < ActiveSupport::TestCase
     @user.password = ''
     assert @user.invalid?
     assert @user.errors[:password].any?
+  end
+
+  test "should be invalid with a password less than 7 characters" do
+    @user.password = '123456'
+    assert @user.invalid?
+    assert @user.errors[:password].any?
+  end
+
+  test "should be valid with a password longer than 7 characters" do
+    @user.password = '12345678'
+    assert @user.valid?
   end
 
   #----------------------------------------------------------------------------#

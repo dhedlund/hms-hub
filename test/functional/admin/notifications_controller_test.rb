@@ -5,6 +5,7 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
 
+    @user.notifiers << (@notifier = FactoryGirl.create(:notifier))
     @internal_notifier = FactoryGirl.create(:internal_notifier)
     @notification = FactoryGirl.build(:notification)
   end
@@ -23,7 +24,7 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should return a list of notifications (JSON)" do
-    4.times { FactoryGirl.create(:notification) }
+    4.times { FactoryGirl.create(:notification, :notifier => @notifier) }
 
     get :index, :format => :json
     assert_response :success
@@ -31,8 +32,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should ignore searches against unsupported matchers" do
-    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS') }
-    FactoryGirl.create(:notification, :delivery_method => 'IVR')
+    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS', :notifier => @notifier) }
+    FactoryGirl.create(:notification, :delivery_method => 'IVR', :notifier => @notifier)
 
     get :index, :delivery_method_cont => 'VR'
     assert_response :success
@@ -40,8 +41,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by phone number (eq and cont)" do
-    2.times { FactoryGirl.create(:notification) }
-    FactoryGirl.create(:notification, :phone_number => '20999999443')
+    2.times { FactoryGirl.create(:notification, :notifier => @notifier) }
+    FactoryGirl.create(:notification, :phone_number => '20999999443', :notifier => @notifier)
 
     get :index, :phone_number_eq => '20999999443'
     assert_response :success
@@ -55,8 +56,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by first name (cont)" do
-    FactoryGirl.create(:notification, :first_name => 'MySearchableFirstName')
-    2.times { FactoryGirl.create(:notification) }
+    FactoryGirl.create(:notification, :first_name => 'MySearchableFirstName', :notifier => @notifier)
+    2.times { FactoryGirl.create(:notification, :notifier => @notifier) }
 
     get :index, :first_name_cont => 'SearchableFirst'
     assert_response :success
@@ -65,7 +66,7 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by notifier_id (eq)" do
-    notifier1, notifier2 = 2.times.map { FactoryGirl.create(:notifier) }
+    notifier1, notifier2 = 2.times.map { FactoryGirl.create(:notifier).tap {|n| @user.notifiers << n } }
     2.times { FactoryGirl.create(:notification, :notifier => notifier1) }
     FactoryGirl.create(:notification, :notifier => notifier2)
 
@@ -75,8 +76,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by delivery_method (eq)" do
-    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS') }
-    FactoryGirl.create(:notification, :delivery_method => 'IVR')
+    2.times { FactoryGirl.create(:notification, :delivery_method => 'SMS', :notifier => @notifier) }
+    FactoryGirl.create(:notification, :delivery_method => 'IVR', :notifier => @notifier)
 
     get :index, :delivery_method_eq => 'SMS'
     assert_response :success
@@ -84,8 +85,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by status (eq)" do
-    2.times { FactoryGirl.create(:notification, :status => 'NEW') }
-    FactoryGirl.create(:notification, :status => 'DELIVERED')
+    2.times { FactoryGirl.create(:notification, :status => 'NEW', :notifier => @notifier) }
+    FactoryGirl.create(:notification, :status => 'DELIVERED', :notifier => @notifier)
 
     get :index, :status_eq => 'DELIVERED'
     assert_response :success
@@ -93,8 +94,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by last error type (eq)" do
-    2.times { FactoryGirl.create(:notification, :last_error_type => 'REMOTE_ERROR') }
-    FactoryGirl.create(:notification, :last_error_type => 'REMOTE_TIMEOUT')
+    2.times { FactoryGirl.create(:notification, :last_error_type => 'REMOTE_ERROR', :notifier => @notifier) }
+    FactoryGirl.create(:notification, :last_error_type => 'REMOTE_TIMEOUT', :notifier => @notifier)
 
     get :index, :last_error_type_eq => 'REMOTE_ERROR'
     assert_response :success
@@ -102,9 +103,9 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by delivery start date (gteq, lteq)" do
-    FactoryGirl.create(:notification, :delivery_start => '2013-02-06 13:00:00')
-    FactoryGirl.create(:notification, :delivery_start => '2013-02-07 17:00:00')
-    FactoryGirl.create(:notification, :delivery_start => '2013-02-08 21:00:00')
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-06 13:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-07 17:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivery_start => '2013-02-08 21:00:00', :notifier => @notifier)
 
     get :index, :delivery_start_gteq => '2013-02-07'
     assert_response :success
@@ -121,10 +122,10 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching by delivered at date (gteq, lteq)" do
-    FactoryGirl.create(:notification, :delivered_at => '2013-02-06 13:00:00')
-    FactoryGirl.create(:notification, :delivered_at => '2013-02-07 17:00:00')
-    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00')
-    FactoryGirl.create(:notification, :delivered_at => nil)
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-06 13:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-07 17:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivered_at => nil, :notifier => @notifier)
 
     get :index, :delivered_at_gteq => '2013-02-07'
     assert_response :success
@@ -141,8 +142,8 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "index should allow searching for non-delivered notifications (null)" do
-    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00')
-    FactoryGirl.create(:notification, :delivered_at => nil)
+    FactoryGirl.create(:notification, :delivered_at => '2013-02-08 21:00:00', :notifier => @notifier)
+    FactoryGirl.create(:notification, :delivered_at => nil, :notifier => @notifier)
 
     get :index, :delivered_at_null => '1'
     assert_response :success
@@ -150,8 +151,16 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_nil assigns(:notifications).first.delivered_at
   end
 
+  test "index should only show notifications for notifiers associated with user" do
+    FactoryGirl.create(:notification, :notifier => @notifier)
+    2.times { FactoryGirl.create(:notification) }
+
+    get :index
+    assert_equal 1, assigns(:notifications).count
+  end
+
   test "show should return a notification (HTML)" do
-    notification = FactoryGirl.create(:notification)
+    notification = FactoryGirl.create(:notification, :notifier => @notifier)
 
     get :show, :id => notification.id
     assert_response :success
@@ -159,11 +168,19 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "show should return a notification (JSON)" do
-    notification = FactoryGirl.create(:notification)
+    notification = FactoryGirl.create(:notification, :notifier => @notifier)
 
     get :show, :id => notification.id, :format => :json
     assert_response :success
     assert_equal 'notification', json_response.keys.first
+  end
+
+  test "show should only return a notification if for a notifier associated with user" do
+    notification = FactoryGirl.create(:notification) # not associated w/ user
+
+    assert_raise(ActiveRecord::RecordNotFound) do
+      get :show, :id => notification.id
+    end
   end
 
   test "new should return a new notification form (HTML)" do

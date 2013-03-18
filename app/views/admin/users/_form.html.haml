@@ -1,0 +1,47 @@
+:ruby
+  locale_options = options_for_select(
+    @available_locales.map {|l| ["#{l}: #{t("admin.common.locales.#{l}")}", l] },
+    @user.locale
+  )
+
+= form_for [:admin, @user], :html => { :class => 'admin-form' } do |f|
+  - if f.object.errors[:base].any?
+    .error-msg= f.object.errors[:base].join(', ')
+  .field.username.required
+    .label= f.label :username, t('.labels.username')
+    .value
+      = f.text_field :username
+      - if f.object.errors[:username].any?
+        .error-msg= f.object.errors[:username].join(', ')
+  .field.password{:class => (@user.new_record? ? 'required' : '')}
+    .label= f.label :password, t('.labels.password')
+    .value
+      = f.password_field :password
+      - if f.object.errors[:password].any?
+        .error-msg= f.object.errors[:password].join(', ')
+  .field.name.required
+    .label= f.label :name, t('.labels.name')
+    .value
+      = f.text_field :name
+      - if f.object.errors[:name].any?
+        .error-msg= f.object.errors[:name].join(', ')
+  .field.timezone.required
+    .label= f.label :timezone, t('.labels.timezone')
+    .value
+      = f.time_zone_select :timezone
+      - if f.object.errors[:timezone].any?
+        .error-msg= f.object.errors[:timezone].join(', ')
+  .field.locale.required
+    .label= f.label :locale, t('.labels.locale')
+    .value
+      = f.select(:locale, locale_options)
+  .field.notifiers
+    .label= f.label :notifiers, t('.labels.notifiers')
+    .value
+      %ul.multi-checkbox
+        - @notifiers.scoped.each do |notifier|
+          %li
+            = notifier.name
+            = f.check_box :notifier_ids, {:multiple => true}, notifier.id, nil
+
+  .buttons= f.submit :value => t(@user.new_record? ? '.actions.create' : '.actions.save')

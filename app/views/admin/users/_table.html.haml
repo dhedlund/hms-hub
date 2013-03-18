@@ -13,4 +13,6 @@
         %td.username= user.username
         %td.name= user.name
         %td.timezone= user.timezone
-        %td.actions #{link_to t('.actions.view'), [:admin, user]}
+        %td.actions
+          #{link_to t('.actions.view'), [:admin, user]}
+          | #{link_to t('.actions.edit'), [:edit, :admin, user]}

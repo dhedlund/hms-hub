@@ -81,15 +81,18 @@ en:
         name: "Name"
         timezone: "Timezone"
         password: "Password"
+        users: "Users"
         active: "Active"
         created_at: "Created At"
         updated_at: "Updated At"
-
       user: &user_attributes
         id: "ID"
         username: "Username"
+        password: "Password"
         name: "Name"
         timezone: "Timezone"
+        locale: "Locale"
+        notifiers: "Notifiers"
         created_at: "Created At"
         updated_at: "Updated At"
 
@@ -138,6 +141,9 @@ en:
           between: "Between"
           between_sep: "and"
         submit: "Search"
+      locales:
+        en: "English"
+        test: "hsilgnE (reverse English)"
     dashboard:
       title:  Message Delivery Dashboard
       notifications_for: "Messages for "
@@ -314,6 +320,8 @@ en:
         title: "View Notifier"
         labels:
           <<: *notifier_attributes
+        actions:
+          edit: "Edit Notifier"
         values:
           active:
             "true": "Yes / Active"
@@ -336,12 +344,26 @@ en:
         title: "Reports and Files"
         no_files: "No files"
     users:
+      edit:
+        title: "Edit User"
+      form:
+        labels:
+          <<: *user_attributes
+        actions:
+          <<: *actions
+          create: "Create User"
       index:
         title: "Users"
+        actions:
+          new: "New User"
+      new:
+        title: "New User"
       show:
         title: "View User"
         labels:
           <<: *user_attributes
+        actions:
+          edit: "Edit User"
       table:
         labels:
           <<: *user_attributes

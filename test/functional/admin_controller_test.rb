@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class AdminControllerTest < ActionController::TestCase
+  setup do
+    @user = FactoryGirl.create(:user)
+  end
+
   #----------------------------------------------------------------------------#
   # authentication:
   #----------------
@@ -39,14 +43,14 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   test "accessing existing page w/ valid creds should return successful" do
-    with_valid_user_creds do
+    with_valid_user_creds @user do
       get :index
       assert_response :success
     end
   end
 
   test "accessing nonexistent pages w/ valid creds should give not found" do
-    with_valid_user_creds do
+    with_valid_user_creds @user do
       with_routing do |map|
         map.draw { match '/admin/bad_url' => 'admin#not_found' }
         get :not_found
@@ -63,18 +67,16 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   test "authenticating with valid credentials should set current_user" do
-    user = FactoryGirl.create(:user)
-    with_valid_user_creds user do
+    with_valid_user_creds @user do
       get :index
-      assert_equal user, @controller.current_user
+      assert_equal @user, @controller.current_user
     end
   end
 
   test "authenticating with valid user should change timezone to their own "do
-    user = FactoryGirl.create(:user)
-    with_valid_user_creds user do
+    with_valid_user_creds @user do
       get :index
-      assert_equal user.timezone, Time.zone.name
+      assert_equal @user.timezone, Time.zone.name
     end
   end
 
@@ -82,27 +84,27 @@ class AdminControllerTest < ActionController::TestCase
   # landing page/dashboard:
   #------------------------
   test "accessing landing page w/ valid creds should return successful" do
-    with_valid_user_creds do
+    with_valid_user_creds @user do
       get :index
       assert_response :success
     end
   end
 
   test "only active notifiers should be included on the dashboard" do
-    2.times { FactoryGirl.create(:notifier, :active => true) }
-    FactoryGirl.create(:notifier, :active => false)
-    with_valid_user_creds do
+    2.times { @user.notifiers << FactoryGirl.create(:notifier, :active => true) }
+    @user.notifiers << FactoryGirl.create(:notifier, :active => false)
+    with_valid_user_creds @user do
       get :index
       assert_equal 2, assigns(:notifiers).count
     end
   end
 
   test "notifiers on dashboard should be ordered by their name" do
-    FactoryGirl.create(:notifier, :username => 'abc123', :name => 'Foo')
-    FactoryGirl.create(:notifier, :username => 'ghi789', :name => 'Bar')
-    FactoryGirl.create(:notifier, :username => 'def456', :name => 'Baz')
+    @user.notifiers << FactoryGirl.create(:notifier, :username => 'abc123', :name => 'Foo')
+    @user.notifiers << FactoryGirl.create(:notifier, :username => 'ghi789', :name => 'Bar')
+    @user.notifiers << FactoryGirl.create(:notifier, :username => 'def456', :name => 'Baz')
 
-    with_valid_user_creds do
+    with_valid_user_creds @user do
       get :index
       assert_equal %w(Bar Baz Foo), assigns(:notifiers).map(&:name)
     end
@@ -110,12 +112,23 @@ class AdminControllerTest < ActionController::TestCase
 
   test "internal notifier should be at end of list on dashboard" do
     notifier = FactoryGirl.create(:notifier, :username => 'internal', :name => 'Internal')
-    FactoryGirl.create(:notifier, :username => 'qux', :name => 'Qux')
-    FactoryGirl.create(:notifier, :username => 'bar', :name => 'Bar')
+    @user.notifiers << notifier
+    @user.notifiers << FactoryGirl.create(:notifier, :username => 'qux', :name => 'Qux')
+    @user.notifiers << FactoryGirl.create(:notifier, :username => 'bar', :name => 'Bar')
 
-    with_valid_user_creds do
+    with_valid_user_creds @user do
       get :index
       assert_equal notifier, assigns(:notifiers).last
+    end
+  end
+
+  test "user should only seen notifiers associated with their user" do
+    2.times { @user.notifiers << FactoryGirl.create(:notifier) }
+    FactoryGirl.create(:notifier)
+
+    with_valid_user_creds @user do
+      get :index
+      assert_equal 2, assigns(:notifiers).count
     end
   end
 

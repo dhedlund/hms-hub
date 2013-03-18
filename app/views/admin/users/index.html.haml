@@ -3,3 +3,5 @@
 
 %h2= t('.title')
 = render 'table', :users => @users
+
+.actions= link_to t('.actions.new'), new_admin_user_path

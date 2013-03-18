@@ -2,7 +2,7 @@
   # assumes a `search_params` has been passed in
 
   notifier_id_eq_options = options_for_select(
-    Notifier.order(:name).map {|n| [n.name, n.id] },
+    @notifiers.map {|n| [n.name, n.id] },
     search_params[:notifier_id_eq]
   )
 

@@ -25,3 +25,5 @@
   .field
     .label= t('.labels.updated_at')
     .value= l(@notifier.updated_at)
+
+  .actions= link_to t('.actions.edit'), edit_admin_notifier_path(@notifier)
