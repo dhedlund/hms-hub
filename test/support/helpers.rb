@@ -27,6 +27,19 @@ class ActiveSupport::TestCase
     use_auth_creds(nil, &block)
   end
 
+  def current_user
+    @controller.current_user
+  end
+
+  def current_ability
+    @controller.current_ability
+  end
+
+  def reset_current_ability!(user=nil)
+    @controller.stubs(:current_ability).returns(Ability.new(user))
+    @controller.current_ability
+  end
+
 
   protected
 

@@ -6,5 +6,10 @@ class User < ActiveRecord::Base
   validates :name,     :presence => true
   validates :timezone, :presence => true
   validates :locale,   :presence => true
+  validates :role,     :presence => true, :inclusion => Ability::VALID_ROLES
+
+  def ability
+    Ability.new(self)
+  end
 
 end

@@ -38,4 +38,7 @@
     .label= t('.labels.updated_at')
     .value= l(@message.updated_at)
 
-  .buttons= link_to t('.new_notification'), new_admin_notification_path(:message_id => @message.id)
+  .actions
+    %ul
+      - if current_ability.can? :create, Notification
+        %li= link_to t('.new_notification'), new_admin_notification_path(:message_id => @message.id)

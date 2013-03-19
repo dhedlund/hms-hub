@@ -4,4 +4,7 @@
 %h2= t('.title')
 = render 'table', :users => @users
 
-.actions= link_to t('.actions.new'), new_admin_user_path
+.actions
+  %ul
+    - if current_ability.can? :create, User
+      = link_to t('.actions.new'), new_admin_user_path

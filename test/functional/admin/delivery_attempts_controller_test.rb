@@ -105,6 +105,14 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
     assert_equal 1, assigns(:delivery_attempts).count
   end
 
+  test "index should only be accessible to users with :index DeliveryAttempt access" do
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :index }
+
+    current_ability.can :index, DeliveryAttempt
+    assert_nothing_raised { get :index }
+  end
+
   test "show should return a delivery_attempt (HTML)" do
     attempt = FactoryGirl.create(:delivery_attempt, :notification => @notification)
 
@@ -121,12 +129,19 @@ class Admin::DeliveryAttemptsControllerTest < ActionController::TestCase
     assert_equal 'delivery_attempt', json_response.keys.first
   end
 
-  test "show should only return an attempt if notifier associated with user" do
+  test "show should only return an attempt if notifier associated with non-admin user" do
     attempt = FactoryGirl.create(:delivery_attempt) # not associated w/ user
+    assert_raise(CanCan::AccessDenied) { get :show, :id => attempt.id }
+  end
 
-    assert_raise(ActiveRecord::RecordNotFound) do
-      get :show, :id => attempt.id
-    end
+  test "show should only be accessible to users with :show DeliveryAttempts access" do
+    attempt = FactoryGirl.create(:delivery_attempt, :notification => @notification)
+
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :show, :id => attempt.id }
+
+    current_ability.can :show, DeliveryAttempt
+    assert_nothing_raised { get :show, :id => attempt.id }
   end
 
 end

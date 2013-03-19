@@ -11,6 +11,7 @@ gem 'haml'
 gem 'rabl'
 gem 'kaminari'
 gem 'ransack'
+gem 'cancan'
 
 gem 'foreman'
 gem 'thin'

@@ -31,6 +31,7 @@ class Api::NotificationsController < ApiController
 
     from_date = current_user.last_status_req_at
     @notifications = @notifications.run_since(from_date) if from_date
+    @notifications = @notifications.reorder(:id)
 
     current_user.update_attributes({ :last_status_req_at => Time.now })
   end

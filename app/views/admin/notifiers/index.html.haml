@@ -4,4 +4,7 @@
 %h2= t('.title')
 = render 'table', :notifiers => @notifiers
 
-.actions= link_to t('.actions.new'), new_admin_notifier_path
+.actions
+  %ul
+    - if current_ability.can? :create, Notifier
+      %li= link_to t('.actions.new'), new_admin_notifier_path

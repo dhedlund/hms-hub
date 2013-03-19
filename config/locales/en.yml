@@ -92,6 +92,7 @@ en:
         name: "Name"
         timezone: "Timezone"
         locale: "Locale"
+        role: "Role"
         notifiers: "Notifiers"
         created_at: "Created At"
         updated_at: "Updated At"
@@ -144,6 +145,10 @@ en:
       locales:
         en: "English"
         test: "hsilgnE (reverse English)"
+      roles:
+        superadmin: "Super Administrator"
+        admin: "Administrator"
+        staff: "Staff"
     dashboard:
       title:  Message Delivery Dashboard
       notifications_for: "Messages for "

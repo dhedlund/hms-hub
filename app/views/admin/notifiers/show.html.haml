@@ -26,4 +26,7 @@
     .label= t('.labels.updated_at')
     .value= l(@notifier.updated_at)
 
-  .actions= link_to t('.actions.edit'), edit_admin_notifier_path(@notifier)
+  .actions
+    %ul
+      - if current_ability.can? :update, @notifier
+        %li= link_to t('.actions.edit'), edit_admin_notifier_path(@notifier)

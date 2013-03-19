@@ -10,4 +10,8 @@ class Notifier < ActiveRecord::Base
 
   scope :active, lambda { where(:active => true) }
 
+  def self.internal
+    find_by_username('internal')
+  end
+
 end

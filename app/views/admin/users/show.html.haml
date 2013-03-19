@@ -20,6 +20,9 @@
     .label= t('.labels.locale')
     .value= t("admin.common.locales.#{@user.locale}")
   .field
+    .label= t('.labels.role')
+    .value= t("admin.common.roles.#{@user.role}")
+  .field
     .label= t('.labels.notifiers')
     .value
       %ul.multi-checkbox
@@ -32,4 +35,7 @@
     .label= t('.labels.updated_at')
     .value= l(@user.updated_at)
 
-  .actions= link_to t('.actions.edit'), edit_admin_user_path(@user)
+  .actions
+    %ul
+      - if current_ability.can? :update, @user
+        = link_to t('.actions.edit'), edit_admin_user_path(@user)

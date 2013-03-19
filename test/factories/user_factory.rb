@@ -5,5 +5,6 @@ FactoryGirl.define do
     password 'password'
     timezone 'America/Los_Angeles'
     locale 'en'
+    role 'admin'
   end
 end

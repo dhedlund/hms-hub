@@ -4,48 +4,36 @@ class Admin::MessagesControllerTest < ActionController::TestCase
   setup do
     @user = FactoryGirl.create(:user)
     with_valid_user_creds @user
+
+    @stream = FactoryGirl.create(:message_stream)
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
     without_auth_creds do
-      stream = FactoryGirl.create(:message_stream)
-
-      get :index, :message_stream_id => stream.id
+      get :index, :message_stream_id => @stream.id
       assert_response 401
     end
   end
 
-  test "index should redirect to message stream show page (HTML)" do
-    stream = FactoryGirl.create(:message_stream)
-
-    get :index, :message_stream_id => stream.id
-    assert_redirected_to [:admin, stream]
-  end
-
-  test "index should return a list of messages (JSON)" do
-    stream = FactoryGirl.create(:message_stream)
-    4.times { FactoryGirl.create(:message, :message_stream => stream) }
-
-    get :index, :message_stream_id => stream.id, :format => :json
-    assert_response :success
-    assert_equal 4, json_response.count
-  end
-
-  test "show should return a message (HTML)" do
-    message = FactoryGirl.create(:message)
-
-    get :show, :message_stream_id => message.message_stream.id, :id => message.id
-    assert_response :success
-    assert_not_nil assigns(:message_stream)
-    assert_not_nil assigns(:message)
-  end
-
   test "show should return a message (JSON)" do
-    message = FactoryGirl.create(:message)
+    message = FactoryGirl.create(:message, :message_stream => @stream)
 
-    get :show, :message_stream_id => message.message_stream.id, :id => message.id, :format => :json
+    get :show, :message_stream_id => @stream.id, :id => message.id, :format => :json
     assert_response :success
     assert_equal 'message', json_response.keys.first
+  end
+
+  test "show should only be accessible to users with :show Message access" do
+    message = FactoryGirl.create(:message, :message_stream => @stream)
+
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :show, :message_stream_id => @stream.id, :id => message.id }
+
+    current_ability.can :show, MessageStream
+    assert_raise(CanCan::AccessDenied) { get :show, :message_stream_id => @stream.id, :id => message.id }
+
+    current_ability.can :show, Message
+    assert_nothing_raised { get :show, :message_stream_id => @stream.id, :id => message.id }
   end
 
 end

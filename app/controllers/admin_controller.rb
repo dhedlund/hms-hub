@@ -3,7 +3,7 @@ class AdminController < ApplicationController
 
   before_filter :authenticate, :setup_i18n
 
-  helper_method :current_user
+  helper_method :current_user, :current_ability
 
   # GET /admin/index
   def index
@@ -11,8 +11,9 @@ class AdminController < ApplicationController
     @delivery_methods = Notification::VALID_DELIVERY_METHODS
     @notifiers = current_user.notifiers.active.reorder(:name)
 
-    # move the 'internal' notifier to the end
-    if internal_pos = @notifiers.index {|n| n.username == 'internal'}
+    # move the internal notifier to the end
+    internal_username = Notifier.internal.try(:username)
+    if internal_pos = @notifiers.index {|n| n.username == internal_username }
       @notifiers << @notifiers.delete_at(internal_pos)
     end
 
@@ -69,6 +70,10 @@ class AdminController < ApplicationController
     @current_user
   end
 
+  def current_ability
+    @current_ability
+  end
+
 
   protected
 
@@ -106,6 +111,7 @@ class AdminController < ApplicationController
 
         Time.zone = user.timezone
         @current_user = user
+        @current_ability = user.ability
       end
     end
   end

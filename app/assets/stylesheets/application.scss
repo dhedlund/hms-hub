@@ -8,6 +8,8 @@
  *= require_tree . 
 */
 
+@import "mixins";
+
 body {
   background-color: #f4fad2;
   line-height: 18px;
@@ -212,7 +214,11 @@ input:focus {
     }
 
     td.actions {
-      text-align: right;
+      width: 1%;
+      text-align: left;
+      white-space: nowrap;
+
+      ul { @include horiz-nav(5px, #ccc) }
     }
 
     .message .sms_text {
@@ -231,6 +237,8 @@ input:focus {
 div.actions { /* action links outside of an admin table */
   margin: 5px;
   font-size: 14px;
+
+  ul { @include horiz-nav(10px, #ccc, 2px) }
 }
 
 .admin-form {

@@ -5,14 +5,21 @@
     %tr
       %th.username= t('.labels.username')
       %th.name= t('.labels.name')
+      %th.role= t('.labels.role')
       %th.timezone= t('.labels.timezone')
+      %th.locale= t('.labels.locale')
       %th.actions= t('.labels.actions')
   %tbody
     - users.each do |user|
       %tr.user{:class => cycle('even', 'odd')}
         %td.username= user.username
         %td.name= user.name
+        %td.role= t("admin.common.roles.#{user.role}")
         %td.timezone= user.timezone
+        %td.locale= t("admin.common.locales.#{user.locale}")
         %td.actions
-          #{link_to t('.actions.view'), [:admin, user]}
-          | #{link_to t('.actions.edit'), [:edit, :admin, user]}
+          %ul
+            - if current_ability.can? :show, user
+              %li= link_to t('.actions.view'), [:admin, user]
+            - if current_ability.can? :update, user
+              %li= link_to t('.actions.edit'), [:edit, :admin, user]

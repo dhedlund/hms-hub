@@ -1,18 +1,42 @@
 module AdminHelper
   def primary_nav(selected=:dashboard)
     nav = [
-      { :name => :dashboard,     :path => admin_path                   },
-      { :name => :messages,      :path => admin_message_streams_path   },
-      { :name => :notifiers,     :path => admin_notifiers_path         },
-      { :name => :notifications, :path => admin_notifications_path     },
-      { :name => :attempts,      :path => admin_delivery_attempts_path },
-      { :name => :jobs,          :path => admin_jobs_path              },
-      { :name => :users,         :path => admin_users_path             },
-      { :name => :reports,       :path => admin_reports_path           },
+      { :name  => :dashboard,
+        :path  => admin_path,
+      },
+      { :name  => :messages,
+        :path  => admin_message_streams_path,
+        :model => Message,
+      },
+      { :name  => :notifiers,
+        :path  => admin_notifiers_path,
+        :model => Notifier,
+      },
+      { :name  => :notifications,
+        :path  => admin_notifications_path,
+        :model => Notification,
+      },
+      { :name  => :attempts,
+        :path  => admin_delivery_attempts_path,
+        :model => DeliveryAttempt,
+      },
+      { :name  => :jobs,
+        :path  => admin_jobs_path,
+        :model => Delayed::Job,
+      },
+      { :name  => :users,
+        :path  => admin_users_path,
+        :model => User,
+      },
+      { :name  => :reports,
+        :path  => admin_reports_path,
+      },
     ]
 
-    nav.each { |i| i[:title] ||= t("admin.primary_nav.#{i[:name]}") }
-    nav.select { |i| i[:name] == selected }[0][:selected] = true
+    nav = nav.reject {|i| i[:model] && current_ability.cannot?(:index, i[:model]) }
+
+    nav.each {|i| i[:title] ||= t("admin.primary_nav.#{i[:name]}") }
+    nav.find {|i| i[:name] == selected }.try {|i| i[:selected] = true }
     nav
   end
 

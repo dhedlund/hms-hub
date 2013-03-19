@@ -7,7 +7,7 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
 
     @user.notifiers << (@notifier = FactoryGirl.create(:notifier))
     @internal_notifier = FactoryGirl.create(:internal_notifier)
-    @notification = FactoryGirl.build(:notification)
+    @notification = FactoryGirl.build(:notification, :notifier => @notifier)
   end
 
   test "accessing controller w/o creds should give 401 unauthorized" do
@@ -159,6 +159,14 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_equal 1, assigns(:notifications).count
   end
 
+  test "index should only be accessible to users with :index Notification access" do
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :index }
+
+    current_ability.can :index, Notification
+    assert_nothing_raised { get :index }
+  end
+
   test "show should return a notification (HTML)" do
     notification = FactoryGirl.create(:notification, :notifier => @notifier)
 
@@ -177,10 +185,17 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
 
   test "show should only return a notification if for a notifier associated with user" do
     notification = FactoryGirl.create(:notification) # not associated w/ user
+    assert(CanCan::AccessDenied) { get :show, :id => notification.id }
+  end
 
-    assert_raise(ActiveRecord::RecordNotFound) do
-      get :show, :id => notification.id
-    end
+  test "show should only be accessible to users with :show Notification access" do
+    notification = FactoryGirl.create(:notification, :notifier => @notifier)
+
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :show, :id => notification.id }
+
+    current_ability.can :show, Notification
+    assert_nothing_raised { get :show, :id => notification.id }
   end
 
   test "new should return a new notification form (HTML)" do
@@ -189,23 +204,31 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:notification)
   end
 
+  test "new should only be accessible to users with :create Notification access" do
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { get :new }
+
+    current_ability.can :create, Notification
+    assert_nothing_raised { get :new }
+  end
+
   test "create should create a new notification (HTML)" do
     assert_difference('Notification.count') do
-      post :create, :notification => @notification.attributes.symbolize_keys
+      post :create, :notification => @notification.attributes
     end
 
     assert_redirected_to [:admin, assigns(:notification)]
   end
 
   test "create should associate notification with internal notifier" do
-    post :create, :notification => @notification.attributes.symbolize_keys
+    post :create, :notification => @notification.attributes
     assert_equal @internal_notifier, assigns(:notification).notifier
   end
 
   test "create should automatically generate a UUID if not specified (HTML)" do
     @notification.uuid = nil
     assert_difference('Notification.count') do
-      post :create, :notification => @notification.attributes.symbolize_keys
+      post :create, :notification => @notification.attributes
     end
     assert_not_nil assigns(:notification).uuid
   end
@@ -213,9 +236,19 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   test "create should automatically set delivery_start if not specified (HTML)" do
     @notification.delivery_start = nil
     assert_difference('Notification.count') do
-      post :create, :notification => @notification.attributes.symbolize_keys
+      post :create, :notification => @notification.attributes
     end
     assert_not_nil assigns(:notification).delivery_start
+  end
+
+  test "create should only be accessible to users with :create Notification access" do
+    notification_attrs = FactoryGirl.attributes_for(:notification, :notifier => @notifier)
+
+    reset_current_ability!
+    assert_raise(CanCan::AccessDenied) { post :create, :notification => notification_attrs }
+
+    current_ability.can :create, Notification
+    assert_nothing_raised { post :create, :notification => notification_attrs }
   end
 
 end

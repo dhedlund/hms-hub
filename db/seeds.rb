@@ -11,7 +11,9 @@ if Rails.env.development?
     :username => 'webdev',
     :name     => 'Web Developer',
     :password => 'webdevpwd',
-    :timezone => 'Africa/Blantyre'
+    :timezone => 'Africa/Blantyre',
+    :locale   => 'en',
+    :role     => 'admin',
   )
   Notifier.create!(
     :username => 'apidev',

@@ -30,6 +30,7 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     builder (3.0.4)
+    cancan (1.6.9)
     coderay (1.0.9)
     columnize (0.3.6)
     daemons (1.1.9)
@@ -163,6 +164,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cancan
   delayed_job
   delayed_job_active_record
   factory_girl_rails

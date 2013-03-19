@@ -4,6 +4,11 @@
     @user.locale
   )
 
+  role_options = options_for_select(
+    [*@user.role, *@available_roles].uniq.map {|r| [t("admin.common.roles.#{r}"), r] },
+    @user.role
+  )
+
 = form_for [:admin, @user], :html => { :class => 'admin-form' } do |f|
   - if f.object.errors[:base].any?
     .error-msg= f.object.errors[:base].join(', ')
@@ -35,6 +40,10 @@
     .label= f.label :locale, t('.labels.locale')
     .value
       = f.select(:locale, locale_options)
+  .field.role.required
+    .label= f.label :role, t('.labels.role')
+    .value
+      = f.select(:role, role_options)
   .field.notifiers
     .label= f.label :notifiers, t('.labels.notifiers')
     .value

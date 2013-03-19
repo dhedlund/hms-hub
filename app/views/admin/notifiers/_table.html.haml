@@ -21,5 +21,8 @@
         %td.notifications_count= notifier.notifications.count
         %td.updates_pending= notifier.notifications.run_since(last_status_req_at).count
         %td.actions
-          #{link_to t('.actions.view'), [:admin, notifier]}
-          | #{link_to t('.actions.edit'), [:edit, :admin, notifier]}
+          %ul
+            - if current_ability.can? :show, notifier
+              %li= link_to t('.actions.view'), admin_notifier_path(notifier)
+            - if current_ability.can? :update, notifier
+              %li= link_to t('.actions.edit'), edit_admin_notifier_path(notifier)

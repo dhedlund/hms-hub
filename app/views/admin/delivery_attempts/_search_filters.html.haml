@@ -28,7 +28,7 @@
     .label= label_tag :phone_number_cont, t('.labels.phone_number')
     .value
       %span.matcher.cont= t('.matchers.cont')
-      = text_field_tag :phone_number_cont, @search_params[:phone_number_cont]
+      = text_field_tag :phone_number_cont, search_params[:phone_number_cont]
   .field.notifier
     .label= label_tag :notifier_id_eq, t('.labels.notifier')
     .value

@@ -2,17 +2,22 @@ class Admin::DeliveryAttemptsController < AdminController
   respond_to :html, :json, :js
 
   def index
+    authorize! :index, DeliveryAttempt
+    @delivery_attempts = DeliveryAttempt.accessible_by(current_ability)
+
     @search_params = params.slice(*allowed_search_params)
-    @notifiers = current_user.notifiers.reorder(:name)
-    @delivery_attempts = search(DeliveryAttempt.where(:notifier_id => @notifiers), @search_params)
+    @delivery_attempts = search(@delivery_attempts, @search_params)
     @delivery_attempts = @delivery_attempts.order('created_at DESC').page(params[:page])
+
+    @notifiers = Notifier.accessible_by(current_ability).reorder(:name)
 
     respond_with @delivery_attempts
   end
 
   def show
-    @notifiers = current_user.notifiers.reorder(:name)
-    @delivery_attempt = DeliveryAttempt.where(:notifier_id => @notifiers).find(params[:id])
+    @delivery_attempt = DeliveryAttempt.find(params[:id])
+    authorize! :show, @delivery_attempt
+
     @message = Message.find(@delivery_attempt.message_id)
     @delivery_details = @delivery_attempt.delivery_details
     @provider = @delivery_attempt.provider

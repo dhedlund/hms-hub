@@ -10,6 +10,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # ability:
+  #---------
+  test "should return an ability object associated with user's role" do
+    ability = FactoryGirl.build(:user, :role => "staff").ability
+    assert ability.respond_to?(:authorize!)
+    assert ability.respond_to?(:can?)
+    assert_equal "staff", ability.role
+  end
+
+  #----------------------------------------------------------------------------#
   # locale:
   #--------
   test "should be invalid without a locale" do
@@ -69,6 +79,33 @@ class UserTest < ActiveSupport::TestCase
   test "should be valid with a password longer than 7 characters" do
     @user.password = '12345678'
     assert @user.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # role:
+  #------
+  test "should be invalid without a role" do
+    @user.role = nil
+    assert @user.invalid?
+    assert @user.errors[:role].any?
+  end
+
+  test "should be invalid for unexpected role values" do
+    @user.role = 'cub_scout_leader'
+    assert @user.invalid?
+    assert @user.errors[:role].any?
+  end
+
+  test "should be valid if role is 'superadmin'" do
+    assert FactoryGirl.build(:user, :role => 'superadmin').valid?
+  end
+
+  test "should be valid if role is 'admin'" do
+    assert FactoryGirl.build(:user, :role => 'admin').valid?
+  end
+
+  test "should be valid if role is 'staff'" do
+    assert FactoryGirl.build(:user, :role => 'staff').valid?
   end
 
   #----------------------------------------------------------------------------#
