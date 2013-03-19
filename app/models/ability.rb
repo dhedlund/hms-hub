@@ -35,7 +35,9 @@ class Ability
   end
 
   def admin
-    notifier_ids = @user.notifier_ids
+    notifiers = @user.notifiers
+    notifier_ids = notifiers.map(&:id)
+    notifier_usernames = notifiers.map(&:username)
     int_notifier_id = Notifier.internal.try(:id)
     subroles = self.class.subroles_for(@role)
 
@@ -46,6 +48,7 @@ class Ability
     can [:index, :show, :create, :update,         ], MessageStream
     can [:index, :show,                           ], Notification, :notifier_id => notifier_ids
     can [:index, :show,                           ], Notifier, :id => notifier_ids
+    can([:index, :show,                           ], Report) {|r| notifier_usernames.include?(r.username) }
     can [:index, :show,                           ], User # FIXME: restrict to same notifiers
 
     # users should be able to create notifications for testing
@@ -59,7 +62,9 @@ class Ability
   end
 
   def staff
-    notifier_ids = @user.notifier_ids
+    notifiers = @user.notifiers
+    notifier_ids = notifiers.map(&:id)
+    notifier_usernames = notifiers.map(&:username)
     int_notifier_id = Notifier.internal.try(:id)
 
     #   [:index, :show, :create, :update, :destroy], Model
@@ -69,6 +74,7 @@ class Ability
     can [:index, :show,                           ], MessageStream
     can [:index, :show,                           ], Notification, :notifier_id => notifier_ids
     can [:index, :show,                           ], Notifier, :id => notifier_ids
+    can([:index, :show,                           ], Report) {|r| notifier_usernames.include?(r.username) }
     can [                                         ], User
 
     # users should be able to create notifications for testing

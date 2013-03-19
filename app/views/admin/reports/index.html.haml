@@ -1,5 +1,6 @@
 :ruby
   @nav_hierarchy = [:reports]
+  self.formats = [:html, :json]
 
 %h2= t('.title')
 
@@ -9,19 +10,17 @@
   $(function() {
     var $elem = $('.report-dir-trees')
     var $tree = $elem.tree({
-      data: #{@dir_trees.to_json.html_safe},
+      data: #{@trees.to_json.html_safe},
       autoOpen: 0,
+      slide: false,
       selectable: true,
       onCanSelectNode: function(node) {
         return node.children.length == 0
       },
     });
 
-    // open newest folder for each notifier directory
-    $tree.find('.jqtree-folder').find('.jqtree-folder.jqtree-closed:first').removeClass('jqtree-closed');
-
     var baseUrl = window.location.pathname;
     $tree.bind('tree.select', function(event) {
-      if (event.node.id) { window.location = baseUrl + event.node.id; };
+      if (event.node.id) { window.location = baseUrl + '/' + event.node.id; };
     });
   });

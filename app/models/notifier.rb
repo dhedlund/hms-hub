@@ -14,4 +14,8 @@ class Notifier < ActiveRecord::Base
     find_by_username('internal')
   end
 
+  def reports
+    Report.find(username)
+  end
+
 end

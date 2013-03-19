@@ -392,6 +392,11 @@ div.actions { /* action links outside of an admin table */
 .report-dir-trees {
   margin-left: 20px;
 
+  ul li { /* separate notifier-level tree nodes a little bit */
+    margin-bottom: 20px !important;
+    ul li { margin-bottom: 0px !important; }
+  }
+
   .jqtree-selected div {
     display: inline;
     background: none !important;
