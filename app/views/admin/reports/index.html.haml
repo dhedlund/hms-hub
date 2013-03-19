@@ -1,6 +1,21 @@
 :ruby
   @nav_hierarchy = [:reports]
-  self.formats = [:html, :json]
+  @trees = @reports.map do |notifier,reports|
+    {
+      'label'    => notifier.name,
+      'children' => reports.group_by(&:month).map {|month,reports|
+        {
+          'label'    => l(month, :format => t('.month_fmt')),
+          'children' => reports.map {|report|
+            {
+              'label' => report.filename,
+              'id'    => report.path,
+            }
+          }
+        }
+      }.reverse # newest months first
+    }
+  end
 
 %h2= t('.title')
 

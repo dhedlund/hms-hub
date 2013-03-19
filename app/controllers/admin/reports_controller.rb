@@ -7,10 +7,7 @@ class Admin::ReportsController < AdminController
     authorize! :index, Report
 
     @notifiers = Notifier.accessible_by(current_ability).reorder(&:name)
-    @trees = @notifiers.map {|n| report_jqtree(n, n.reports) }
-
-    # reject any notifier trees that are empty
-    @trees.reject! {|t| t['children'].empty? }
+    @reports = Hash[@notifiers.map {|n| [n, n.reports] }.reject {|v| v[1].empty? }]
 
     respond_with @reports
   end

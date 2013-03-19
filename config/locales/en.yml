@@ -348,6 +348,7 @@ en:
       index:
         title: "Reports and Files"
         no_files: "No files"
+        month_fmt: "%B %Y"
     users:
       edit:
         title: "Edit User"
