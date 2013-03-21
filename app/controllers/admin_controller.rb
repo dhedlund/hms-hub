@@ -5,6 +5,7 @@ class AdminController < ApplicationController
 
   helper_method :current_user, :current_ability
 
+  REPORT_PATH = '/var/www/apps/hms-deploy-ccpf/hms-hub/reports/'
   # GET /admin/index
   def index
     @status_codes = Notification::VALID_STATUSES 
@@ -18,13 +19,16 @@ class AdminController < ApplicationController
     end
 
     status_data = @notifiers.map do |notifier|
-      #notif_time = Notifier.where(:username=>'balaka-notifier').first.last_status_req_at
-      #notif_hours_ago = ((Time.now - time)/3600).to_i
-      notif_hours_ago = rand(60); notif_time = Time.zone.now - notif_hours_ago.hours  #DEMO only to check class helper
+      notif_time = Notifier.where(:username=>notifier.username).first.last_status_req_at
+      notif_hours_ago = ((Time.now - notif_time)/3600).to_i
 
-      #TODO:  get last report sync from contents ot mtime of report file
-      last_report_sync = Date.today.beginning_of_month + 5.days
-      [notifier.username, {'hours_ago'=>notif_hours_ago, 'last_notif_sync'=>notif_time, 'last_notif_hours_ago'=>notif_hours_ago, 'last_report_sync'=>last_report_sync} ]
+      begin
+        last_report_sync = File.mtime(REPORT_PATH+notifier.username)
+      rescue Exception => e
+        logger.warn "Error getting mtime of #{REPORT_PATH+notifier.username}: #{e.inspect}"
+        last_report_sync = 'unknown'
+      end
+      [notifier.username, {'last_notif_sync'=>notif_time, 'last_notif_hours_ago'=>notif_hours_ago, 'last_report_sync'=>last_report_sync} ]
     end
 
     @status = Hash[status_data]
