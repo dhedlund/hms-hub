@@ -1,4 +1,8 @@
 class AddNameToNotifiers < ActiveRecord::Migration
+  class Notifier < ActiveRecord::Base
+    self.table_name = 'notifiers'
+  end
+
   def up
     add_column :notifiers, :name, :string
 
