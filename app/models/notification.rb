@@ -3,7 +3,7 @@ class Notification < ActiveRecord::Base
   belongs_to :notifier
   has_many :delivery_attempts
 
-  after_initialize :default_values
+  after_initialize :default_values, :if => :new_record?
 
   NEW = 'NEW'
   TEMP_FAIL = 'TEMP_FAIL'
@@ -43,6 +43,7 @@ class Notification < ActiveRecord::Base
   def default_values
     self.status ||= 'NEW'
     self.delivery_window ||= WINDOW_SIZE
+    self.uuid ||= SecureRandom.uuid
   end
 
   def delivery_expires

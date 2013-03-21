@@ -226,7 +226,6 @@ class Admin::NotificationsControllerTest < ActionController::TestCase
   end
 
   test "create should automatically generate a UUID if not specified (HTML)" do
-    @notification.uuid = nil
     assert_difference('Notification.count') do
       post :create, :notification => @notification.attributes
     end

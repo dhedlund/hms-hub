@@ -475,6 +475,11 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.errors[:uuid].any?
   end
 
+  test "new notifications should be initialized with a uuid" do
+    notification = Notification.new
+    assert notification.uuid.present?
+  end
+
   test "should be valid if uuid contains non-numeric characters" do
     @notification.uuid = 'asdf1234_:44N'
     assert @notification.valid?

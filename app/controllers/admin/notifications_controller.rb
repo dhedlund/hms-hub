@@ -44,7 +44,6 @@ class Admin::NotificationsController < AdminController
 
     @notification = Notification.new
     @notification.attributes = params[:notification]
-    @notification.uuid = SecureRandom.uuid
     @notification.delivery_start = Time.zone.now
     @notification.notifier = Notifier.internal
 
