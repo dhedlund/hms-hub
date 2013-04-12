@@ -30,7 +30,7 @@ HmsHub::Application.routes.draw do
   get 'nexmo/inbound_sms' => 'nexmo#accept_delivery'
 
   post 'intellivr/confirmation' => 'intellivr#confirm_delivery'
-
+  root :to => redirect("/admin")
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

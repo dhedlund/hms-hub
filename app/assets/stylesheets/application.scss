@@ -343,12 +343,24 @@ div.actions { /* action links outside of an admin table */
       background: #eee;
     }
     .sync_status {
-      h3 {
-        font-size: 1.2em;
+      width: 60%;
+      border: 1px solid black;
+      padding: 1em;
+      margin-left: 20%;
+      table {
+        width: 90%;
+        margin: 1em;
+        td.left {
+          text-align: left;
+          padding-left: 1em;
+        }
       }
-      .last_notif, .last_report {
+      h3 {
+        font-size: 1.4em;
+      }
+      .last_notif, .last_report, .last_ping {
         padding-left: 1em;
-        font-size: 1em;
+        font-size: 1.2em;
       }
       .status-ok   {color: green;}
       .status-warn {color: purple;}

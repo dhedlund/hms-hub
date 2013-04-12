@@ -5,7 +5,8 @@ class AdminController < ApplicationController
 
   helper_method :current_user, :current_ability
 
-  REPORT_PATH = '/var/www/apps/hms-deploy-ccpf/hms-hub/reports/'
+  REPORTS_BASE = Rails.root.join(ENV['REPORTS_BASE'] || 'reports').expand_path.to_s
+
   # GET /admin/index
   def index
     @status_codes = Notification::VALID_STATUSES 
@@ -22,13 +23,22 @@ class AdminController < ApplicationController
       notif_time = Notifier.where(:username=>notifier.username).first.last_status_req_at
       notif_hours_ago = ((Time.now - notif_time)/3600).to_i
 
+      last_report_path = File.join(REPORTS_BASE,notifier.username)
+      last_ping_path = File.join(REPORTS_BASE,"last_ping")   #no separate ones currently
       begin
-        last_report_sync = File.mtime(REPORT_PATH+notifier.username)
+        last_report_sync = File.mtime(last_report_path)
       rescue Exception => e
-        logger.warn "Error getting mtime of #{REPORT_PATH+notifier.username}: #{e.inspect}"
+        logger.warn "STATUS_TIME_ERROR:   getting mtime of #{last_report_path}: #{e.inspect}"
         last_report_sync = 'unknown'
       end
-      [notifier.username, {'last_notif_sync'=>notif_time, 'last_notif_hours_ago'=>notif_hours_ago, 'last_report_sync'=>last_report_sync} ]
+      begin
+        last_ping = File.mtime(File.join(REPORTS_BASE,"last_ping"))
+      rescue Exception => e
+        logger.warn "STATUS_TIME_ERROR:  getting mtime of #{last_ping_path}: #{e.inspect}"
+        last_ping = 'unknown'
+      end
+      
+      [notifier.username, {'last_notif_sync'=>notif_time, 'last_notif_hours_ago'=>notif_hours_ago, 'last_report_sync'=>last_report_sync, 'last_ping' => last_ping} ]
     end
 
     @status = Hash[status_data]
