@@ -5,8 +5,6 @@ class AdminController < ApplicationController
 
   helper_method :current_user, :current_ability
 
-  REPORTS_BASE = Rails.root.join(ENV['REPORTS_BASE'] || 'reports').expand_path.to_s
-
   # GET /admin/index
   def index
     @status_codes = Notification::VALID_STATUSES 
@@ -23,8 +21,8 @@ class AdminController < ApplicationController
       notif_time = Notifier.where(:username=>notifier.username).first.last_status_req_at
       notif_hours_ago = ((Time.now - notif_time)/3600).to_i
 
-      last_report_path = File.join(REPORTS_BASE,notifier.username)
-      last_ping_path = File.join(REPORTS_BASE,"last_ping")   #no separate ones currently
+      last_report_path = File.join(Report::REPORTS_PATH,notifier.username)
+      last_ping_path = File.join(Report::REPORTS_PATH, "last_ping")   #no separate ones currently
       begin
         last_report_sync = File.mtime(last_report_path)
       rescue Exception => e
@@ -32,7 +30,7 @@ class AdminController < ApplicationController
         last_report_sync = 'unknown'
       end
       begin
-        last_ping = File.mtime(File.join(REPORTS_BASE,"last_ping"))
+        last_ping = File.mtime(File.join(Report::REPORTS_PATH,"last_ping"))
       rescue Exception => e
         logger.warn "STATUS_TIME_ERROR:  getting mtime of #{last_ping_path}: #{e.inspect}"
         last_ping = 'unknown'
