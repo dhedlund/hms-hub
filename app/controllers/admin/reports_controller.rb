@@ -7,7 +7,10 @@ class Admin::ReportsController < AdminController
     authorize! :index, Report
 
     @notifiers = Notifier.accessible_by(current_ability).reorder(&:name)
-    @reports = Hash[@notifiers.map {|n| [n, n.reports] }.reject {|v| v[1].empty? }]
+    @reports = Hash[@notifiers.map {|n| [n, n.reports] }]
+
+    # don't include notifiers w/o any reports
+    @reports.delete_if {|notifier,reports| reports.empty? }
 
     respond_with @reports
   end
@@ -24,26 +27,6 @@ class Admin::ReportsController < AdminController
     rescue Report::NotFound => e
       raise ActionController::RoutingError.new('Not Found')
     end
-  end
-
-
-  private
-
-  def report_jqtree(notifier, reports)
-    {
-      'label'    => notifier.name,
-      'children' => reports.group_by(&:month).map {|month,reports|
-        {
-          'label'    => month.to_s,
-          'children' => reports.map {|report|
-            {
-              'label' => report.filename,
-              'id'    => report.path,
-            }
-          }
-        }
-      }.reverse # newest months first
-    }
   end
 
 end

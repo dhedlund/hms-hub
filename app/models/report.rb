@@ -27,6 +27,7 @@ class Report
 
     reports = []
     Find.find(find_path) do |path|
+      Find.prune if File.basename(path)[0] == '.' # exclude hidden
       reports << Report.new(path, false) if FileTest.file?(path)
     end
 
