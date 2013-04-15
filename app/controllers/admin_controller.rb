@@ -19,7 +19,7 @@ class AdminController < ApplicationController
 
     status_data = @notifiers.map do |notifier|
       notif_time = Notifier.where(:username=>notifier.username).first.last_status_req_at
-      notif_hours_ago = ((Time.now - notif_time)/3600).to_i
+      notif_hours_ago = notif_time ? ((Time.now - notif_time)/3600).to_i : nil
 
       last_report_path = File.join(Report::REPORTS_PATH,notifier.username)
       last_ping_path = File.join(Report::REPORTS_PATH, "last_ping")   #no separate ones currently

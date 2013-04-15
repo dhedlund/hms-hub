@@ -157,7 +157,8 @@ en:
         last_notif_sync:  "Last Messages Sync"
         last_report_sync:  "Last Reports Sync"
         last_ping:  "Hotline Server Last Seen"
-      hours_ago: "Hours Ago"
+        hours_ago: "hours ago"
+        never_synced: "never synced"
       delivery_methods:
         SMS: "SMS Messages"
         IVR: "IVR Messages"
