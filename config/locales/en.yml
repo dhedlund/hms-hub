@@ -106,12 +106,12 @@ en:
       last: "Last »"
 
   admin:
-    site_title: "CCPF Hub"
+    site_title: "HMS Hub"
     footer: "Unauthorized access prohibited."
 
     user_nav:
       app_name: "HMS"
-      app_product: "CCPF Hub"
+      app_product: "Hub"
       notifiers:
         all: "All Notifiers"
       signed_in: "Signed In"
@@ -153,10 +153,10 @@ en:
       title:  Message Delivery Dashboard
       notifications_for: "Messages for "
       connection_status:
-        connection_status:  "Hotline-Hub Connection Status"
+        connection_status:  "Notifier-Hub Connection Status"
         last_notif_sync:  "Last Messages Sync"
         last_report_sync:  "Last Reports Sync"
-        last_ping:  "Hotline Server Last Seen"
+        last_ping:  "Notifier Last Seen"
         hours_ago: "hours ago"
         never_synced: "never synced"
         unknown: "unknown"
