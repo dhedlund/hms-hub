@@ -159,6 +159,7 @@ en:
         last_ping:  "Hotline Server Last Seen"
         hours_ago: "hours ago"
         never_synced: "never synced"
+        unknown: "unknown"
       delivery_methods:
         SMS: "SMS Messages"
         IVR: "IVR Messages"

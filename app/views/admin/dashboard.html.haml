@@ -18,13 +18,13 @@
               - if hours_ago
                 (#{hours_ago} #{t('.connection_status.hours_ago')})
               - else
-                (#{t('.connection_status.never_synced')})
+                = t('.connection_status.never_synced')
           %tr.last_report
             %td=t('.connection_status.last_report_sync') + ": "          
-            %td.left #{@status[username]['last_report_sync']}
+            %td.left #{@status[username]['last_report_sync'] || t('.connection_status.unknown')}
           %tr.last_ping
             %td=t('.connection_status.last_ping') + ": "
-            %td.left #{@status[username]['last_ping']}
+            %td.left #{@status[username]['last_ping'] || t('.connection_status.unknown')}
           
       -@delivery_methods.each do |method|
         - url_vars[:delivery_method_eq] = method

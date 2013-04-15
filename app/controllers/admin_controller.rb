@@ -21,19 +21,16 @@ class AdminController < ApplicationController
       notif_time = Notifier.where(:username=>notifier.username).first.last_status_req_at
       notif_hours_ago = notif_time ? ((Time.now - notif_time)/3600).to_i : nil
 
-      last_report_path = File.join(Report::REPORTS_PATH,notifier.username)
-      last_ping_path = File.join(Report::REPORTS_PATH, "last_ping")   #no separate ones currently
       begin
-        last_report_sync = File.mtime(last_report_path)
-      rescue Exception => e
-        logger.warn "STATUS_TIME_ERROR:   getting mtime of #{last_report_path}: #{e.inspect}"
-        last_report_sync = 'unknown'
+        last_report_sync = Report.new("#{notifier.username}/.last-synced").file.mtime
+      rescue Report::NotFound => e
+        # a sync hasn't been performed yet
       end
+
       begin
-        last_ping = File.mtime(File.join(Report::REPORTS_PATH,"last_ping"))
-      rescue Exception => e
-        logger.warn "STATUS_TIME_ERROR:  getting mtime of #{last_ping_path}: #{e.inspect}"
-        last_ping = 'unknown'
+        last_ping = Report.new("#{notifier.username}/.last-pinged").file.mtime
+      rescue Report::NotFound => e
+        # a ping has never succeeded, or hub not set up to ping notifier
       end
       
       [notifier.username, {'last_notif_sync'=>notif_time, 'last_notif_hours_ago'=>notif_hours_ago, 'last_report_sync'=>last_report_sync, 'last_ping' => last_ping} ]
