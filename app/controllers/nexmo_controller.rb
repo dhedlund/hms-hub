@@ -13,6 +13,10 @@ class NexmoController < ApplicationController
       :mo_tag       => params[:'mo-tag'],
       :status       => params[:status].try(:upcase),
       :scts         => params[:scts],
+      :sender_id    => params[:to],
+      :err_code     => params[:'err-code'],
+      :price        => params[:price],
+      :client_ref   => params[:'client-ref'],
       :params       => params, # to include w/ error message if failure
     })
     unless success

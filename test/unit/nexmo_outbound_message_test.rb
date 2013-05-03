@@ -53,7 +53,103 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
     attempt.expects(:save).once
     @message.update_attributes(:status => NexmoOutboundMessage::FAILED)
     assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
-    assert_equal NexmoOutboundMessage::REMOTE_ERROR, attempt.error_type
+    assert_equal NexmoOutboundMessage::UNKNOWN_ERROR, attempt.error_type
+  end
+
+  test "attempt should be TEMP_FAIL if err_code is 'absent subscriber' (2)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '2')
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::ABSENT_SUBSCRIBER, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'absent subscriber' (3)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '3')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::ABSENT_SUBSCRIBER, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'call barred by user' (4)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '4')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::CALL_BARRED, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'portability error' (5)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '5')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::PORTABILITY_ERROR, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'anti-spam rejection' (6)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '6')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::ANTI_SPAM, attempt.error_type
+  end
+
+  test "attempt should be TEMP_FAIL if err_code is 'handset busy' (7)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '7')
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::HANDSET_BUSY, attempt.error_type
+  end
+
+  test "attempt should be TEMP_FAIL if err_code is 'network error' (8)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '8')
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::NETWORK_ERROR, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'illegal number' (9)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '9')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::ILLEGAL_NUMBER, attempt.error_type
+  end
+
+  test "attempt should be PERM_FAIL if err_code is 'invalid message' (10)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '10')
+    assert_equal DeliveryAttempt::PERM_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::INVALID_MSG, attempt.error_type
+  end
+
+  test "attempt should be TEMP_FAIL if err_code is 'unroutable' (11)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '11')
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::UNROUTABLE, attempt.error_type
+  end
+
+  test "attempt should be TEMP_FAIL if err_code is 'general error' (99)" do
+    @message.save!
+    attempt = @message.delivery_attempt
+    @message.update_attributes(:status => NexmoOutboundMessage::FAILED, :err_code => '99')
+    assert_equal DeliveryAttempt::TEMP_FAIL, attempt.result
+    assert_equal NexmoOutboundMessage::GENERAL_ERROR, attempt.error_type
+  end
+
+  #----------------------------------------------------------------------------#
+  # client_ref:
+  #------------
+  test "should be valid without a client_ref" do
+    @message.client_ref = nil
+    @message.valid?
   end
 
   #----------------------------------------------------------------------------#
@@ -67,6 +163,14 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
 
   test "can access delivery_attempt from outbound message" do
     assert @message.delivery_attempt
+  end
+
+  #----------------------------------------------------------------------------#
+  # err_code:
+  #----------
+  test "should be valid without an err_code" do
+    @message.err_code = nil
+    assert @message.valid?
   end
 
   #----------------------------------------------------------------------------#
@@ -115,10 +219,26 @@ class NexmoOutboundMessageTest < ActiveSupport::TestCase
   end
 
   #----------------------------------------------------------------------------#
+  # price:
+  #-------
+  test "should be valid without a price" do
+    @message.price = nil
+    @message.valid?
+  end
+
+  #----------------------------------------------------------------------------#
   # scts:
   #------
   test "should be valid without a scts" do
     @message.scts = nil
+    @message.valid?
+  end
+
+  #----------------------------------------------------------------------------#
+  # sender_id:
+  #-----------
+  test "should be valid without a sender_id" do
+    @message.sender_id = nil
     @message.valid?
   end
 

@@ -6,22 +6,28 @@ class Delivery::Provider::Nexmo
   class ConfigurationError < StandardError; end
 
   # error types (used for DeliveryAttempt's :error_type attribute)
-  INTERNAL_ERROR   = 'INTERNAL_ERROR'
-  REMOTE_TIMEOUT   = 'REMOTE_TIMEOUT'
-  REMOTE_ERROR     = 'REMOTE_ERROR'
-  THROTTLED        = 'THROTTLED'
-  MISSING_PARAMS   = 'MISSING_PARAMS'
-  INVALID_PARAMS   = 'INVALID_PARAMS'
-  INVALID_CREDS    = 'INVALID_CREDS'
-  NEXMO_ERROR      = 'NEXMO_ERROR'
-  INVALID_MESSAGE  = 'INVALID_MESSAGE'
-  BLACKLISTED      = 'BLACKLISTED'
-  ACCOUNT_BARRED   = 'ACCOUNT_BARRED'
-  NO_CREDITS       = 'NO_CREDITS'
-  CONNECTION_LIMIT = 'CONNECTION_LIMIT'
-  REST_DISABLED    = 'REST_DISABLED'
-  MESSAGE_LENGTH   = 'MESSAGE_LENGTH'
-  UNKNOWN_ERROR    = 'UNKNOWN_ERROR'
+  INTERNAL_ERROR       = 'INTERNAL_ERROR'
+  REMOTE_TIMEOUT       = 'REMOTE_TIMEOUT'
+  REMOTE_ERROR         = 'REMOTE_ERROR'
+  THROTTLED            = 'THROTTLED'
+  MISSING_PARAMS       = 'MISSING_PARAMS'
+  INVALID_PARAMS       = 'INVALID_PARAMS'
+  INVALID_CREDS        = 'INVALID_CREDS'
+  NEXMO_ERROR          = 'NEXMO_ERROR'
+  INVALID_MESSAGE      = 'INVALID_MESSAGE'
+  BLACKLISTED          = 'BLACKLISTED'
+  ACCOUNT_BARRED       = 'ACCOUNT_BARRED'
+  NO_CREDITS           = 'NO_CREDITS'
+  CONNECTION_LIMIT     = 'CONNECTION_LIMIT'
+  REST_DISABLED        = 'REST_DISABLED'
+  MESSAGE_LENGTH       = 'MESSAGE_LENGTH'
+  COMMUNICATION_FAIL   = 'COMMUNICATION_FAIL'
+  INVALID_SIGNATURE    = 'INVALID_SIGNATURE'
+  INVALID_SENDER_ADDR  = 'INVALID_SENDER_ADDR'
+  INVALID_TTL          = 'INVALID_TTL'
+  FACILITY_NOT_ALLOWED = 'FACILITY_NOT_ALLOWED'
+  INVALID_MSG_CLASS    = 'INVALID_MSG_CLASS'
+  UNKNOWN_ERROR        = 'UNKNOWN_ERROR'
 
   def initialize(config={})
     @json_endpoint = config[:json_endpoint] || 'http://rest.nexmo.com/sms/json'
@@ -228,6 +234,54 @@ class Delivery::Provider::Nexmo
           :result     => DeliveryAttempt::PERM_FAIL,
           :error_type => MESSAGE_LENGTH,
           :error_msg  => "message is too long: #{msg_res.inspect}",
+        }
+
+      when '13'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::TEMP_FAIL,
+          :error_type => COMMUNICATION_FAIL,
+          :error_msg  => "not submitted because there was a communication failure: #{msg_res.inspect}",
+        }
+
+      when '14'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::PERM_FAIL,
+          :error_type => INVALID_SIGNATURE,
+          :error_msg  => "verification failure in the submitted signature: #{msg_res.inspect}",
+        }
+
+      when '15'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::PERM_FAIL,
+          :error_type => INVALID_SENDER_ADDR,
+          :error_msg  => "sender address was not allowed for this message: #{msg_res.inspect}",
+        }
+
+      when '16'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::PERM_FAIL,
+          :error_type => INVALID_TTL,
+          :error_msg  => "the ttl parameter values is invalid: #{msg_res.inspect}",
+        }
+
+      when '19'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::PERM_FAIL,
+          :error_type => FACILITY_NOT_ALLOWED,
+          :error_msg  => "request makes use of a facility that is not enabled on your account: #{msg_res.inspect}",
+        }
+
+      when '20'
+        message.status = NexmoOutboundMessage::FAILED
+        attempt_statuses << {
+          :result     => DeliveryAttempt::PERM_FAIL,
+          :error_type => INVALID_MSG_CLASS,
+          :error_msg  => "message class value supplied was out of range (0 - 3): #{msg_res.inspect}",
         }
 
       else

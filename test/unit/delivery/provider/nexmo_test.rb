@@ -222,6 +222,54 @@ class Delivery::Provider::NexmoTest < ActiveSupport::TestCase
     assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
   end
 
+  test "deliver supports nexmo response code 13 (communication fail)" do
+    @provider.stubs(:handle_request).returns(fake_response(['13']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::TEMP_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::COMMUNICATION_FAIL, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
+  test "deliver supports nexmo response code 14 (invalid signature)" do
+    @provider.stubs(:handle_request).returns(fake_response(['14']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::INVALID_SIGNATURE, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
+  test "deliver supports nexmo response code 15 (invalid sender addr)" do
+    @provider.stubs(:handle_request).returns(fake_response(['15']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::INVALID_SENDER_ADDR, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
+  test "deliver supports nexmo response code 16 (invalid TTL)" do
+    @provider.stubs(:handle_request).returns(fake_response(['16']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::INVALID_TTL, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
+  test "deliver supports nexmo response code 19 (facility not allowed)" do
+    @provider.stubs(:handle_request).returns(fake_response(['19']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::FACILITY_NOT_ALLOWED, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
+  test "deliver supports nexmo response code 20 (invalid message class)" do
+    @provider.stubs(:handle_request).returns(fake_response(['20']))
+    @provider.deliver(@attempt)
+    assert_equal DeliveryAttempt::PERM_FAIL, @attempt.result
+    assert_equal Delivery::Provider::Nexmo::INVALID_MSG_CLASS, @attempt.error_type
+    assert_equal NexmoOutboundMessage::FAILED, NexmoOutboundMessage.first.status
+  end
+
   test "deliver supports unknown nexmo responses" do
     @provider.stubs(:handle_request).returns(fake_response(['SOS']))
     @provider.deliver(@attempt)

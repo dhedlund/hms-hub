@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130318165636) do
+ActiveRecord::Schema.define(:version => 20130503075139) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -108,6 +108,10 @@ ActiveRecord::Schema.define(:version => 20130318165636) do
     t.string   "scts"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sender_id"
+    t.string   "err_code"
+    t.string   "price"
+    t.string   "client_ref"
   end
 
   add_index "nexmo_outbound_messages", ["delivery_attempt_id"], :name => "index_nexmo_outbound_messages_on_delivery_attempt_id"
