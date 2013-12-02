@@ -1,4 +1,5 @@
-## Overview **HMS Hub** manages the delivery and tracking of phone-based
+## Overview
+**HMS Hub** manages the delivery and tracking of phone-based
 notifications to end recipients.  It is particularly well suited for
 environments where recipient phones are frequently inaccessible; this may be
 due to limited signal range or access to power, common in some developing
@@ -13,7 +14,8 @@ bundled with support for [Nexmo](https://www.nexmo.com) (SMS) and
 This software was developed to support objectives outlined in the CCPF
 program.
 
-### About the CCPF Program The VillageReach CCPF program, CHIPATALA CHA PA
+### About the CCPF Program
+The VillageReach CCPF program, CHIPATALA CHA PA
 FONI, means "Health Center by Phone" in the Malawian language of Chichewa.
 The program is focused on maternal & child health improvement, through
 increased access to basic health information, and prompting towards earlier
@@ -30,9 +32,11 @@ by the Malawian health-software company
 [Baobab Health Trust](http://baobabhealth.org/). The software to handle the
 tips-message distribution, [HMS-Hub](https://github.com/dhedlund/hms-hub),
 and [HMS-Notifier](https://github.com/dhedlund/hms-notifier), were developed
-by VillageReach.  All components are in active production use in Malawi.
+by [VillageReach](http://villagereach.org/).  All components are in active
+production use in Malawi.
 
-### Messaging System The tips-messaging system is designed to operate
+### Messaging System
+The tips-messaging system is designed to operate
 robustly in a environment with intermittent connectivity, and multiple
 remote messaging sources.  The Hub software is intended to be on a
 relatively better-connected server.  It centralizes handling of all the
