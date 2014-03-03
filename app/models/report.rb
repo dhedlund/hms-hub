@@ -9,7 +9,7 @@ class Report
     \A#{Regexp.escape(REPORTS_PATH)}/ # report dir, discard
     (?<path>
       (?<username>[^/]+)/         # username of notifier
-      (?:(?<month>\d{4}-\d{2})/)? # month, optional
+      (?:(?<month>\w+-\d{4})/)? # month, optional
       (?<filename>.+)             # filename, could have subdirectories
     )
     \Z
@@ -82,7 +82,7 @@ class Report
       @filename = match[:filename]
 
       if match[:month]
-        @month = Date.strptime(match[:month], '%Y-%m')
+        @month = Date.strptime(match[:month], '%B-%Y')
       end
     end
   end

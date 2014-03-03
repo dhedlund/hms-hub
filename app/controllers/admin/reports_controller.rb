@@ -7,8 +7,7 @@ class Admin::ReportsController < AdminController
     authorize! :index, Report
 
     @notifiers = Notifier.accessible_by(current_ability).reorder(&:name)
-    @reports = Hash[@notifiers.map {|n| [n, n.reports] }]
-
+    @reports = Hash[@notifiers.map {|n| [n, n.reports.sort_by{|r| r.month.to_s + r.filename} ] }]
     # don't include notifiers w/o any reports
     @reports.delete_if {|notifier,reports| reports.empty? }
 
